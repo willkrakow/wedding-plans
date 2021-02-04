@@ -19,7 +19,7 @@ export default function Rsvp() {
       .join("&");
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = (data, e) => {
     console.log(data);
     fetch("/", {
       method: "POST",
@@ -28,6 +28,7 @@ export default function Rsvp() {
     })
       .then(() => navigate('/thank-you'))
       .catch((error) => alert(error));
+      e.preventDefault()
   };
 
   const addMember = () => {
@@ -62,7 +63,14 @@ export default function Rsvp() {
   const values = getValues()
   return (
     <Layout metatitle="RSVP">
-      <Form onSubmit={handleSubmit(onSubmit)} data-netlify="true" >
+      <Form
+        onSubmit={handleSubmit(onSubmit)}
+        data-netlify="true"
+        name="rsvp"
+        method="POST"
+        action="/thank-you/"
+        netlify-honeypot="bot-field"
+      >
         <Container className="my-5">
           {familyCount.map((member, index) => (
             <Row className="my-4" key={index}>
