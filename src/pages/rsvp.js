@@ -3,6 +3,7 @@ import { Form, Input, Button, Container } from "reactstrap";
 import Layout from "../components/layout";
 import { useForm } from "react-hook-form";
 import { Row, Col, FormGroup, Label } from "reactstrap";
+import { navigate } from "gatsby";
 
 export default function Rsvp() {
   const [familyCount, setFamilyCount] = useState([0]);
@@ -25,7 +26,7 @@ export default function Rsvp() {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: encode({ "form-name": "rsvp", ...data }),
     })
-      .then(() => alert("Success!"))
+      .then(() => navigate('/thank-you'))
       .catch((error) => alert(error));
   };
 
@@ -61,7 +62,7 @@ export default function Rsvp() {
   const values = getValues()
   return (
     <Layout metatitle="RSVP">
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)} data-netlify="true" >
         <Container className="my-5">
           {familyCount.map((member, index) => (
             <Row className="my-4" key={index}>
@@ -132,7 +133,11 @@ export default function Rsvp() {
                           : "btn btn-outline-dark d-block rounded-0"
                       }
                     >
-                      {values[`guest_over21-${index}`] ? <span className="text-light">&#10003; Yes</span> : <span>Yes</span>}
+                      {values[`guest_over21-${index}`] ? (
+                        <span className="text-light">&#10003; Yes</span>
+                      ) : (
+                        <span>Yes</span>
+                      )}
                     </div>
                     <Input
                       id={`guest_over21-${index}`}
@@ -165,6 +170,7 @@ export default function Rsvp() {
               </Button>
             </Col>
           </Row>
+          <input type="hidden" name="form-name" value="RSVP" />
           <Row className="my-4 justify-content-end">
             <Col xs={12} md={2}>
               <Button type="submit" className="btn btn-dark rounded-0">
