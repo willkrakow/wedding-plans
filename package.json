@@ -39,6 +39,7 @@
     "react-helmet": "^6.1.0",
     "react-hook-form": "^6.15.1",
     "react-reveal": "^1.2.2",
+    "react-transition-group": "^4.4.1",
     "reactstrap": "^8.9.0",
     "styled-components": "^5.2.1"
   }

@@ -129,10 +129,10 @@ export default function Rsvp() {
               <Col xs={12} md={2}>
                 <FormGroup>
                   <Label
-                    className="d-inline-block text-center w-100"
+                    className="d-inline-block text-left w-100 mb-0"
                     htmlFor={`guest_over21-${index}`}
                   >
-                    Over 21?
+                    <span className="mb-2 d-inline-block">Over 21?</span>
                     <div className="w-100"></div>
                     <div
                       className={
@@ -167,7 +167,7 @@ export default function Rsvp() {
             </Row>
           ))}
           <Row className="my-4">
-            <Col xs={12} md={4}>
+            <Col xs={12} md={3}>
               <Button
                 className="rounded-0 w-100 text-start text-secondary"
                 color="light"
