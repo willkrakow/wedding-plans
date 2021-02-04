@@ -27,7 +27,7 @@ export const BannerText = styled.h1`
 `;
 
 export const SectionTitle = styled.h4`
-  color: #d5e7e9;
+  color: #bfd5e0;
   margin-top: 0;
   font-family: 'Courgette', cursive;
   font-weight: 800;
@@ -52,4 +52,12 @@ export const ElementText = styled.p`
   font-weight: 300;
   font-family: 'Open Sans';
   margin-bottom: 0.5em;
+`;
+
+export const SubtleText = styled.p`
+  font-size: 1em;
+  color: #bfd5e0;
+  margin-bottom: 0.5em;
+  font-family: 'Open Sans';
+  font-weight: 400;
 `;

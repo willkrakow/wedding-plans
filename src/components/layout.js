@@ -1,10 +1,11 @@
 import React from 'react'
 import styled, {keyframes} from 'styled-components'
-import { BannerText } from './typography'
+import { BannerText, SubtleText } from './typography'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Container } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import '@fontsource/open-sans';
 import AniLink from 'gatsby-plugin-transition-link/AniLink';
+import SEO from '../utils/seo'
 
 const slide = keyframes`
   0% {
@@ -83,6 +84,7 @@ export default function Layout({children, metatitle, bannerimage}) {
 
     return (
       <>
+      <SEO title={metatitle} description={"Wedding Website for Laura Gale Campbell and William Tompkins Krakow"} />
         <Navigation>
           <NavItem swipe to="/" alt="Home">
             Home
@@ -105,6 +107,7 @@ export default function Layout({children, metatitle, bannerimage}) {
             <BannerText>LGC + WTK</BannerText>
         </Banner>}
         {children}
+        <Footer />
       </>
     );
 }
@@ -113,3 +116,24 @@ export const ClassyCard = styled(Container).attrs(props => ({
     className: "mb-5 py-4 mt-4"
 }))``
 
+const FooterWrapper = styled(Container).attrs((props) => ({
+  className: "mt-5 py-5",
+}))`
+  background-color: #fafcfe;
+`;
+
+const Footer = () => (
+  <FooterWrapper>
+    <Row className="justify-content-center">
+      <Col xs={10} md={6} lg={4}>
+        <SubtleText className="text-center">
+          Designed and Developed by{" "}
+          <a href="https://williamkrakow.dev/" alt="William Krakow | Portfolio" className="text-muted">
+            William Krakow
+          </a>
+        </SubtleText>
+        <SubtleText className="text-center">&copy; 2021</SubtleText>
+      </Col>
+    </Row>
+  </FooterWrapper>
+);
