@@ -2,7 +2,6 @@ import * as React from "react"
 import Layout from '../components/layout'
 import Location from '../components/location'
 import Date from '../components/date'
-import Colors from '../components/colors'
 import Cake from '../components/cake'
 
 const IndexPage = () => {
@@ -13,7 +12,6 @@ const IndexPage = () => {
     >
       <Date />
       <Location />
-      <Colors />
       <Cake />
     </Layout>
   );

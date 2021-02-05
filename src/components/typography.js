@@ -47,11 +47,11 @@ export const ElementTitle = styled.h4`
 
 export const ElementText = styled.p`
   color: #4e5755;
-  font-size: 1.25em;
+  font-size: 1em;
   margin-top: 0;
   font-weight: 300;
   font-family: 'Open Sans';
-  margin-bottom: 0.5em;
+  margin-bottom: 0;
 `;
 
 export const SubtleText = styled.p`
