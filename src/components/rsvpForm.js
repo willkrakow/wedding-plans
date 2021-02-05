@@ -16,7 +16,7 @@ function RsvpForm() {
       .join("&");
   };
 
-  const onSubmit = (data, e) => {
+  const onSubmit = (e) => {
     console.log(data);
     fetch("/", {
       method: "POST",
