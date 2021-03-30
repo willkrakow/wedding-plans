@@ -12,12 +12,6 @@ module.exports = {
   },
   plugins: [
     "gatsby-plugin-styled-components",
-    {
-      resolve: "gatsby-plugin-google-analytics",
-      options: {
-        trackingId: "G-VJCD2KNJE4",
-      },
-    },
     "gatsby-plugin-sharp",
     "gatsby-plugin-react-helmet",
     "gatsby-transformer-sharp",
@@ -52,7 +46,7 @@ module.exports = {
         tables: [
           {
             baseId: process.env.AIRTABLE_BASE_ID,
-            tableName: `Guests`,
+            tableName: `guest_list`,
           },
           {
             baseId: process.env.AIRTABLE_BASE_ID,
@@ -62,8 +56,24 @@ module.exports = {
             baseId: process.env.AIRTABLE_BASE_ID,
             tableName: `About`,
           },
+          {
+            baseId: process.env.AIRTABLE_BASE_ID,
+            tableName: `Photos`,
+            mapping: { "src": "fileNode" },
+          },
+          {
+            baseId: process.env.AIRTABLE_BASE_ID,
+            tableName: `registry`,
+          }
         ],
       },
+    },
+      {
+			resolve: 'gatsby-plugin-snipcart',
+			options: {
+        apiKey: process.env.SNIPCART_PUBLIC_KEY,
+        autoPop: true,
+			},
     },
   ],
 };

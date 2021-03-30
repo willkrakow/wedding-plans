@@ -65,6 +65,7 @@ const Navigation = styled.div`
   display: flex;
   max-width: 100%;
   animation: ${NavigationIn} ${props => props.metatitle === "LGC + WTK" ? "5s ease" : "1s ease"};
+  animation-delay: 2s;
   justify-content: space-evenly;
   flex-direction: row;
   align-items: center;
@@ -103,7 +104,7 @@ export default function Layout({children, metatitle, bannerimage}) {
         <SecondaryBanner bannerimage={bannerimage} metatitle={metatitle}>
           <BannerText>{metatitle}</BannerText>
         </SecondaryBanner>
-        : <Banner bannerimage={bannerimage} metatitle={metatitle}>
+        : <Banner bannerimage={bannerimage} metatitle="LGC + WTK">
             <BannerText>LGC + WTK</BannerText>
         </Banner>}
         {children}

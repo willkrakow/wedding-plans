@@ -4,48 +4,54 @@ import id from "uuid/dist/v1";
 import { Input, Form, Label, Button, Row, Col } from 'reactstrap'
 import { navigate } from 'gatsby'
 import { ElementText } from './typography';
-
+import _ from 'lodash'
 
 
 function RsvpForm() {
-  const encode = (data) => {
-    return Object.keys(data)
-      .map(
-        (key) => encodeURIComponent(key) + "=" + encodeURIComponent(data[key])
-      )
-      .join("&");
-  };
+ 
 
-  const onSubmit = (e) => {
-    console.log(data);
-    fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: encode({ "form-name": "rsvp", ...data }),
-    })
-      .then(() => navigate("/thank-you"))
-      .catch((error) => alert(error));
-    e.preventDefault();
-  };
+  const [indexes, setIndexes] = useState([]);
+  const [counter, setCounter] = useState(0);
 
+  const onSubmit = (data) => console.log(data)
 
   const [data, setData] = useState([]);
-  const { watch, handleSubmit, control } = useForm();
+  const { watch, handleSubmit, control, getValues } = useForm();
   watch("at", 2);
 
   const append = () => {
+    const values = getValues();
+    console.log(values);
     setData([...data, { id: id() }]);
   };
 
   const remove = (index) => {
-    setData([...data.slice(0, index), ...data.slice(index + 1)]);
+    let temp = data;
+    console.log(temp)
+    setData([...temp.slice(0, index), ...temp.slice(index+1)]);
   };
 
   useEffect(() => {
     if (data.length === 0) {
       append()
     }
-  }, [data])
+  })
+
+   const addFriend = () => {
+     setIndexes((prevIndexes) => [...prevIndexes, counter]);
+     setCounter((prevCounter) => prevCounter + 1);
+   };
+
+   const removeFriend = (index) => () => {
+     setIndexes((prevIndexes) => [
+       ...prevIndexes.filter((item) => item !== index),
+     ]);
+     setCounter((prevCounter) => prevCounter - 1);
+   };
+
+   const clearFriends = () => {
+     setIndexes([]);
+   };
 
   return (
     <Form

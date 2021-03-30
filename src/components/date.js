@@ -18,7 +18,6 @@ const data = useStaticQuery(graphql`
     }
   }
 `);
-console.log(data.airtable.data.Name)
     return (
       <Slide left>
         <ClassyCard>

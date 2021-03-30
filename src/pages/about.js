@@ -13,7 +13,6 @@ height: auto;
 
 export default function About({data}) {
   const { allAirtable } = data
-  console.log(allAirtable)
     return (
       <Layout
         metatitle="About us"
