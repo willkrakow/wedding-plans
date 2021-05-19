@@ -6,29 +6,38 @@ import { Container, Row, Col } from "reactstrap";
 import "@fontsource/courgette";
 import "@fontsource/open-sans";
 import _ from "lodash";
+import Button, { RedButton, WhiteButton } from "./button";
 
-const FancySelect = styled.select`
-  padding: 6px 6px;
-  display: block;
-  font-family: "Open Sans", sans-serif;
-  width: 100%;
-  font-size: 18px;
-  border: none;
-  border-bottom: 2px solid black;
-`;
+const FancySelect = styled.select(props => ({
+  fontSize: props.theme.fontSizes[1],
+  fontFamily: props.theme.fonts.body,
+  width: '100%',
+  paddingTop: props.theme.spacing[1],
+  paddingBottom: props.theme.spacing[1],
+  paddingRight: props.theme.spacing[1],
+  paddingLeft: props.theme.spacing[1],
+  border: 'none',
+  borderBottom: '2px solid',
+  borderColor: props.theme.colors.muted,
+}))
 
-const FancyInput = styled.input`
-  width: 100%;
-  font-family: "Open Sans", sans-serif;
-  padding: 4px 6px;
-  font-size: 18px;
-  border: none;
-  border-bottom: 2px solid black;
-`;
+const FancyInput = styled.input(props => ({
+  width: '100%',
+  fontFamily: props.theme.fonts.headers,
+  paddingTop: props.theme.spacing[1],
+  paddingBottom: props.theme.spacing[1],
+  paddingLeft: props.theme.spacing[2],
+  paddingRight: props.theme.spacing[2],
+  border: 'none',
+  borderBottom: '2px solid',
+  borderColor: props.theme.colors.muted,
+}))
 
-const LabelTitle = styled.span`
-  font-family: "Courgette", cursive;
-`;
+const LabelTitle = styled.span(props => ({
+  fontFamily: props.theme.fonts.headers,
+  fontSize: props.theme.fontSizes[1],
+  color: props.theme.colors.text,
+}))
 
 function FieldArray() {
   const [indexes, setIndexes] = React.useState([0]);
@@ -158,40 +167,15 @@ function FieldArray() {
                       ref={register({
                         minLength: 10,
                         maxLength: 12,
-                        required:
-                          "Please enter your country code + 10 digit phone number",
                       })}
                     />
-                    <span className="text-danger">
-                      {errors?.guests?.[index]?.phone?.message}
-                    </span>
+                    
                   </label>
                 </Col>
                 {/* Guest meal selector */}
-                <Col className="p-4" xs={12} md={3}>
-                  <label
-                    htmlFor={`${fieldName}.dinner`}
-                    className="d-flex flex-wrap"
-                  >
-                    <LabelTitle>Dinner choice</LabelTitle>
-                    <FancySelect
-                      id={`${fieldName}.dinner`}
-                      name={`${fieldName}.dinner`}
-                      ref={register({
-                        required: "Please choose a dinner option",
-                      })}
-                    >
-                      <option value="Burger">Burger</option>
-                      <option value="Salad">Salad</option>
-                      <option value="liquor">Liquor</option>
-                    </FancySelect>
-                    <span className="text-danger">
-                      {errors?.guests?.[index]?.dinner?.message}
-                    </span>
-                  </label>
-                </Col>
+               
                 {/* Guest is over 21 checkbox */}
-                <Col className="p-4" xs={12} md={3}>
+                <Col className="p-4" xs={12} md={6}>
                   <label
                     htmlFor={`${fieldName}.over21`}
                     className="d-flex flex-wrap"
@@ -231,13 +215,12 @@ function FieldArray() {
                 {/* Remove guest button*/}
                 <Col xs={12} md={3} className="my-2 text-center">
                   {counter > 1 && (
-                    <button
-                      className="btn btn-outline-dark rounded-0"
+                    <RedButton
                       type="button"
                       onClick={removeGuest(index)}
                     >
                       &times;&nbsp;Remove guest
-                    </button>
+                    </RedButton>
                   )}
                 </Col>
                 <Col xs={12}>
@@ -251,22 +234,21 @@ function FieldArray() {
       <Container>
         <Row className="d-flex justify-content-center text-center">
           <Col xs={6} md={3} className="my-3">
-            <button className="mx-auto btn btn-outline-dark rounded-0" type="button" onClick={addGuest}>
+            <WhiteButton type="button" onClick={addGuest}>
               + Add guest
-            </button>
+            </WhiteButton>
           </Col>
           <Col xs={6} md={3} className="my-3">
-            {counter > 1 && <button
-              className="mx-auto btn btn-outline-danger rounded-0"
+            {counter > 1 && <Button
               type="button"
               onClick={clearGuests}
             >
-              Clear guests
-            </button>}
+              Clear guest
+            </Button>}
           </Col>
           <Col xs={12} md={3} className="my-3">
               {errors && console.log(errors)}
-            {counter > 0 && <input className="w-75 d-inline-block btn btn-dark rounded-0" type="submit" />}
+            {counter > 0 && <Button type="submit" >Submit</Button>}
           </Col>
         </Row>
       </Container>

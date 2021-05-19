@@ -1,49 +1,65 @@
 import React from 'react'
 import { Row, Col } from "reactstrap";
-import Layout, { ClassyCard } from '../components/layout'
 import { ElementText, ElementTitle } from '../components/typography'
 import styled from 'styled-components'
 import { graphql } from 'gatsby'
 import Slide from 'react-reveal/Slide'
 
 const AboutImage = styled.img`
-width: 100%;
-height: auto;
+width: auto;
+overflow: hidden;
+height: 100%;
+display: block;
 `
 
+const Square = styled(Col)`
+width: 100%;
+height: calc(100vw / 2);
+overflow: hidden;
+`
+
+const TextSquare = styled(Square)(props => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  alignContent: 'center',
+  padding: props.theme.spacing[3],
+  flexWrap: 'wrap',
+}))
+
+const InwardSpacer = styled.div(props => ({
+  paddingLeft: props.theme.spacing[props.pl] || props.theme.spacing[props.px] || props.theme.spacing[5],
+  paddingRight: props.theme.spacing[props.pr] || props.theme.spacing[props.px] || props.theme.spacing[5],
+  paddingTop: props.theme.spacing[props.pt] || props.theme.spacing[props.py] || props.theme.spacing[5],
+  paddingBottom: props.theme.spacing[props.pb] || props.theme.spacing[props.py] || props.theme.spacing[5],
+}))
+
 export default function About({data}) {
-  const { allAirtable } = data
+  const sections = data.allAirtable.edges
     return (
-      <Layout
-        metatitle="About us"
-        bannerimage="https://images.pexels.com/photos/1415131/pexels-photo-1415131.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-      >
-        <ClassyCard className="mx-auto w-75">
-          {allAirtable.edges.map((node, index) => (
-            <Slide>
-              <Row className="my-5" key={index}>
-                <Col xs={12} md={6}>
-                  <ElementTitle>{node.node.data.section_title}</ElementTitle>
-                  <ElementText>{node.node.data.section_text}</ElementText>
-                </Col>
-                <Col xs={12} md={6}>
-                  <AboutImage
-                    src={node.node.data.image[0].url}
-                    alt={node.node.data.section_title}
-                  />
-                </Col>
+      <React.Fragment>
+          {sections.map((section, index) => (
+            <Slide left key={index}>
+              <Row className="mr-0 ml-0">
+                <TextSquare xs={12} md={6} className={`order-md-${(index % 2 === 0 ? '1' : '2').toString()} order-xs-2 px-0`}>
+                  <InwardSpacer>
+                    <ElementTitle>{section.node.data.section_title}</ElementTitle>
+                    <ElementText>{section.node.data.section_text}</ElementText>
+                  </InwardSpacer>
+                </TextSquare>
+                <Square xs={12} md={6} className={`order-md-${(index % 2 === 0 ? '2' : '1').toString()} order-xs-1 px-0`}>
+                  <AboutImage src={section.node.data.image[0].url} alt={section.node.data.section_title} />
+                </Square>
               </Row>
             </Slide>
           ))}
-        </ClassyCard>
-      </Layout>
+      </React.Fragment>
     );
 }
 export const query = graphql`
   {
     allAirtable(
       filter: { table: { eq: "About" } }
-      sort: { fields: data___order }
     ) {
       edges {
         node {

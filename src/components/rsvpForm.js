@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import id from "uuid/dist/v1";
-import { Input, Form, Label, Button, Row, Col } from 'reactstrap'
+import { Input, Form, Label, Row, Col } from 'reactstrap'
 import { navigate } from 'gatsby'
 import { ElementText } from './typography';
 import _ from 'lodash'
+import { WhiteButton, Button } from './button';
 
 
 function RsvpForm() {
@@ -165,14 +166,12 @@ function RsvpForm() {
             className="d-flex justify-content-center align-items-center"
           >
             {index !== 0 ? (
-              <Button
-                color="danger"
-                outline
-                className="border-0 mt-3 rounded-0"
+              <WhiteButton
+                
                 onClick={() => remove(index)}
               >
                 Remove
-              </Button>
+              </WhiteButton>
             ) : null}
           </Col>
         </Row>
@@ -180,7 +179,6 @@ function RsvpForm() {
       <Row className="my-3">
         <Col xs={12} md={3}>
           <Button
-            className="btn-light text-dark rounded-0 w-100"
             onClick={() => {
               append();
             }}
@@ -191,7 +189,7 @@ function RsvpForm() {
       </Row>
       <Row className="justify-content-end my-4">
         <Col xs={6} md={3}>
-          <Input className="btn-dark rounded-0" type="submit" />
+          <Input as={Button} type="submit" />
         </Col>
       </Row>
     </Form>

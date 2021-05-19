@@ -1,5 +1,4 @@
 import React from "react";
-import Layout from "../components/layout";
 import { useStaticQuery, graphql } from "gatsby";
 import { Col, Row, Container } from "reactstrap";
 
@@ -33,10 +32,6 @@ export default function Registry() {
   };
   const { allAirtable } = data;
   return (
-    <Layout
-      metatitle="Registry"
-      bannerimage="https://images.pexels.com/photos/1415131/pexels-photo-1415131.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-    >
       <Container>
         <Row className="justify-content-center">
           {allAirtable.edges.map((edge) => {
@@ -55,7 +50,7 @@ export default function Registry() {
                     alt={edge.node.data.name}
                   />
                   <button
-                    className="snipcart-add-item btn-outline-dark rounded-0 w-75 my-2"
+                    className="snipcart-add-item btn-outline-dark rounded-0 w-75 my-2 btn"
                     data-item-id={slugifyName(edge.node.data.name)}
                     data-item-price={edge.node.data.price}
                     data-item-url="/"
@@ -65,7 +60,7 @@ export default function Registry() {
                     Add to cart
                     <br />
                   </button>
-                  <span className="small text-muted">
+                  <span className="small text-muted d-block w-100">
                     $
                     {priceRemaining(
                       edge.node.data.purchased,
@@ -79,6 +74,5 @@ export default function Registry() {
           })}
         </Row>
       </Container>
-    </Layout>
   );
 }
