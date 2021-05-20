@@ -104,10 +104,6 @@ function FieldArray() {
             recordId
             data {
               name
-              over_21
-              guest_type
-              phone_number
-              rsvp
             }
           }
         }

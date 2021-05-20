@@ -1,5 +1,5 @@
 import React from "react";
-import { ClassyCard } from "../components/layout";
+import { ClassyCard } from "../containers/classyCard";
 import FieldArray from "../components/fieldArray";
 
 const Rsvp = () => (

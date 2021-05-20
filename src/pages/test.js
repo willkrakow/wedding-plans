@@ -31,9 +31,6 @@ transition-delay: 1s;
 }
 `
 
-
-
-
 const ModalGateway = styled.div`
 position: fixed;
 top: 0;
@@ -120,7 +117,7 @@ flex-basis: 50%;
 `
 
 
-const Gallery = (props) => {
+const PhotoGrid = (props) => {
     const { options, itemOptions, photos } = props;
 
     const [ open, setOpen ] = React.useState(false);
@@ -165,25 +162,25 @@ const Gallery = (props) => {
         <React.Fragment>
             <Grid {...options} >
                 {photos.map((photo, index) => (
-                    <GridItem aspectRatio={photo.node.data.src.localFiles[0].childImageSharp.fluid.aspectRatio}  {...itemOptions} key={index} index={index} onClick={() => handleClick(index)}  >
-                        <Img style={{ maxWidth: "100%", height: "100%" }} fluid={photo.node.data.src.localFiles[0].childImageSharp.fluid} alt={photo.node.data.title} />
+                    <GridItem aspectRatio={photo.node.localFiles[0].childImageSharp.fluid.aspectRatio}  {...itemOptions} key={index} index={index} onClick={() => handleClick(index)}  >
+                        <Img style={{ maxWidth: "100%", height: "100%" }} fluid={photo.node.localFiles[0].childImageSharp.fluid} alt={photo.node.parent.data.title} />
                     </GridItem>
 
                 ))}
             </Grid>
             <CornerButton onClick={() => handleClick(currentIndex)} open={open}>&times;</CornerButton>
             <ModalGateway open={open} >
-                <ModalItem aspectRatio={photos[currentIndex].node.data.src.localFiles[0].childImageSharp.fluid.aspectRatio} >
-                    <ModalImg fluid={photos[currentIndex].node.data.src.localFiles[0].childImageSharp.fluid} aspectRatio={photos[currentIndex].node.data.src.localFiles[0].childImageSharp.fluid.aspectRatio} alt={photos[currentIndex].node.data.title} />
+                <ModalItem aspectRatio={photos[currentIndex].node.localFiles[0].childImageSharp.fluid.aspectRatio} >
+                    <ModalImg fluid={photos[currentIndex].node.localFiles[0].childImageSharp.fluid} aspectRatio={photos[currentIndex].node.localFiles[0].childImageSharp.fluid.aspectRatio} alt={photos[currentIndex].node.parent.data.title} />
                 </ModalItem>
                 <ModalControls>
                     <NextButton onClick={handleDecrement}>&larr;</NextButton>
                     <Caption>
-                    <CaptionText>{photos[currentIndex].node.data.description}</CaptionText>
+                    <CaptionText>{photos[currentIndex].node.parent.data.description}</CaptionText>
                     <CaptionText muted >
-                        {makeDateString(photos[currentIndex].node.data.date)}
+                        {makeDateString(photos[currentIndex].node.parent.data.date)}
                         <br />
-                        {photos[currentIndex].node.data.location}</CaptionText>
+                        {photos[currentIndex].node.parent.data.location}</CaptionText>
                     </Caption>
                     <NextButton onClick={handleIncrement}>&rarr;</NextButton>
                 </ModalControls>
@@ -192,8 +189,31 @@ const Gallery = (props) => {
     )
 }
 
-Gallery.propTypes = {
-    photos: PropTypes.arrayOf(PropTypes.object),
+PhotoGrid.propTypes = {
+    photos: PropTypes.arrayOf(PropTypes.shape({
+        node: PropTypes.shape({
+            localFiles: PropTypes.arrayOf(PropTypes.shape({
+                childImageSharp: PropTypes.shape({
+                    fluid: PropTypes.shape({
+                        aspectRatio: PropTypes.number,
+                        base64: PropTypes.string,
+                        sizes: PropTypes.string,
+                        src: PropTypes.string,
+                        srcset: PropTypes.string,
+                    }),
+                }),
+            })),
+            parent: PropTypes.shape({
+                data: PropTypes.shape({
+                    title: PropTypes.string,
+                    description: PropTypes.string,
+                    date: PropTypes.string,
+                    location: PropTypes.string,
+                    id: PropTypes.string,
+                })
+            })
+        })
+    })),
     options: PropTypes.shape({
         columns: PropTypes.number,
         rowGap: PropTypes.string,
@@ -206,7 +226,7 @@ Gallery.propTypes = {
     }),
 }
 
-Gallery.defaultProps = {
+PhotoGrid.defaultProps = {
     options: {
         columns: 5,
         rowGap: "8px",
@@ -222,35 +242,38 @@ Gallery.defaultProps = {
 
 const Test = () => {
     const data = useStaticQuery(graphql`
-  {
-    allAirtable(filter: { table: { eq: "Photos" } }) {
-      edges {
-        node {
-          data {
-            src {
-              localFiles {
-                childImageSharp {
-                  fluid(quality: 100) {
-                    ...GatsbyImageSharpFluid
-                    aspectRatio
-                  }
+    {
+      allAirtableField {
+        edges {
+          node {
+            parent {
+              id
+              ... on Airtable {
+                id
+                data {
+                  location
+                  date
+                  description
+                  title
                 }
               }
             }
-            location
-            date
-            description
-            title
+            localFiles {
+              childImageSharp {
+                fluid(quality: 100) {
+                  ...GatsbyImageSharpFluid
+                }
+              }
+            }
           }
         }
       }
     }
-  }
-`)
+  `)
 
-    const photoData = data.allAirtable.edges
+    const photoData = data.allAirtableField.edges
     return (
-        <Gallery photos={photoData} />
+        <PhotoGrid photos={photoData} />
     )
 }
 

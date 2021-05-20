@@ -1,39 +1,39 @@
 import React from "react";
-import { useStaticQuery, graphql } from "gatsby";
-import { Col, Row, Container } from "reactstrap";
+// import { useStaticQuery, graphql } from "gatsby";
+// import { Col, Row, Container } from "reactstrap";
+import { Container } from 'reactstrap'
 
-export default function Registry() {
-  const data = useStaticQuery(graphql`
-    {
-      allAirtable(filter: { table: { eq: "registry" } }) {
-        edges {
-          node {
-            recordId
-            data {
-              name
-              product_url
-              purchased
-              price
-              description
-            }
-          }
-        }
-      }
-    }
-  `);
 
-  const slugifyName = (name) => {
-    return name.replace(" ", "-").toLowerCase();
-  };
+const Registry = () => {
+  // const data = useStaticQuery(graphql`
+  //   {
+  //     allAirtable(filter: {table: {eq: "registry"}}) {
+  //       nodes {
+  //         id
+  //         data {
+  //           name
+  //           category
+  //           product_url
+  //           price
+  //           purchased
+  //           description
+  //         }
+  //       }
+  //     }
+  //   }
+  // `)
 
-  const priceRemaining = (percPurchased, price) => {
-    let moneyLeft = price - percPurchased * price;
-    return Math.round(moneyLeft);
-  };
-  const { allAirtable } = data;
+  // const slugifyName = (name) => {
+  //   return name.replace(" ", "-").toLowerCase();
+  // };
+
+  // const priceRemaining = (percPurchased, price) => {
+  //   let moneyLeft = price - percPurchased * price;
+  //   return Math.round(moneyLeft);
+  // };
   return (
       <Container>
-        <Row className="justify-content-center">
+        {/* <Row className="justify-content-center">
           {allAirtable.edges.map((edge) => {
             return (
               edge.node.data && (
@@ -72,7 +72,9 @@ export default function Registry() {
               )
             );
           })}
-        </Row>
+        </Row> */}
       </Container>
   );
 }
+
+export default Registry

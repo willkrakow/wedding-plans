@@ -4,8 +4,9 @@ import { ElementText, ElementTitle } from '../components/typography'
 import styled from 'styled-components'
 import { graphql } from 'gatsby'
 import Slide from 'react-reveal/Slide'
+import Img from 'gatsby-image'
 
-const AboutImage = styled.img`
+const AboutImage = styled(Img)`
 width: auto;
 overflow: hidden;
 height: 100%;
@@ -35,7 +36,7 @@ const InwardSpacer = styled.div(props => ({
 }))
 
 export default function About({data}) {
-  const sections = data.allAirtable.edges
+  const sections = data.allAirtable.nodes
     return (
       <React.Fragment>
           {sections.map((section, index) => (
@@ -43,12 +44,12 @@ export default function About({data}) {
               <Row className="mr-0 ml-0">
                 <TextSquare xs={12} md={6} className={`order-md-${(index % 2 === 0 ? '1' : '2').toString()} order-xs-2 px-0`}>
                   <InwardSpacer>
-                    <ElementTitle>{section.node.data.section_title}</ElementTitle>
-                    <ElementText>{section.node.data.section_text}</ElementText>
+                    <ElementTitle>{section.data.section_title}</ElementTitle>
+                    <ElementText>{section.data.section_text}</ElementText>
                   </InwardSpacer>
                 </TextSquare>
                 <Square xs={12} md={6} className={`order-md-${(index % 2 === 0 ? '2' : '1').toString()} order-xs-1 px-0`}>
-                  <AboutImage src={section.node.data.image[0].url} alt={section.node.data.section_title} />
+                  <AboutImage fluid={section.data.image.localFiles[0].childImageSharp.fluid} alt={section.data.section_title} />
                 </Square>
               </Row>
             </Slide>
@@ -58,21 +59,23 @@ export default function About({data}) {
 }
 export const query = graphql`
   {
-    allAirtable(
-      filter: { table: { eq: "About" } }
-    ) {
-      edges {
-        node {
-          data {
-            section_title
-            image {
-              url
+    allAirtable(filter: {table: {eq: "About"}}) {
+      nodes {
+        data {
+          image {
+            localFiles {
+              id
+              childImageSharp {
+                fluid(quality: 100) {
+                  ...GatsbyImageSharpFluid
+                }
+              }
             }
-            section_text
-            order
           }
+          section_text
+          section_title
         }
       }
     }
   }
-`;
+`

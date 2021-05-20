@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import Button from '../components/button'
 import PropTypes from 'prop-types'
 import { Row, Col } from 'reactstrap'
-import { ClassyCard } from '../components/layout'
+import { ClassyCard } from './classyCard'
 import FunFact from '../components/funFact'
 
 const PageSectionImage = styled.img`

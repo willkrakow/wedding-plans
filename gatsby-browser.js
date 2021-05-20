@@ -1,11 +1,17 @@
-require("bootstrap/dist/css/bootstrap.min.css")
-require("bootstrap/dist/js/bootstrap.min.js")
-require("@popperjs/core/dist/umd/popper.min.js")
+import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/js/bootstrap.min.js"
+import "@popperjs/core/dist/umd/popper.min.js"
 
-const React = require('react')
-const Layout = require('./src/components/layout').default
+// import React from 'react'
+// import Layout from './src/components/layout'
+// import GlobalStyle from './src/theme/globalStyles'
 
-
-exports.wrapPageElement = ({ element, props }) => {
-    return <Layout {...props}>{element}</Layout>
-}
+// export const wrapRootElement = ({ element, props }) => {
+//     return (
+//         <>
+//             <GlobalStyle />
+//             <Layout {...props}>{element}</Layout>
+//         </>
+//     )
+    
+// }

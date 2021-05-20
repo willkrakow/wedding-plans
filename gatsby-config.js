@@ -12,10 +12,7 @@ module.exports = {
   },
   plugins: [
     "gatsby-plugin-styled-components",
-    "gatsby-plugin-sharp",
     "gatsby-plugin-react-helmet",
-    "gatsby-transformer-sharp",
-    "gatsby-plugin-transition-link",
     {
       resolve: "gatsby-plugin-manifest",
       options: {
@@ -42,7 +39,7 @@ module.exports = {
       resolve: `gatsby-source-airtable`,
       options: {
         apiKey: process.env.AIRTABLE_API_KEY,
-        concurrency: 5,
+        concurrency: 0,
         tables: [
           {
             baseId: process.env.AIRTABLE_BASE_ID,
@@ -55,19 +52,22 @@ module.exports = {
           {
             baseId: process.env.AIRTABLE_BASE_ID,
             tableName: `About`,
+            mapping: { 'image': 'fileNode' },
           },
           {
             baseId: process.env.AIRTABLE_BASE_ID,
             tableName: `Photos`,
-            mapping: { "src": "fileNode" },
+            mapping: { 'src': "fileNode" },
           },
           {
             baseId: process.env.AIRTABLE_BASE_ID,
             tableName: `registry`,
-          }
+          },
         ],
       },
     },
+    "gatsby-plugin-sharp",
+    "gatsby-transformer-sharp",
       {
 			resolve: 'gatsby-plugin-snipcart',
 			options: {
@@ -75,5 +75,6 @@ module.exports = {
         autoPop: true,
 			},
     },
+    `gatsby-plugin-layout`
   ],
 };

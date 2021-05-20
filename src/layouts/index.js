@@ -1,19 +1,18 @@
 import React from 'react'
 import styled, { ThemeProvider } from 'styled-components'
-import { BannerText, ElementSubtitle, ElementText } from './typography'
-import 'bootstrap/dist/css/bootstrap.min.css'
+import { BannerText, ElementSubtitle, ElementText } from '../components/typography'
 import { Container, Row, Col } from 'reactstrap';
 import '@fontsource/open-sans';
-import AniLink from 'gatsby-plugin-transition-link/AniLink';
 import SEO from '../utils/seo'
 import { theme, darkTheme } from '../theme';
-import Button, { WhiteButton } from './button';
+import Button, { WhiteButton } from '../components/button';
 import BackgroundImage from 'gatsby-background-image'
-import { useStaticQuery, graphql } from 'gatsby'
+import { useStaticQuery, graphql, Link } from 'gatsby'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 
 
-const NavItem = styled(AniLink)`
+const NavItem = styled(Link)`
   display: inline-block;
   padding: ${props => props.theme.spacing[1]};
   color: ${props => props.theme.colors.muted};
@@ -94,9 +93,9 @@ export default function Layout({ children }) {
   const handleTheme = () => setLightTheme(!lightTheme)
 
   return (
+    <>
     <ThemeProvider theme={lightTheme ? theme : darkTheme}>
-     
-
+      <React.Fragment>
       <SEO title={""} description={"Wedding Website for Laura Gale Campbell and William Tompkins Krakow"} />
       <BackgroundImage as="nav" fluid={imageData} alt="Dandelions blowing in the wind" isDarken={lightTheme} key={lightTheme ? `dark` : `light`} >
         <MenuBar fluid>
@@ -129,16 +128,11 @@ export default function Layout({ children }) {
             Light mode
           </StickyWhiteButton>
         )}
+        </React.Fragment>
     </ThemeProvider>
+    </>
   );
 }
-
-export const ClassyCard = styled(Container)`
-  margin-top: ${props => props.theme.spacing[5]};
-  margin-bottom: ${props => props.theme.spacing[4]};
-  padding-top: ${props => props.theme.spacing[4]};
-  padding-bottom: ${props => props.theme.spacing[4]};
-`
 
 const FooterWrapper = styled(Container)(props => ({
   padding: props.theme.spacing[3],
