@@ -1,6 +1,19 @@
 import React, { useState } from 'react';
-import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types'
+import { ElementSubtitle, SubtleText } from './typography'
+import styled from 'styled-components'
+
+const ElementPop = styled(Popover)`
+border-radius: 0;
+`
+
+const PopInner = styled.div`
+padding: ${props => `${props.theme.spacing[1]}${" "}${props.theme.spacing[2]}`};
+display: block;
+border-radius: 0;
+border: ${props => `1px solid ${props.theme.colors.muted}`};
+`
 
 const FunFact = ({placement, header, body, ...props}) => {
     const [popoverOpen, setPopoverOpen] = useState(false);
@@ -14,10 +27,12 @@ const FunFact = ({placement, header, body, ...props}) => {
             <div aria-label="toggle popover" role="button" tabIndex={0} ref={targetRef} onMouseLeave={toggle} onMouseEnter={toggle}>
                 {props.children}
             </div>
-            <Popover placement={placement} isOpen={popoverOpen} target={targetRef} toggle={toggle}>
-                <PopoverHeader>{header}</PopoverHeader>
-                <PopoverBody>{body}</PopoverBody>
-            </Popover>
+            <ElementPop popperClassName="border-0" placement={placement} isOpen={popoverOpen} target={targetRef} toggle={toggle}>
+                <PopInner as="aside">
+                    <ElementSubtitle>{header}</ElementSubtitle>
+                    <SubtleText>{body}</SubtleText>
+                </PopInner>
+            </ElementPop>
         </React.Fragment>
     );
 }

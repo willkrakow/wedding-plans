@@ -36,4 +36,20 @@ export const RedButton = styled(Button)(props => ({
     borderColor: props.theme.colors.danger
 }))
 
+
+export const StickyButton = styled(Button)`
+position: sticky;
+bottom: ${props => props.theme.spacing[4]};
+left: 100vw;
+z-index: 50;
+`
+
+export const StickyWhiteButton = styled(WhiteButton)`
+position: sticky;
+bottom: ${props => props.theme.spacing[4]};
+left: 100vw;
+z-index: 50;
+`
+
+
 export default Button

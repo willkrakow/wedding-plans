@@ -15,12 +15,12 @@ display: block;
 
 const Square = styled(Col)`
 width: 100%;
-height: calc(100vw / 2);
+display: flex;
+flex-direction: column;
 overflow: hidden;
 `
 
 const TextSquare = styled(Square)(props => ({
-  display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   alignContent: 'center',
@@ -36,7 +36,7 @@ const InwardSpacer = styled.div(props => ({
 }))
 
 export default function About({data}) {
-  const sections = data.allAirtable.nodes
+  const sections = data.allAirtable.edges
     return (
       <React.Fragment>
           {sections.map((section, index) => (
@@ -44,12 +44,12 @@ export default function About({data}) {
               <Row className="mr-0 ml-0">
                 <TextSquare xs={12} md={6} className={`order-md-${(index % 2 === 0 ? '1' : '2').toString()} order-xs-2 px-0`}>
                   <InwardSpacer>
-                    <ElementTitle>{section.data.section_title}</ElementTitle>
-                    <ElementText>{section.data.section_text}</ElementText>
+                    <ElementTitle>{section.node.data.section_title}</ElementTitle>
+                    <ElementText>{section.node.data.section_text}</ElementText>
                   </InwardSpacer>
                 </TextSquare>
                 <Square xs={12} md={6} className={`order-md-${(index % 2 === 0 ? '2' : '1').toString()} order-xs-1 px-0`}>
-                  <AboutImage fluid={section.data.image.localFiles[0].childImageSharp.fluid} alt={section.data.section_title} />
+                  <AboutImage fluid={section.node.data.image.localFiles[0].childImageSharp.fluid} alt={section.node.data.section_title} />
                 </Square>
               </Row>
             </Slide>
@@ -59,21 +59,23 @@ export default function About({data}) {
 }
 export const query = graphql`
   {
-    allAirtable(filter: {table: {eq: "About"}}) {
-      nodes {
-        data {
-          image {
-            localFiles {
-              id
-              childImageSharp {
-                fluid(quality: 100) {
-                  ...GatsbyImageSharpFluid
+    allAirtable(filter: {table: {eq: "About"}}, sort: {order: ASC, fields: data___order}) {
+      edges {
+        node {
+          data {
+            image {
+              localFiles {
+                id
+                childImageSharp {
+                  fluid(quality: 100) {
+                    ...GatsbyImageSharpFluid
+                  }
                 }
               }
             }
+            section_title
+            section_text
           }
-          section_text
-          section_title
         }
       }
     }

@@ -18,7 +18,7 @@ const PageSection = ({ sectionData }) => {
     const { label, title, subtitle, sectionImg, bodyText, cta, funFact } = sectionData
     return (
         <Slide left>
-            <ClassyCard fluid>
+            <ClassyCard fluid >
                 <Row>
                     <Col xs={12} lg={3}>
                     </Col>

@@ -8,6 +8,19 @@ height: 120vh;
 margin-top: -20vh;
 `
 
+const ParallaxImg = styled(Parallax)`
+max-width: 100vw;
+width: 100vw;
+position: relative;
+overflow: hidden;
+left: calc(calc(100vw - 100%) * -1 / 2);
+`
+
+
+const SnapSection = styled.section`
+scroll-snap-align: start;
+`
+
 
 
 const IndexPage = () => {
@@ -76,13 +89,16 @@ const IndexPage = () => {
   ]
   return (
     <React.Fragment>
-      <Parallax style={{ maxWidth: "100%" }} strength={-200} bgImage="https://images.pexels.com/photos/1067194/pexels-photo-1067194.jpeg?cs=srgb&dl=pexels-jennifer-murray-1067194.jpg&fm=jpg" >
+      <SnapSection>
+      <ParallaxImg style={{ maxWidth: "100vw" }} strength={-200} bgImage="https://images.pexels.com/photos/1067194/pexels-photo-1067194.jpeg?cs=srgb&dl=pexels-jennifer-murray-1067194.jpg&fm=jpg" >
         <Inner />
-      </Parallax>
-
+      </ParallaxImg>
+      </SnapSection>
 
       {data.map((item, index) => (
-        <PageSection sectionData={item} key={index} />
+        <SnapSection key={index}>
+          <PageSection sectionData={item} key={index} />
+        </SnapSection>
       ))}
 
     </React.Fragment>

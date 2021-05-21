@@ -52,7 +52,7 @@ module.exports = {
           {
             baseId: process.env.AIRTABLE_BASE_ID,
             tableName: `About`,
-            mapping: { 'image': 'fileNode' },
+            mapping: {'image': 'fileNode'},
           },
           {
             baseId: process.env.AIRTABLE_BASE_ID,
@@ -62,6 +62,7 @@ module.exports = {
           {
             baseId: process.env.AIRTABLE_BASE_ID,
             tableName: `registry`,
+            mapping: {'image': "fileNode"},
           },
         ],
       },
@@ -69,10 +70,12 @@ module.exports = {
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
       {
-			resolve: 'gatsby-plugin-snipcart',
+			resolve: 'gatsby-plugin-snipcart-advanced',
 			options: {
-        apiKey: process.env.SNIPCART_PUBLIC_KEY,
-        autoPop: true,
+        publicApiKey: process.env.SNIPCART_PUBLIC_KEY,
+        defaultLang: "en",
+        currency: "usd",
+        openCartOnAdd: true,
 			},
     },
     `gatsby-plugin-layout`

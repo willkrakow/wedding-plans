@@ -1,7 +1,7 @@
 import { createGlobalStyle } from 'styled-components'
 import { reset } from 'styled-reset'
 
-const GlobalStyle = createGlobalStyle`
+const GlobalStyles = createGlobalStyle`
   ${reset}
 
   *, *:before, *:after {
@@ -13,7 +13,12 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     letter-spacing: 0;
+    line-height: 1.5em;
+    background-color: ${props => props.theme.colors.background};
+    scroll-snap-type: y proximity;
+    overflow-y: scroll;
+    height: 100vh;
   }
 `
 
-export default GlobalStyle
+export default GlobalStyles

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from 'gatsby'
 import "@fontsource/open-sans";
 import "@fontsource/courgette";
 
@@ -25,6 +26,7 @@ export const BannerText = styled.h1(props => ({
   animationDuration: "6s",
   animationTimingFunction: "ease",
   fontFamily: props.theme.fonts.cursive,
+  lineHeight: 'normal',
 }))
 
 export const SectionTitle = styled.h2(props => ({
@@ -39,7 +41,7 @@ export const SectionTitle = styled.h2(props => ({
   textAlign: 'center',
   borderBottom: "2px solid",
   borderColor: props.theme.colors.muted,
-  maxWidth: "25%",
+  maxWidth: "10rem",
   marginLeft: 'auto',
   marginRight: 'auto'
 }))
@@ -50,9 +52,12 @@ export const ElementTitle = styled.h3(props => ({
   fontFamily: props.theme.fonts.headers,
   fontWeight: props.theme.fontWeights.heavy,
   paddingTop: props.theme.spacing[0],
-  marginBottom: props.theme.spacing[2],
+  marginBottom: props.theme.spacing[3],
+  display: "inline-block",
+  width: "100%",
   marginTop: props.theme.spacing[0],
   textAlign: 'center',
+  lineHeight: "1.1em",
   cursor: props.factTitle ? "pointer" : "inherit",
 }))
 
@@ -62,6 +67,10 @@ export const ElementSubtitle = styled.h4(props => ({
   fontFamily: props.theme.fonts.headers,
   fontWeight: props.theme.fontWeights.body,
   textAlign: "center",
+  display: "inline-block",
+  width: "100%",
+  marginBottom: props.theme.spacing[3],
+  marginTop: props.theme.spacing[3],
 }))
 
 export const ElementText = styled.p(props => ({
@@ -80,3 +89,19 @@ export const SubtleText = styled.h5(props => ({
   fontFamily: props.theme.fonts.body,
   fontWeight: props.theme.fontWeights.body,
 }))
+
+export const NavItem = styled(Link)`
+  display: inline-block;
+  padding: ${props => props.theme.spacing[1]};
+  color: ${props => props.theme.colors.muted};
+  font-size: ${props => props.theme.fontSizes[2]};
+  font-weight: ${props => props.theme.fontWeights.body};
+  font-family: ${props => props.theme.fonts.headers};
+  transition: all 0.5s ease;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  &:hover {
+    color: ${props => props.theme.colors.primary};
+    text-decoration-color: ${props => props.theme.colors.primary},
+  };
+`;

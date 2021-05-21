@@ -1,80 +1,134 @@
 import React from "react";
-// import { useStaticQuery, graphql } from "gatsby";
-// import { Col, Row, Container } from "reactstrap";
-import { Container } from 'reactstrap'
+import {SnipcartContext} from 'gatsby-plugin-snipcart-advanced/context'
+import { graphql } from 'gatsby'
+import Button, { WhiteButton } from '../components/button'
+import { ElementTitle, ElementSubtitle, ElementText } from "../components/typography";
+import { ClassyCard } from '../containers/classyCard';
+import { Row, Col } from 'reactstrap'
+import styled from 'styled-components'
+import { centsToDollars } from '../utils'
+import Img from 'gatsby-image'
 
 
-const Registry = () => {
-  // const data = useStaticQuery(graphql`
-  //   {
-  //     allAirtable(filter: {table: {eq: "registry"}}) {
-  //       nodes {
-  //         id
-  //         data {
-  //           name
-  //           category
-  //           product_url
-  //           price
-  //           purchased
-  //           description
-  //         }
-  //       }
-  //     }
-  //   }
-  // `)
+const ProductName = styled(ElementTitle)`
+font-size: ${props => props.theme.fontSizes[3]};
+margin-bottom: ${props => props.theme.spacing[0]};
+margin-top: ${props => props.theme.spacing[2]};
+`
 
-  // const slugifyName = (name) => {
-  //   return name.replace(" ", "-").toLowerCase();
-  // };
+const ProductCategory = styled(ElementSubtitle)`
+font-size: ${props => props.theme.fontSizes[1]};
+margin-top: ${props => props.theme.spacing[0]};
+margin-bottom: ${props => props.theme.spacing[0]};
+text-align: center;
+`
 
-  // const priceRemaining = (percPurchased, price) => {
-  //   let moneyLeft = price - percPurchased * price;
-  //   return Math.round(moneyLeft);
-  // };
+const ProductPrice = styled(ElementText)`
+text-align: center;
+`
+
+const BuyButton = styled(Button)`
+margin: auto;
+display: block;
+`
+
+const ProductCard = styled(Col)`
+margin-bottom: ${props => props.theme.spacing[6]};
+margin-top: ${props => props.theme.spacing[7]};
+`
+
+const ProductRow = styled(Row)`
+align-items: flex-end;
+`
+
+const Registry = ({ data }) => {
+  const products = data.allAirtable.edges;
+  const { state } = React.useContext(SnipcartContext)
+  const { userStatus, cartQuantity } = state;
+
+
+  const [ location, setLocation ] = React.useState()
+
+
+  React.useEffect(() => {
+    setLocation(window.location.href)
+  }, [])
+
   return (
-      <Container>
-        {/* <Row className="justify-content-center">
-          {allAirtable.edges.map((edge) => {
-            return (
-              edge.node.data && (
-                <Col
-                  key={edge.node.recordId}
-                  xs={6}
-                  md={4}
-                  lg={3}
-                  className="d-flex justify-content-center align-items-end flex-wrap text-center"
-                >
-                  <img
-                    src="https://images-na.ssl-images-amazon.com/images/I/81RA3dDS6EL._AC_SL300_.jpg"
-                    className="w-100 p-4"
-                    alt={edge.node.data.name}
-                  />
-                  <button
-                    className="snipcart-add-item btn-outline-dark rounded-0 w-75 my-2 btn"
-                    data-item-id={slugifyName(edge.node.data.name)}
-                    data-item-price={edge.node.data.price}
-                    data-item-url="/"
-                    data-item-description={edge.node.data.description}
-                    data-item-name={edge.node.data.name}
-                  >
-                    Add to cart
-                    <br />
-                  </button>
-                  <span className="small text-muted d-block w-100">
-                    $
-                    {priceRemaining(
-                      edge.node.data.purchased,
-                      edge.node.data.price
-                    ).toString()}{" "}
-                    to go
-                  </span>
-                </Col>
-              )
-            );
-          })}
-        </Row> */}
-      </Container>
+      <ClassyCard>
+        <ElementTitle>Gift Registry</ElementTitle>
+        
+      <Row>
+        <Col xs={6} className="text-center">
+        {userStatus === "SignedOut" ? (
+          <Button className="snipcart-customer-signin mx-auto">Sign in</Button>
+        ) : (
+          <WhiteButton className="snipcart-customer-signout">Sign out</WhiteButton>
+        )}
+        </Col>
+        <Col xs={6} className="text-center">
+          <Button className="snipcart-checkout">{`Cart (${cartQuantity})`}</Button>
+        </Col>
+        </Row>
+        <ProductRow>
+        {products.map((product) => (
+          <ProductCard xs={12} md={4} lg={3} key={product.node.id}>
+              <Img fluid={product.node.data.image.localFiles[0].childImageSharp.fluid} alt={product.node.data.name} />
+            <header>
+              <a href={product.node.data.product_url} alt={product.node.data.name}>
+              <ProductName>{product.node.data.name}</ProductName>
+              <ProductCategory>{product.node.data.category[0]}</ProductCategory>
+              </a>
+            </header>
+            <ProductPrice>{`$${centsToDollars(product.node.data.price, "str")}`}</ProductPrice>
+          <BuyButton
+            className="snipcart-add-item"
+            data-item-id={product.node.id}
+            data-item-url={location}
+            data-item-image={product.node.data.image.localFiles[0].publicURL}
+            data-item-price={product.node.data.price}
+            data-item-description={product.node.data.category[0]}
+            data-item-name={product.node.data.name}
+          >
+            Add to cart
+          </BuyButton>
+          </ProductCard>
+        ))}
+      </ProductRow>
+      
+      </ClassyCard>
   );
 }
+
+export const query = graphql`
+  {
+    allAirtable(filter: {table: {eq: "registry"}}) {
+      edges {
+        node {
+          id
+          data {
+            image {
+              localFiles {
+                publicURL
+                childImageSharp {
+                  fluid(quality: 100) {
+                    ...GatsbyImageSharpFluid
+                    src
+                  }
+                }
+              }
+            }
+            price
+            name
+            purchased
+            category
+            product_url
+          }
+        }
+      }
+    }
+  }
+`
+
 
 export default Registry

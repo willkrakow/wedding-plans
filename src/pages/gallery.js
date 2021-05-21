@@ -1,17 +1,19 @@
 import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Img from 'gatsby-image'
 import { useStaticQuery, graphql } from 'gatsby'
-import { ElementText } from '../components/typography'
+import { ElementText, ElementTitle } from '../components/typography'
 import { makeDateString } from '../utils'
+import { ClassyCard } from '../containers/classyCard'
 
 const Grid = styled.section`
 display: grid;
 grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 grid-auto-flow: dense;
-width: 100%;
-
+width: 100vw;
+position: absolute;
+left: 0;
 `
 
 const GridItem = styled.div`
@@ -50,6 +52,7 @@ transition: all 0.7s ease;
 z-index: 600;
 `
 
+
 const ModalItem = styled.div`
 opacity: 1.0;
 height: auto;
@@ -57,19 +60,6 @@ width: ${props => 500 * props.aspectRatio}px;
 max-width: 100vw;
 `
 
-const fadeIn = keyframes`
-0% {
-    opacity: 0;
-}
-
-100% {
-    opacity: 1.0;
-}
-`
-
-const ModalImg = styled(Img)`
-animation: ${fadeIn} 0.6s ease forwards;
-`
 
 const ModalControls = styled.div`
 display: flex;
@@ -171,7 +161,7 @@ const PhotoGrid = (props) => {
       <CornerButton onClick={() => handleClick(currentIndex)} open={open}>&times;</CornerButton>
       <ModalGateway open={open} >
         <ModalItem aspectRatio={photos[currentIndex].node.localFiles[0].childImageSharp.fluid.aspectRatio} >
-          <ModalImg fluid={photos[currentIndex].node.localFiles[0].childImageSharp.fluid} aspectRatio={photos[currentIndex].node.localFiles[0].childImageSharp.fluid.aspectRatio} alt={photos[currentIndex].node.parent.data.title} />
+          <Img fluid={photos[currentIndex].node.localFiles[0].childImageSharp.fluid} aspectRatio={photos[currentIndex].node.localFiles[0].childImageSharp.fluid.aspectRatio} alt={photos[currentIndex].node.parent.data.title} />
         </ModalItem>
         <ModalControls>
           <NextButton onClick={handleDecrement}>&larr;</NextButton>
@@ -271,9 +261,13 @@ const Gallery = () => {
     }
   `)
 
-  const photoData = data.allAirtableField.edges
+  const photoData = data.allAirtableField.edges;
+
   return (
-    <PhotoGrid photos={photoData} />
+    <ClassyCard>
+      <ElementTitle>Gallery</ElementTitle>
+      <PhotoGrid photos={photoData} />
+    </ClassyCard>
   )
 }
 
