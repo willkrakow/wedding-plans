@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form'
 import id from "uuid/dist/v1";
 import { Input, Form, Label, Row, Col } from 'reactstrap'
 import { navigate } from 'gatsby'
-import { ElementText } from './typography';
+import { P } from './typography';
 import _ from 'lodash'
 import { WhiteButton, Button } from './button';
 
@@ -72,7 +72,7 @@ function RsvpForm() {
               defaultValue=""
               render={({ onChange, onBlur, ref, value }) => (
                 <Label className="w-100">
-                  <ElementText>First name</ElementText>
+                  <P>First name</P>
                   <Input
                     type="text"
                     onChange={onChange}
@@ -93,7 +93,7 @@ function RsvpForm() {
               defaultValue=""
               render={({ onChange, onBlur, ref, value }) => (
                 <Label className="w-100">
-                  <ElementText>Last name</ElementText>
+                  <P>Last name</P>
                   <Input
                     type="text"
                     onChange={onChange}
@@ -114,7 +114,7 @@ function RsvpForm() {
               defaultValue="Here"
               render={({ onChange, onBlur, value, ref }) => (
                 <Label className="w-100">
-                  <ElementText>Dinner</ElementText>
+                  <P>Dinner</P>
                   <Input
                     type="select"
                     className="w-100 rounded-0"
@@ -138,7 +138,7 @@ function RsvpForm() {
               defaultValue={false}
               render={({ onChange, onBlur, value, ref }) => (
                 <Label className="w-100">
-                  <ElementText>Over 21?</ElementText>
+                  <P>Over 21?</P>
                   <Input
                     type="checkbox"
                     className="d-none"

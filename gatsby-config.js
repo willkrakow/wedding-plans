@@ -36,6 +36,14 @@ module.exports = {
       __key: "images",
     },
     {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `pages`,
+        path: `${__dirname}/src/pages/`,
+      },
+    },
+    `gatsby-plugin-mdx`,
+    {
       resolve: `gatsby-source-airtable`,
       options: {
         apiKey: process.env.AIRTABLE_API_KEY,
@@ -63,6 +71,19 @@ module.exports = {
             baseId: process.env.AIRTABLE_BASE_ID,
             tableName: `registry`,
             mapping: {'image': "fileNode"},
+          },
+          {
+            baseId: process.env.AIRTABLE_BASE_ID,
+            tableName: `schedule`,
+          },
+          {
+            baseId: process.env.AIRTABLE_BASE_ID,
+            tableName: `faqs`,
+          },
+          {
+            baseId: process.env.AIRTABLE_BASE_ID,
+            tableName: `lodging`,
+            mapping: { 'image': "fileNode" },
           },
         ],
       },

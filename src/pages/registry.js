@@ -2,30 +2,12 @@ import React from "react";
 import {SnipcartContext} from 'gatsby-plugin-snipcart-advanced/context'
 import { graphql } from 'gatsby'
 import Button, { WhiteButton } from '../components/button'
-import { ElementTitle, ElementSubtitle, ElementText } from "../components/typography";
+import { H2, ProductName, ProductPrice, ProductCategory } from "../components/typography";
 import { ClassyCard } from '../containers/classyCard';
 import { Row, Col } from 'reactstrap'
 import styled from 'styled-components'
 import { centsToDollars } from '../utils'
 import Img from 'gatsby-image'
-
-
-const ProductName = styled(ElementTitle)`
-font-size: ${props => props.theme.fontSizes[3]};
-margin-bottom: ${props => props.theme.spacing[0]};
-margin-top: ${props => props.theme.spacing[2]};
-`
-
-const ProductCategory = styled(ElementSubtitle)`
-font-size: ${props => props.theme.fontSizes[1]};
-margin-top: ${props => props.theme.spacing[0]};
-margin-bottom: ${props => props.theme.spacing[0]};
-text-align: center;
-`
-
-const ProductPrice = styled(ElementText)`
-text-align: center;
-`
 
 const BuyButton = styled(Button)`
 margin: auto;
@@ -56,8 +38,7 @@ const Registry = ({ data }) => {
 
   return (
       <ClassyCard>
-        <ElementTitle>Gift Registry</ElementTitle>
-        
+        <H2 centered>Gift Registry</H2>
       <Row>
         <Col xs={6} className="text-center">
         {userStatus === "SignedOut" ? (

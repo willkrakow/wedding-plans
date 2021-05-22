@@ -15,9 +15,7 @@ const GlobalStyles = createGlobalStyle`
     letter-spacing: 0;
     line-height: 1.5em;
     background-color: ${props => props.theme.colors.background};
-    scroll-snap-type: y proximity;
-    overflow-y: scroll;
-    height: 100vh;
+    font-size: 18px;
   }
 `
 

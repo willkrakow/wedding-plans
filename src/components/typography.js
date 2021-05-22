@@ -3,21 +3,7 @@ import { Link } from 'gatsby'
 import "@fontsource/open-sans";
 import "@fontsource/courgette";
 
-// const fadeIn = keyframes`
-// 0% {
-//   opacity: 0;
-// }
-
-// 40% {
-//   opacity: 1.0;
-// }
-
-// 100% {
-//   opacity: 1.0;
-// }
-// `
-
-export const BannerText = styled.h1(props => ({
+export const H1 = styled.h1(props => ({
   display: 'block',
   textAlign: 'center',
   fontWeight: props.theme.fontWeights.lightest,
@@ -29,65 +15,68 @@ export const BannerText = styled.h1(props => ({
   lineHeight: 'normal',
 }))
 
-export const SectionTitle = styled.h2(props => ({
-  color: props.theme.colors.text,
-  fontSize: props.theme.fontSizes[3],
-  fontFamily: props.theme.fonts.cursive,
-  fontWeight: props.theme.fontWeights.heavy,
-  lineHeight: props.theme.spacing[5],
-  paddingTop: props.theme.spacing[0],
+
+export const H2 = styled.h2(props => ({
+  lineHeight: props.theme.spacing[7],
+  paddingTop: props.theme.spacing[3],
+  paddingBottom: props.theme.spacing[2],
   marginBottom: props.theme.spacing[5],
-  marginTop: props.theme.spacing[0],
-  textAlign: 'center',
+  marginTop: props.theme.spacing[6],
+  textAlign: props.centered ? "center" : "left",
   borderBottom: "2px solid",
   borderColor: props.theme.colors.muted,
-  maxWidth: "10rem",
+  fontFamily: props.theme.fonts.cursive,
+  fontSize: props.theme.fontSizes[5],
+  color: props.theme.colors.text,
+  letterSpacing: props.theme.spacing[2],
   marginLeft: 'auto',
-  marginRight: 'auto'
+  marginRight: 'auto',
 }))
 
-export const ElementTitle = styled.h3(props => ({
+
+export const H3 = styled.h3(props => ({
   color: props.theme.colors.text,
-  fontSize: props.theme.fontSizes[5],
+  fontSize: props.theme.fontSizes[4],
   fontFamily: props.theme.fonts.headers,
   fontWeight: props.theme.fontWeights.heavy,
   paddingTop: props.theme.spacing[0],
   marginBottom: props.theme.spacing[3],
   display: "inline-block",
+  textAlign: props.centered ? "center" : "left",
   width: "100%",
   marginTop: props.theme.spacing[0],
-  textAlign: 'center',
   lineHeight: "1.1em",
   cursor: props.factTitle ? "pointer" : "inherit",
 }))
 
-export const ElementSubtitle = styled.h4(props => ({
+export const H4 = styled.h4(props => ({
   color: props.alwaysdark ? props.theme.colors.alwaysdark : props.theme.colors.muted,
   fontSize: props.theme.fontSizes[2],
   fontFamily: props.theme.fonts.headers,
   fontWeight: props.theme.fontWeights.body,
-  textAlign: "center",
+  textAlign: props.centered ? "center" : "left",
   display: "inline-block",
   width: "100%",
   marginBottom: props.theme.spacing[3],
   marginTop: props.theme.spacing[3],
 }))
 
-export const ElementText = styled.p(props => ({
+export const H5 = styled.h5(props => ({
+  color: props.theme.colors.muted,
+  fontSize: props.theme.fontSizes[0],
+  marginBottom: props.theme.spacing[1],
+  fontFamily: props.theme.fonts.body,
+  fontWeight: props.theme.fontWeights.body,
+}))
+
+
+export const P = styled.p(props => ({
   color: props.theme.colors.text,
   fontWeight: props.theme.fontWeights.light,
   fontFamily: props.theme.fonts.body,
   marginTop: props.theme.spacing[2],
   marginBottom: props.theme.spacing[3],
   fontSize: props.theme.fontSizes[1],
-}))
-
-export const SubtleText = styled.h5(props => ({
-  color: props.theme.colors.muted,
-  fontSize: props.theme.fontSizes[0],
-  marginBottom: props.theme.spacing[1],
-  fontFamily: props.theme.fonts.body,
-  fontWeight: props.theme.fontWeights.body,
 }))
 
 export const NavItem = styled(Link)`
@@ -105,3 +94,28 @@ export const NavItem = styled(Link)`
     text-decoration-color: ${props => props.theme.colors.primary},
   };
 `;
+
+export const ProductName = styled(H3)`
+font-size: ${props => props.theme.fontSizes[3]};
+margin-bottom: ${props => props.theme.spacing[0]};
+margin-top: ${props => props.theme.spacing[2]};
+`
+
+export const ProductCategory = styled(H4)`
+font-size: ${props => props.theme.fontSizes[1]};
+margin-top: ${props => props.theme.spacing[0]};
+margin-bottom: ${props => props.theme.spacing[0]};
+text-align: center;
+`
+
+export const ProductPrice = styled(P)`
+text-align: center;
+`
+
+
+export const ElementLink = styled.a`
+text-decoration: underline;
+text-decoration-color: ${props => props.theme.colors.accent};
+color: ${props => props.theme.colors.text};
+text-decoration-thickness: ${props => props.theme.spacing[1]};
+`

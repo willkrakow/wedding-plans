@@ -1,17 +1,17 @@
 import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import { makeDateString } from '../utils'
+import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Img from 'gatsby-image'
-import { useStaticQuery, graphql } from 'gatsby'
-import { P } from '../components/typography'
-import { makeDateString } from '../utils'
+import { P } from './typography'
 
 const Grid = styled.section`
 display: grid;
 grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 grid-auto-flow: dense;
-width: 100%;
-
+width: 100vw;
+position: absolute;
+left: 0;
 `
 
 const GridItem = styled.div`
@@ -27,7 +27,7 @@ transition-delay: 1s;
     overflow: visible;
     transform: scale(1.2);
     z-index: 501;
-    box-shadow: 0px ${props => props.theme.spacing[3]} ${props => props.theme.spacing[2] } rgba(10, 10, 10, 0.5);
+    box-shadow: 0px ${props => props.theme.spacing[3]} ${props => props.theme.spacing[2]} rgba(10, 10, 10, 0.5);
 }
 `
 
@@ -50,6 +50,7 @@ transition: all 0.7s ease;
 z-index: 600;
 `
 
+
 const ModalItem = styled.div`
 opacity: 1.0;
 height: auto;
@@ -57,19 +58,6 @@ width: ${props => 500 * props.aspectRatio}px;
 max-width: 100vw;
 `
 
-const fadeIn = keyframes`
-0% {
-    opacity: 0;
-}
-
-100% {
-    opacity: 1.0;
-}
-`
-
-const ModalImg = styled(Img)`
-animation: ${fadeIn} 0.6s ease forwards;
-`
 
 const ModalControls = styled.div`
 display: flex;
@@ -120,8 +108,8 @@ flex-basis: 50%;
 const PhotoGrid = (props) => {
     const { options, itemOptions, photos } = props;
 
-    const [ open, setOpen ] = React.useState(false);
-    const [ currentIndex, setCurrentIndex ] = React.useState(0)
+    const [open, setOpen] = React.useState(false);
+    const [currentIndex, setCurrentIndex] = React.useState(0)
 
     const handleClick = (itemIndex) => {
         setOpen(!open)
@@ -144,7 +132,7 @@ const PhotoGrid = (props) => {
         }
     }
 
-    
+
 
     React.useEffect(() => {
         const handleKeypress = (e) => {
@@ -171,16 +159,16 @@ const PhotoGrid = (props) => {
             <CornerButton onClick={() => handleClick(currentIndex)} open={open}>&times;</CornerButton>
             <ModalGateway open={open} >
                 <ModalItem aspectRatio={photos[currentIndex].node.localFiles[0].childImageSharp.fluid.aspectRatio} >
-                    <ModalImg fluid={photos[currentIndex].node.localFiles[0].childImageSharp.fluid} aspectRatio={photos[currentIndex].node.localFiles[0].childImageSharp.fluid.aspectRatio} alt={photos[currentIndex].node.parent.data.title} />
+                    <Img fluid={photos[currentIndex].node.localFiles[0].childImageSharp.fluid} aspectRatio={photos[currentIndex].node.localFiles[0].childImageSharp.fluid.aspectRatio} alt={photos[currentIndex].node.parent.data.title} />
                 </ModalItem>
                 <ModalControls>
                     <NextButton onClick={handleDecrement}>&larr;</NextButton>
                     <Caption>
-                    <CaptionText>{photos[currentIndex].node.parent.data.description}</CaptionText>
-                    <CaptionText muted >
-                        {makeDateString(photos[currentIndex].node.parent.data.date)}
-                        <br />
-                        {photos[currentIndex].node.parent.data.location}</CaptionText>
+                        <CaptionText>{photos[currentIndex].node.parent.data.description}</CaptionText>
+                        <CaptionText muted >
+                            {makeDateString(photos[currentIndex].node.parent.data.date)}
+                            <br />
+                            {photos[currentIndex].node.parent.data.location}</CaptionText>
                     </Caption>
                     <NextButton onClick={handleIncrement}>&rarr;</NextButton>
                 </ModalControls>
@@ -240,44 +228,4 @@ PhotoGrid.defaultProps = {
 }
 
 
-const Test = () => {
-    const data = useStaticQuery(graphql`
-    {
-      allAirtableField {
-        edges {
-          node {
-            parent {
-              id
-              ... on Airtable {
-                id
-                data {
-                  location
-                  date
-                  description
-                  title
-                }
-              }
-            }
-            localFiles {
-              childImageSharp {
-                fluid(quality: 100) {
-                  ...GatsbyImageSharpFluid
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `)
-
-    const photoData = data.allAirtableField.edges
-    return (
-        <PhotoGrid photos={photoData} />
-    )
-}
-
-
-
-
-export default Test
+export default PhotoGrid

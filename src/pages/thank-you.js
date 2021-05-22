@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { ElementText, ElementTitle } from '../components/typography'
+import { P, H2 } from '../components/typography'
 import { navigate } from 'gatsby'
 const ThankYou = () => {
     const [counter, setCounter] = useState(5)
@@ -15,12 +15,12 @@ const ThankYou = () => {
     }, [counter])
     return (
       <React.Fragment>
-        <ElementTitle className="text-center w-100 d-block">
+        <H2 className="text-center w-100 d-block">
           We can't wait to see you there!
-        </ElementTitle>
-        <ElementText className="text-center w-100 d-block">
+        </H2>
+        <P className="text-center w-100 d-block">
     Redirecting back to home page in <span>{counter.toString()}</span>...
-        </ElementText>
+        </P>
       </React.Fragment>
     );
     }

@@ -9,6 +9,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import GlobalStyles from '../theme/globalStyles'
 import Footer from './footer'
 import MenuBar from './menuBar'
+import { H1, H2, H3, H4, H5, P, ElementLink } from '../components/typography'
+import { MDXProvider } from '@mdx-js/react'
 
 const Main = styled.main(props => ({
   backgroundColor: props.theme.colors.background,
@@ -38,6 +40,15 @@ export default function Layout({ children }) {
   const [ lightTheme, setLightTheme ] = React.useState(true)
 
   const handleTheme = () => setLightTheme(!lightTheme)
+  const components = {
+    h1: H1,
+    h2: H2,
+    h3: H3,
+    h4: H4,
+    h5: H5,
+    p: P,
+    a: ElementLink,
+  }
 
   return (
     <>
@@ -51,7 +62,9 @@ export default function Layout({ children }) {
         </BackgroundImage>
       </header>
       <Main>
-        {children}
+            <MDXProvider components={components}>
+              {children}
+            </MDXProvider>
       </Main>
       <Footer />
 

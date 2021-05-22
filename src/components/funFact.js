@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types'
-import { ElementSubtitle, SubtleText } from './typography'
+import { H4, H5 } from './typography'
 import styled from 'styled-components'
 
 const ElementPop = styled(Popover)`
@@ -29,8 +29,8 @@ const FunFact = ({placement, header, body, ...props}) => {
             </div>
             <ElementPop popperClassName="border-0" placement={placement} isOpen={popoverOpen} target={targetRef} toggle={toggle}>
                 <PopInner as="aside">
-                    <ElementSubtitle>{header}</ElementSubtitle>
-                    <SubtleText>{body}</SubtleText>
+                    <H4>{header}</H4>
+                    <H5>{body}</H5>
                 </PopInner>
             </ElementPop>
         </React.Fragment>

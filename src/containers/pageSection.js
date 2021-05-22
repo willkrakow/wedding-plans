@@ -1,5 +1,5 @@
 import React from 'react'
-import { ElementTitle, SectionTitle, ElementText, ElementSubtitle } from '../components/typography'
+import { H3, H2, P, H4 } from '../components/typography'
 import Slide from 'react-reveal/Slide'
 import styled from 'styled-components'
 import Button from '../components/button'
@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import { Row, Col } from 'reactstrap'
 import { ClassyCard } from './classyCard'
 import FunFact from '../components/funFact'
+import Img from 'gatsby-image'
 
 const PageSectionImage = styled.img`
 width: 100%;
@@ -15,7 +16,7 @@ height: auto;
 
 
 const PageSection = ({ sectionData }) => {
-    const { label, title, subtitle, sectionImg, bodyText, cta, funFact } = sectionData
+    const { label, title, subtitle, sectionImg, bodyText, cta, funFact, sectionFluid } = sectionData
     return (
         <Slide left>
             <ClassyCard fluid >
@@ -23,17 +24,18 @@ const PageSection = ({ sectionData }) => {
                     <Col xs={12} lg={3}>
                     </Col>
                     <Col xs={12} lg={6}>
-                        <SectionTitle>{label}</SectionTitle>
+                        {label && <H2>{label}</H2>}
                         {funFact ? (
                             <FunFact body={funFact.body} header={funFact.header} >
-                                <ElementTitle factTitle >{title}</ElementTitle>
+                                <H3 factTitle >{title}</H3>
                             </FunFact>
                         )
-                            : <ElementTitle>{title}</ElementTitle>
+                            : <H3>{title}</H3>
                         }
-                        {subtitle && <ElementSubtitle>{subtitle}</ElementSubtitle>}
+                        {subtitle && <H4>{subtitle}</H4>}
                         {sectionImg && <PageSectionImage src={sectionImg.src} alt={sectionImg.alt || title} />}
-                        {bodyText && <ElementText>{bodyText}</ElementText>}
+                        {sectionFluid && <Img fluid={sectionFluid.fluid} alt={sectionFluid.alt || sectionImg.alt || title} />}
+                        {bodyText && <P>{bodyText}</P>}
                         {cta && (
                             <a href={cta.link} alt={cta.label} className={cta.centered ? "d-block text-center" : ""}><Button>{cta.label}</Button></a>
                         )}
@@ -52,6 +54,7 @@ PageSection.propTypes = {
         sectionImg: PropTypes.shape({
             src: PropTypes.string,
             alt: PropTypes.string,
+            isUrl: PropTypes.bool,
         }),
         bodyText: PropTypes.string,
         cta: PropTypes.shape({
@@ -64,6 +67,10 @@ PageSection.propTypes = {
             header: PropTypes.string,
             body: PropTypes.string,
         }),
+        sectionFluid: PropTypes.shape({
+            fluid: PropTypes.any,
+            alt: PropTypes.string,
+        })
     }),
 }
 
@@ -71,6 +78,9 @@ PageSection.defaultProps = {
     sectionData: {
         label: "Section label",
         title: "Section title",
+        sectionImg: {
+            isUrl: true,
+        },
     },
 }
 

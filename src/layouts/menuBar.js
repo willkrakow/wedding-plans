@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Container, Row, Col } from 'reactstrap'
-import { BannerText, ElementSubtitle, NavItem } from '../components/typography'
+import { H1, H4, NavItem } from '../components/typography'
 
 const MenuWrapper = styled(Container)(props => ({
     paddingTop: props.theme.spacing[4],
@@ -40,8 +40,8 @@ const MenuBar = () => {
     <MenuWrapper fluid>
         <Row>
             <Col xs={12}>
-              <BannerText>Laura Gale Campbell <br /> &amp; <br />William Tompkins Krakow</BannerText>
-              <ElementSubtitle alwaysdark ><time dateTime="2022-05-01">May 1, 2022</time></ElementSubtitle>
+              <H1>Laura Gale Campbell <br /> &amp; <br />William Tompkins Krakow</H1>
+              <H4 alwaysdark centered><time dateTime="2022-05-01">May 1, 2022</time></H4>
             </Col>
           </Row>
           <Row className="d-xs-none">
