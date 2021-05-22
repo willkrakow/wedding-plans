@@ -4,7 +4,6 @@ import { graphql } from 'gatsby'
 import { H2, H4 } from '../components/typography'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Col } from 'reactstrap'
 
 const SidebarWrapper = styled.div`
 position: sticky;
@@ -36,30 +35,9 @@ const Faqs = ({ data }) => {
     return (
         <React.Fragment>
             <H2 centered>Frequently Asked Questions</H2>
-            <Sidebar links={faqlist} />
             {faqlist.map(q => (
                 <PageSection id={q.id} key={q.id} sectionData={{ title: q.data.question, bodyText: q.data.answer }} />
             ))} 
-            <Col xs={12} md={3}>
-            <div id="list-example" className="list-group">
-                <a className="list-group-item list-group-item-action" href="#list-item-1">Item 1</a>
-                <a className="list-group-item list-group-item-action" href="#list-item-2">Item 2</a>
-                <a className="list-group-item list-group-item-action" href="#list-item-3">Item 3</a>
-                <a className="list-group-item list-group-item-action" href="#list-item-4">Item 4</a>
-            </div>
-            </Col>
-            <Col xs={12} md={9}>
-            <div data-spy="scroll" data-target="#list-example" data-offset="0" class="scrollspy-example">
-                <h4 id="list-item-1">Item 1</h4>
-                <p>...</p>
-                <h4 id="list-item-2">Item 2</h4>
-                <p>...</p>
-                <h4 id="list-item-3">Item 3</h4>
-                <p>...</p>
-                <h4 id="list-item-4">Item 4</h4>
-                <p>...</p>
-            </div>
-            </Col>
         </React.Fragment>
     )
 }

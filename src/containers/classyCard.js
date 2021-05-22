@@ -2,6 +2,7 @@ import React from 'react'
 import { Container } from 'reactstrap'
 import styled from 'styled-components'
 import Slide from 'react-reveal/Slide'
+import PropTypes from 'prop-types'
 
 export const ClassyWrapper = styled(Container)`
   scroll-snap-align: start;
@@ -18,3 +19,7 @@ export const ClassyCard = ({children}) => (
     </ClassyWrapper>
   </Slide>
 )
+
+ClassyCard.propTypes = {
+  children: PropTypes.element,
+}
