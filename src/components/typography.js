@@ -20,7 +20,7 @@ export const H2 = styled.h2(props => ({
   lineHeight: props.theme.spacing[7],
   paddingTop: props.theme.spacing[3],
   paddingBottom: props.theme.spacing[2],
-  marginBottom: props.theme.spacing[5],
+  marginBottom: props.theme.spacing[3],
   marginTop: props.theme.spacing[6],
   textAlign: props.centered ? "center" : "left",
   borderBottom: "2px solid",
@@ -40,7 +40,7 @@ export const H3 = styled.h3(props => ({
   fontFamily: props.theme.fonts.headers,
   fontWeight: props.theme.fontWeights.heavy,
   paddingTop: props.theme.spacing[0],
-  marginBottom: props.theme.spacing[3],
+  marginBottom: props.nosubtitle ? props.theme.spacing[2] : props.theme.spacing[0],
   display: "inline-block",
   textAlign: props.centered ? "center" : "left",
   width: "100%",
@@ -57,8 +57,8 @@ export const H4 = styled.h4(props => ({
   textAlign: props.centered ? "center" : "left",
   display: "inline-block",
   width: "100%",
-  marginBottom: props.theme.spacing[3],
-  marginTop: props.theme.spacing[3],
+  marginBottom: props.theme.spacing[4],
+  marginTop: props.theme.spacing[1],
 }))
 
 export const H5 = styled.h5(props => ({
@@ -83,7 +83,9 @@ export const NavItem = styled(Link)`
   display: inline-block;
   padding: ${props => props.theme.spacing[1]};
   color: ${props => props.theme.colors.muted};
-  font-size: ${props => props.theme.fontSizes[2]};
+  font-size: ${props => props.theme.fontSizes[1]};
+  text-transform: uppercase;
+  letter-spacing: ${props => props.theme.spacing[1]};
   font-weight: ${props => props.theme.fontWeights.body};
   font-family: ${props => props.theme.fonts.headers};
   transition: all 0.5s ease;

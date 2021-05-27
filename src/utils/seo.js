@@ -5,7 +5,7 @@ import { useLocation } from "@reach/router";
 import { useStaticQuery, graphql } from "gatsby";
 
 
-const SEO = ({ title, description }) => {
+const Seo = ({ title, description }) => {
   const { pathname } = useLocation();
   const { site } = useStaticQuery(query);
   const {
@@ -37,17 +37,16 @@ const SEO = ({ title, description }) => {
     </Helmet>
   );
 };
-export default SEO;
-SEO.propTypes = {
+Seo.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
 };
-SEO.defaultProps = {
+Seo.defaultProps = {
   title: null,
   description: null,
 };
-const query = graphql`
-  query SEO {
+export const query = graphql`
+  query Seo {
     site {
       siteMetadata {
         defaultTitle: title
@@ -58,3 +57,6 @@ const query = graphql`
     }
   }
 `;
+
+export default Seo;
+

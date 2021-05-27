@@ -30,7 +30,7 @@ const PageSection = ({ sectionData }) => {
                                 <H3 factTitle >{title}</H3>
                             </FunFact>
                         )
-                            : <H3>{title}</H3>
+                            : <H3 nosubtitle={subtitle ? false : true} >{title}</H3>
                         }
                         {subtitle && <H4>{subtitle}</H4>}
                         {sectionImg && <PageSectionImage src={sectionImg.src} alt={sectionImg.alt || title} />}

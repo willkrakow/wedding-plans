@@ -1,11 +1,10 @@
 import React from 'react'
 import styled, { ThemeProvider } from 'styled-components'
-import SEO from '../utils/seo'
+import Seo from '../utils/seo'
 import { theme, darkTheme } from '../theme';
 import {StickyButton, StickyWhiteButton} from '../components/button';
 import BackgroundImage from 'gatsby-background-image'
 import { useStaticQuery, graphql } from 'gatsby'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import GlobalStyles from '../theme/globalStyles'
 import Footer from './footer'
 import MenuBar from './menuBar'
@@ -55,7 +54,7 @@ export default function Layout({ children }) {
     <ThemeProvider theme={lightTheme ? theme : darkTheme}>
       <React.Fragment>
       <GlobalStyles theme={lightTheme ? theme : darkTheme} />
-      <SEO title={""} description={"Wedding Website for Laura Gale Campbell and William Tompkins Krakow"} />
+      <Seo title={""} description={"Wedding Website for Laura Gale Campbell and William Tompkins Krakow"} />
       <header>
         <BackgroundImage as="nav" fluid={imageData} alt="Dandelions blowing in the wind" isDarken={lightTheme} key={lightTheme ? `dark` : `light`} >
           <MenuBar />

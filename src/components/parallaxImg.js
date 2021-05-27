@@ -15,10 +15,13 @@ overflow: hidden;
 left: calc(calc(100vw - 100%) * -1 / 2);
 `
 
-const ParallaxImg = () => (
-    <ParallaxCustom style={{ maxWidth: "100vw" }} strength={-200} bgImage="https://images.pexels.com/photos/1067194/pexels-photo-1067194.jpeg?cs=srgb&dl=pexels-jennifer-murray-1067194.jpg&fm=jpg" >
-        <Inner />
-    </ParallaxCustom>
-)
+const ParallaxImg = () => {
+    return (
+
+        <ParallaxCustom style={{ maxWidth: "100vw" }} strength={-200} bgImage="https://images.pexels.com/photos/1067194/pexels-photo-1067194.jpeg?cs=srgb&dl=pexels-jennifer-murray-1067194.jpg&fm=jpg" >
+            <Inner />
+        </ParallaxCustom>
+    )
+}
 
 export default ParallaxImg

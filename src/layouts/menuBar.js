@@ -44,9 +44,9 @@ const MenuBar = () => {
               <H4 alwaysdark centered><time dateTime="2022-05-01">May 1, 2022</time></H4>
             </Col>
           </Row>
-          <Row className="d-xs-none">
+          <Row >
             {links.map((link, index) => (
-              <Col className="text-center" key={index}>
+              <Col className="text-center d-xs-none d-sm-none d-md-block" key={index}>
                 <NavItem to={link.url} alt={link.alt}>{link.alt}</NavItem>
               </Col>
             ))}

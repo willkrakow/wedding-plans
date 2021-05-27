@@ -12,10 +12,10 @@ export const ClassyWrapper = styled(Container)`
   padding-bottom: ${props => props.theme.spacing[4]};
 `
 
-export const ClassyCard = ({children}) => (
+export const ClassyCard = (props) => (
   <Slide>
     <ClassyWrapper>
-    {children}
+    {props.children}
     </ClassyWrapper>
   </Slide>
 )
