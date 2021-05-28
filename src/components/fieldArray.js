@@ -41,14 +41,32 @@ display: block;
 margin: auto;
 `
 
+const YesButton = styled(WhiteButton)`
+flex-basis: 45%;
+background-color: ${props => props.status ? props.theme.colors.accent : props.theme.colors.background};
+transition: all 0.4s ease-out;
+`
+
+const NoButton = styled(YesButton)`
+background-color: ${props => props.status ? props.theme.colors.background : props.theme.colors.accent};
+`
+
+
 const FieldArray = () => {
-  const { register, control, handleSubmit } = useForm({
+  const { register, control, handleSubmit, setValue, getValues, watch } = useForm({
     // defaultValues: {}; you can populate the fields by this attribute 
   });
   const { fields, append, remove  } = useFieldArray({
     control,
     name: "test"
   });
+
+  const handleToggle = (index, input) => {
+    setValue(`test.${index}.over21`, input)
+    console.log(getValues())
+  }
+
+  const status = watch('test')
 
   return (
     <Container>
@@ -57,12 +75,12 @@ const FieldArray = () => {
         {fields.map((item, index) => (
           <Row key={item.id} className="justify-content-center">
 
-            <Col xs={12} md={7}>
+            <Col xs={12} md={8}>
               <H4>Guest {index + 1}</H4>
             </Col>
-            <FormCol xs={12} md={6}>
+            <FormCol xs={12} md={8}>
               <Container>
-                <Row>
+                <Row className="align-items-center" >
                   <Col xs={12} lg={4}>
                     <FancyLabel htmlFor={`test.${index}.name`}>Name</FancyLabel>
                   </Col>
@@ -74,7 +92,7 @@ const FieldArray = () => {
                     />
                   </Col>
                 </Row>
-                <Row>
+                <Row className="align-items-center" >
                   <Col xs={12} lg={4}>
                     <FancyLabel htmlFor={`test.${index}.phoneNumber`}>Phone number</FancyLabel>
                   </Col>
@@ -85,7 +103,21 @@ const FieldArray = () => {
                     />
                   </Col>
                 </Row>
-                <Row>
+                <Row className="align-items-center" >
+                  <Col xs={12} lg={4} >
+                    <FancyLabel htmlFor={`test.${index}.over21`}>Is guest over 21?</FancyLabel>
+                  </Col>
+                  <Col xs={12} lg={8} className="justify-content-between d-flex">
+                    <FancyInput
+                    type="hidden"
+                      {...register(`test.${index}.over21`)}
+                      defaultValue={item.over21 || false} // make sure to set up defaultValue
+                    />
+                    <YesButton status={status[index].over21} type="button" onClick={() => handleToggle(index, true)} >Yes</YesButton>
+                    <NoButton status={status[index].over21} type="button" onClick={() => handleToggle(index, false)} >No</NoButton>
+                  </Col>
+                </Row>
+                <Row className="align-items-center" >
                   <Col xs={12} lg={4}>
                     <FancyLabel htmlFor={`test.${index}.notes`}>Notes</FancyLabel>
                   </Col>

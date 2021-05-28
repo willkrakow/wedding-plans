@@ -15,7 +15,6 @@ exports.handler = async function (event) {
     fields: {
       phone_number: guest.phone,
       over_21: guest.over21 ? "Yes" : "No",
-      dinner_option: guest.dinner,
       notes: guest.note,
       rsvp: true,
     },

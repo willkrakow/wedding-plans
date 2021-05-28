@@ -5,10 +5,45 @@ require("dotenv").config({
 module.exports = {
   siteMetadata: {
     title: "Our Wedding",
-    titleTemplate: "%s · Laura Gale Campbell and William Tompkins Krakow",
+    titleTemplate: "%s | Laura Gale Campbell and William Tompkins Krakow",
     url: "https://campbellkrakow.com/",
     description:
       "The official wedding site of Laura Gale and William. Thanks for all your love and support.",
+    image: `/images/icon.png`,
+    menuLinks: [
+      {
+        title: "Home",
+        path: "/"
+      },
+      {
+        title: "RSVP",
+        path: "/rsvp"
+      },
+      {
+        title: "Registry",
+        path: "/registry"
+      },
+      {
+        title: "About Us",
+        path: "/about"
+      },
+      {
+        title: "Gallery",
+        path: "/gallery"
+      },
+      {
+        title: "FAQs",
+        path: "/faqs"
+      },
+      {
+        title: "Lodging",
+        path: "/lodging"
+      },
+      {
+        title: "Schedule",
+        path: "/schedule"
+      },
+    ]
   },
   plugins: [
     "gatsby-plugin-styled-components",

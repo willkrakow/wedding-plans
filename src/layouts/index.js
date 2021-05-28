@@ -4,12 +4,13 @@ import Seo from '../utils/seo'
 import { theme, darkTheme } from '../theme';
 import {StickyButton, StickyWhiteButton} from '../components/button';
 import BackgroundImage from 'gatsby-background-image'
-import { useStaticQuery, graphql } from 'gatsby'
+import { useStaticQuery, graphql,  } from 'gatsby'
 import GlobalStyles from '../theme/globalStyles'
 import Footer from './footer'
 import MenuBar from './menuBar'
 import { H1, H2, H3, H4, H5, P, ElementLink } from '../components/typography'
 import { MDXProvider } from '@mdx-js/react'
+import _ from 'lodash';
 
 const Main = styled.main(props => ({
   backgroundColor: props.theme.colors.background,
@@ -20,7 +21,7 @@ const Main = styled.main(props => ({
 
 
 
-export default function Layout({ children }) {
+export default function Layout({ children, location }) {
   const data = useStaticQuery(graphql`
     {
       file(name: {eq: "dosdandelions"}) {
@@ -30,12 +31,25 @@ export default function Layout({ children }) {
           }
         }
       }
+      site {
+        siteMetadata {
+          title
+          titleTemplate
+          description
+          menuLinks {
+            title
+            path
+          }
+        }
+      }
     }
   `)
 
   const imageData = data.file.childImageSharp.fluid
+  const { title, description, menuLinks } = data.site.siteMetadata
 
 
+  const activePage = _.find(menuLinks, (o) => {return o.path === location.pathname})
   const [ lightTheme, setLightTheme ] = React.useState(true)
 
   const handleTheme = () => setLightTheme(!lightTheme)
@@ -54,7 +68,7 @@ export default function Layout({ children }) {
     <ThemeProvider theme={lightTheme ? theme : darkTheme}>
       <React.Fragment>
       <GlobalStyles theme={lightTheme ? theme : darkTheme} />
-      <Seo title={""} description={"Wedding Website for Laura Gale Campbell and William Tompkins Krakow"} />
+      <Seo title={activePage.title === "Home" ? title : activePage.title} description={description} />
       <header>
         <BackgroundImage as="nav" fluid={imageData} alt="Dandelions blowing in the wind" isDarken={lightTheme} key={lightTheme ? `dark` : `light`} >
           <MenuBar />
