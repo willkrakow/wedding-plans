@@ -1,7 +1,7 @@
 import React from 'react'
 import PageSection from "../containers/pageSection";
 import ParallaxImg from '../components/parallaxImg';
-
+import { StaticImage } from 'gatsby-plugin-image'
 
 const IndexPage = () => {
 

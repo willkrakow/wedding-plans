@@ -8,36 +8,35 @@ var base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
 );
 
 exports.handler = async function (event) {
-  const bod = JSON.parse(event.body);
-  console.log(bod);
-  const toUpdate = bod.guests.map((guest) => ({
-    id: guest.recordId,
+  const formBody = JSON.parse(event.body);
+
+  const toUpdate = formBody.test.map((guest) => ({
     fields: {
-      phone_number: guest.phone,
+      name: guest.name,
+      phone_number: guest.phoneNumber,
       over_21: guest.over21 ? "Yes" : "No",
-      notes: guest.note,
-      rsvp: true,
+      notes: guest.notes,
+      rsvp: "Yes",
     },
   }));
 
-  console.log(toUpdate);
 
-  const updateOk = base("guest_list").update([...toUpdate], function (err, records) {
+
+
+  base('rsvps').create([...toUpdate], (err, records) => {
     if (err) {
-      console.error(err);
-      return false;
+      console.log(err);
+      return false
     }
-    return true
-  });
-if(updateOk){
+    records.forEach((record) => {
+      console.log(record.getId())
+    })
+  })
+
   return {
     statusCode: 200,
-    body: "Form submitted!",
+    body: JSON.stringify({
+      message: "Form submitted"
+    })
   }
-} else {
-    return {
-      statusCode: 501,
-      body: "Internal service error. Form not submitted."
-    }
-  };
 };

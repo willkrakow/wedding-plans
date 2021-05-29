@@ -57,16 +57,17 @@ export const H4 = styled.h4(props => ({
   textAlign: props.centered ? "center" : "left",
   display: "inline-block",
   width: "100%",
-  marginBottom: props.theme.spacing[4],
+  marginBottom: props.inline ? props.theme.spacing[1] : props.theme.spacing[4],
   marginTop: props.theme.spacing[1],
 }))
 
 export const H5 = styled.h5(props => ({
-  color: props.theme.colors.muted,
-  fontSize: props.theme.fontSizes[0],
+  color: props.theme.colors.dark,
+  fontSize: props.theme.fontSizes[2],
   marginBottom: props.theme.spacing[1],
+  textAlign: props.centered ? "center" : "left",
   fontFamily: props.theme.fonts.body,
-  fontWeight: props.theme.fontWeights.body,
+  fontWeight: props.theme.fontWeights.heavy,
 }))
 
 
@@ -74,6 +75,7 @@ export const P = styled.p(props => ({
   color: props.theme.colors.text,
   fontWeight: props.theme.fontWeights.light,
   fontFamily: props.theme.fonts.body,
+  textAlign: props.centered ? "center" : "left",
   marginTop: props.theme.spacing[2],
   marginBottom: props.theme.spacing[3],
   fontSize: props.theme.fontSizes[1],

@@ -68,7 +68,7 @@ export default function Layout({ children, location }) {
     <ThemeProvider theme={lightTheme ? theme : darkTheme}>
       <React.Fragment>
       <GlobalStyles theme={lightTheme ? theme : darkTheme} />
-      <Seo title={activePage.title === "Home" ? title : activePage.title} description={description} />
+      <Seo title={activePage?.title || title} description={description} />
       <header>
         <BackgroundImage as="nav" fluid={imageData} alt="Dandelions blowing in the wind" isDarken={lightTheme} key={lightTheme ? `dark` : `light`} >
           <MenuBar />

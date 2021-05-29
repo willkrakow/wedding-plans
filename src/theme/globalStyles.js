@@ -16,6 +16,8 @@ const GlobalStyles = createGlobalStyle`
     line-height: 1.5em;
     background-color: ${props => props.theme.colors.background};
     font-size: 18px;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 `
 

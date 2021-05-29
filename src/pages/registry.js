@@ -1,25 +1,35 @@
 import React from "react";
 import { SnipcartContext } from 'gatsby-plugin-snipcart-advanced/context'
 import { graphql } from 'gatsby'
-import Button, { WhiteButton } from '../components/button'
-import { H2, ProductName, ProductPrice, ProductCategory } from "../components/typography";
-import { Row, Col } from 'reactstrap'
+import Button, { RedButton, WhiteButton } from '../components/button'
+import { H2, H3, H4, H5, P } from "../components/typography";
+import { Row, Col, Container } from 'reactstrap'
 import styled from 'styled-components'
 import { centsToDollars } from '../utils'
-import Img from 'gatsby-image'
+import { GatsbyImage } from 'gatsby-plugin-image'
 
 const BuyButton = styled(Button)`
-margin: auto;
 display: block;
 `
 
 const ProductCard = styled(Col)`
 margin-bottom: ${props => props.theme.spacing[6]};
 margin-top: ${props => props.theme.spacing[7]};
+padding-left: ${props => props.theme.spacing[5]};
+padding-right: ${props => props.theme.spacing[5]};
 `
 
 const ProductRow = styled(Row)`
 align-items: flex-end;
+`
+
+const ProductDescription = styled(P)`
+display: inline-block;
+min-height: 3em;
+`
+
+const ProductHeader = styled.header`
+margin-top: ${props => props.theme.spacing[4]};
 `
 
 const Registry = ({ data }) => {
@@ -38,43 +48,44 @@ const Registry = ({ data }) => {
   return (
     <>
       <H2 centered>Gift Registry</H2>
+      <Container>
       <Row>
         <Col xs={6} className="text-center">
           {userStatus === "SignedOut" ? (
             <Button className="snipcart-customer-signin mx-auto">Sign in</Button>
           ) : (
-            <WhiteButton className="snipcart-customer-signout">Sign out</WhiteButton>
+            <RedButton className="snipcart-customer-signout">Sign out</RedButton>
           )}
         </Col>
         <Col xs={6} className="text-center">
-          <Button className="snipcart-checkout">{`Cart (${cartQuantity})`}</Button>
+          <WhiteButton className="snipcart-checkout">{`Cart (${cartQuantity})`}</WhiteButton>
         </Col>
       </Row>
       <ProductRow>
         {products.map((product) => (
-          <ProductCard xs={12} md={4} lg={3} key={product.node.id}>
-            <Img fluid={product.node.data.image.localFiles[0].childImageSharp.fluid} alt={product.node.data.name} />
-            <header>
-              <a href={product.node.data.product_url} alt={product.node.data.name}>
-                <ProductName>{product.node.data.name}</ProductName>
-                <ProductCategory>{product.node.data.category[0]}</ProductCategory>
-              </a>
-            </header>
-            <ProductPrice>{`$${centsToDollars(product.node.data.price, "str")}`}</ProductPrice>
-            <BuyButton
-              className="snipcart-add-item"
-              data-item-id={product.node.id}
-              data-item-url={location}
-              data-item-image={product.node.data.image.localFiles[0].publicURL}
-              data-item-price={product.node.data.price}
-              data-item-description={product.node.data.category[0]}
-              data-item-name={product.node.data.name}
-            >
-              Add to cart
-          </BuyButton>
+          <ProductCard xs={12} md={6} lg={4} key={product.node.id}>
+            <GatsbyImage image={product.node.data.image.localFiles[0].childImageSharp.gatsbyImageData} alt={product.node.data.name} />
+            <ProductHeader>
+              <H3>{product.node.data.name}</H3>
+              <H5>{`$${centsToDollars(product.node.data.price, "str")}`}</H5>
+
+              <ProductDescription>{product.node.data.description}</ProductDescription>
+            </ProductHeader>
+                  <BuyButton
+                    className="snipcart-add-item"
+                    data-item-id={product.node.id}
+                    data-item-url={location}
+                    data-item-image={product.node.data.image.localFiles[0].publicURL}
+                    data-item-price={product.node.data.price}
+                    data-item-description={product.node.data.description}
+                    data-item-name={product.node.data.name}
+                  >
+                    Add to cart
+                  </BuyButton>
           </ProductCard>
         ))}
       </ProductRow>
+      </Container>
     </>
   );
 }
@@ -90,10 +101,16 @@ export const query = graphql`
               localFiles {
                 publicURL
                 childImageSharp {
-                  fluid(quality: 100) {
-                    ...GatsbyImageSharpFluid
-                    src
-                  }
+                  gatsbyImageData(
+                    layout: CONSTRAINED, 
+                    aspectRatio: 0.875, 
+                    backgroundColor: "transparent", 
+                    quality: 100,
+                    transformOptions: {
+                      fit: CONTAIN,
+                      trim: 30
+                    }
+                  )
                 }
               }
             }
@@ -102,6 +119,7 @@ export const query = graphql`
             purchased
             category
             product_url
+            description
           }
         }
       }

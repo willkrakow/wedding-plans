@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Button, { WhiteButton, RedButton } from '../components/button'
 import { Row, Container, Col } from 'reactstrap'
 import { H4 } from '../components/typography'
+import { navigate } from "gatsby-link";
 
 const FancyInput = styled.input(props => ({
   fontSize: props.theme.fontSizes[1],
@@ -66,11 +67,24 @@ const FieldArray = () => {
     console.log(getValues())
   }
 
+  const onSubmit = async (data) => {
+    const res = await fetch('/.netlify/functions/rsvp', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify(data),
+    })
+    
+    navigate('/thank-you')
+    
+  }
   const status = watch('test')
 
   return (
     <Container>
-      <form onSubmit={handleSubmit(data => console.log(data))}>
+      <form onSubmit={handleSubmit(data => onSubmit(data))}>
 
         {fields.map((item, index) => (
           <Row key={item.id} className="justify-content-center">
