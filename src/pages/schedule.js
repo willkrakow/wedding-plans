@@ -3,6 +3,10 @@ import { H2 } from '../components/typography'
 import { graphql } from 'gatsby';
 import PageSection from '../containers/pageSection';
 
+const createReadableTime = (uglyString) => {
+  const formatted = new Date(uglyString)
+  return formatted.toLocaleTimeString().slice(0, 4) + formatted.toLocaleTimeString().slice(-3)
+}
 
 const Schedule = ({data}) => {
     const weddingSchedule = data.allAirtable.nodes;
@@ -11,7 +15,7 @@ const Schedule = ({data}) => {
         <React.Fragment>
             <H2 centered >Wedding Day Schedule</H2>
             {weddingSchedule.map((item) => (
-                <PageSection key={item.id} sectionData={{title: item.data.name, subtitle: item.data.time, bodyText: item.data.description}} />
+                <PageSection key={item.id} sectionData={{title: item.data.name, subtitle: createReadableTime(item.data.time), bodyText: item.data.description}} />
             ))}
         </React.Fragment>
     )

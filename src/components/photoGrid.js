@@ -2,7 +2,7 @@ import React from 'react'
 import { makeDateString } from '../utils'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import Img from 'gatsby-image'
+import { GatsbyImage } from 'gatsby-plugin-image'
 import { P } from './typography'
 
 const Grid = styled.section`
@@ -41,44 +41,48 @@ overflow: hidden;
 background-color: rgba(10, 10, 10, 0.9);
 background-blend-mode: hard-light;
 opacity: ${props => props.open ? 1.0 : 0.0};
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-align-content: center;
+display: grid;
+grid-template-columns: 1fr;
+grid-template-rows: 1fr 7fr 2fr;
 transition: all 0.7s ease;
 z-index: 600;
+max-width: 100vw;
+max-height: 100vh;
+height: ${props => props.open ? "-webkit-fill-available" : 0};
 `
 
 
 const ModalItem = styled.div`
 opacity: 1.0;
 height: auto;
-width: ${props => 500 * props.aspectRatio}px;
 max-width: 100vw;
+position: relative;
+left: 0;
+display: flex;
+flex-direction: column;
+justify-content: center;
+overflow: hidden;
 `
 
 
 const ModalControls = styled.div`
-display: flex;
-justify-content: space-evenly;
-align-items: center;
+display: grid;
+grid-template-columns: 1fr 3fr 1fr;
+grid-template-rows: 1fr;
 width: 100%;
-flex: 0 0 15%;
 `
 
 const NextButton = styled.button`
-display: block;
+display: inline-block;
 border: none;
 color: ${props => props.theme.colors.alwayslight};
 background: transparent;
-padding: ${props => props.theme.spacing[1]} ${props => props.theme.spacing[4]};
 font-size: ${props => props.theme.fontSizes[4]};
 transition: all 0.5s ease;
 text-decoration: underline;
 text-decoration-color: transparent;
+text-align: center;
 text-decoration-thickness: ${props => props.theme.spacing[1]};
-flex-basis: 25%;
 &:hover {
     text-decoration-color: ${props => props.theme.colors.accent};
 }
@@ -150,16 +154,16 @@ const PhotoGrid = (props) => {
         <React.Fragment>
             <Grid {...options} >
                 {photos.map((photo, index) => (
-                    <GridItem aspectRatio={photo.node.localFiles[0].childImageSharp.fluid.aspectRatio}  {...itemOptions} key={index} index={index} onClick={() => handleClick(index)}  >
-                        <Img style={{ maxWidth: "100%", height: "100%" }} fluid={photo.node.localFiles[0].childImageSharp.fluid} alt={photo.node.parent.data.title} />
+                    <GridItem aspectRatio={photo.node.localFiles[0].childImageSharp.resize.aspectRatio}  {...itemOptions} key={index} index={index} onClick={() => handleClick(index)}  >
+                        <GatsbyImage style={{ maxWidth: "100%", height: "100%" }} image={photo.node.localFiles[0].childImageSharp.gatsbyImageData} alt={photo.node.parent.data.title} />
                     </GridItem>
-
                 ))}
             </Grid>
             <CornerButton onClick={() => handleClick(currentIndex)} open={open}>&times;</CornerButton>
             <ModalGateway open={open} >
-                <ModalItem aspectRatio={photos[currentIndex].node.localFiles[0].childImageSharp.fluid.aspectRatio} >
-                    <Img fluid={photos[currentIndex].node.localFiles[0].childImageSharp.fluid} aspectRatio={photos[currentIndex].node.localFiles[0].childImageSharp.fluid.aspectRatio} alt={photos[currentIndex].node.parent.data.title} />
+                <div></div>
+                <ModalItem aspectRatio={photos[currentIndex].node.localFiles[0].childImageSharp.resize.aspectRatio} >
+                    <GatsbyImage image={photos[currentIndex].node.localFiles[0].childImageSharp.gatsbyImageData} alt={photos[currentIndex].node.parent.data.title} />
                 </ModalItem>
                 <ModalControls>
                     <NextButton onClick={handleDecrement}>&larr;</NextButton>
@@ -182,13 +186,7 @@ PhotoGrid.propTypes = {
         node: PropTypes.shape({
             localFiles: PropTypes.arrayOf(PropTypes.shape({
                 childImageSharp: PropTypes.shape({
-                    fluid: PropTypes.shape({
-                        aspectRatio: PropTypes.number,
-                        base64: PropTypes.string,
-                        sizes: PropTypes.string,
-                        src: PropTypes.string,
-                        srcset: PropTypes.string,
-                    }),
+                    gatsbyImageData: PropTypes.object,
                 }),
             })),
             parent: PropTypes.shape({

@@ -10,6 +10,8 @@ const GlobalStyles = createGlobalStyle`
   html {
     box-sizing: border-box;
     scroll-behavior: smooth;
+    transition: all 0.3s ease;
+
   }
   body {
     letter-spacing: 0;

@@ -1,7 +1,6 @@
 import React from 'react'
 import PageSection from "../containers/pageSection";
-import ParallaxImg from '../components/parallaxImg';
-import { StaticImage } from 'gatsby-plugin-image'
+import {StaticImage} from 'gatsby-plugin-image';
 
 const IndexPage = () => {
 
@@ -72,7 +71,8 @@ const IndexPage = () => {
   ]
   return (
     <React.Fragment>
-      <ParallaxImg />
+      <StaticImage src={`../images/us.jpg`} alt="Laura and Will, sitting on a log as the sun sets on the Hillsborough meadows" placeholder="blurred" layout="fullWidth" aspectRatio={16 / 12} />
+
 
       {data.map((item, index) => (
           <PageSection sectionData={item} key={index} />

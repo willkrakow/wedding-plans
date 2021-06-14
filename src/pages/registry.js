@@ -2,7 +2,7 @@ import React from "react";
 import { SnipcartContext } from 'gatsby-plugin-snipcart-advanced/context'
 import { graphql } from 'gatsby'
 import Button, { RedButton, WhiteButton } from '../components/button'
-import { H2, H3, H4, H5, P } from "../components/typography";
+import { H2, H3, H5, P } from "../components/typography";
 import { Row, Col, Container } from 'reactstrap'
 import styled from 'styled-components'
 import { centsToDollars } from '../utils'

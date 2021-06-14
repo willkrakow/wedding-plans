@@ -37,7 +37,7 @@ const PageSection = ({ sectionData }) => {
                         {sectionFluid && <Img fluid={sectionFluid.fluid} alt={sectionFluid.alt || sectionImg.alt || title} />}
                         {bodyText && <P>{bodyText}</P>}
                         {cta && (
-                            <a href={cta.link} alt={cta.label} className={cta.centered ? "d-block text-center" : ""}><Button>{cta.label}</Button></a>
+                            <a href={cta.link} alt={cta.label} className={cta.centered ? "d-block" : ""}><Button>{cta.label}</Button></a>
                         )}
                     </Col>
                 </Row>

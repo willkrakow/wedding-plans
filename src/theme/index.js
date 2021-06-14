@@ -8,12 +8,13 @@ export const theme = {
         text: "#1a1c1f",
         background: "#fafafa",
         primary: "hsl(235, 66%, 12%)",
-        secondary: "hsl(300, 66%, 12%)",
-        accent: "hsl(40, 86%, 68%)",
+        secondary: "hsl(208, 93%, 23%)",
+        accent: "hsl(17, 52%, 68%)",
         muted: "hsl(235, 6%, 50%)",
         danger: "hsl(9, 100%, 24%)",
         alwayslight: "#fafafa",
         alwaysdark: "#1a1c1f",
+        overlap: "#fafafaef",
     },
     fonts: {
         headers: "Crimson Text, serif",
@@ -43,6 +44,7 @@ export const darkTheme = {
         muted: "hsl(235, 6%, 80%)",
         alwayslight: "#fafafa",
         alwaysdark: "#1a1c1f",
+        overlap: "#1a1c1fef",
     },
     colorInvert: 1
 }

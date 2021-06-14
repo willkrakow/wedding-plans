@@ -8,7 +8,7 @@ export const H1 = styled.h1(props => ({
   textAlign: 'center',
   fontWeight: props.theme.fontWeights.lightest,
   fontSize: props.theme.fontSizes[3],
-  color: props.theme.colors.alwaysdark,
+  color: props.theme.colors.text,
   animationDuration: "6s",
   animationTimingFunction: "ease",
   fontFamily: props.theme.fonts.cursive,
@@ -81,18 +81,21 @@ export const P = styled.p(props => ({
   fontSize: props.theme.fontSizes[1],
 }))
 
+
 export const NavItem = styled(Link)`
   display: inline-block;
   padding: ${props => props.theme.spacing[1]};
   color: ${props => props.theme.colors.muted};
   font-size: ${props => props.theme.fontSizes[1]};
   text-transform: uppercase;
-  letter-spacing: ${props => props.theme.spacing[1]};
+  letter-spacing: ${props => props.theme.borders[1]};
   font-weight: ${props => props.theme.fontWeights.body};
   font-family: ${props => props.theme.fonts.headers};
   transition: all 0.5s ease;
   text-decoration: underline;
   text-decoration-color: transparent;
+  text-align: center;
+  cursor: pointer;
   &:hover {
     color: ${props => props.theme.colors.primary};
     text-decoration-color: ${props => props.theme.colors.primary},
@@ -115,7 +118,6 @@ text-align: center;
 export const ProductPrice = styled(P)`
 text-align: center;
 `
-
 
 export const ElementLink = styled.a`
 text-decoration: underline;

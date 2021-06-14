@@ -1,10 +1,9 @@
 import React from 'react'
-import styled, { ThemeProvider } from 'styled-components'
+import styled, { ThemeProvider, keyframes } from 'styled-components'
 import Seo from '../utils/seo'
 import { theme, darkTheme } from '../theme';
-import {StickyButton, StickyWhiteButton} from '../components/button';
-import BackgroundImage from 'gatsby-background-image'
-import { useStaticQuery, graphql,  } from 'gatsby'
+import { StickyButton, StickyWhiteButton } from '../components/button';
+import { useStaticQuery, graphql, } from 'gatsby'
 import GlobalStyles from '../theme/globalStyles'
 import Footer from './footer'
 import MenuBar from './menuBar'
@@ -19,9 +18,75 @@ const Main = styled.main(props => ({
 }))
 
 
+const welcome = keyframes`
+0% {
+  min-height: 100vh;
+  opacity: 0.0;
+}
+20% {
+  min-height: 100vh;
+  opacity: 1.0;
+}
+
+50% {
+  min-height: 100vh;
+}
+100% {
+  min-height: 30vh;
+}
+`
+
+
+const IntroHeader = styled.header`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: 6s ${welcome} ease forwards;
+`
+
 
 
 export default function Layout({ children, location }) {
+  const [isPrevious, setIsPrevious] = React.useState(false)
+
+  React.useEffect(() => {
+    const setCookie = (cname, cvalue, exdays) => {
+      var d = new Date();
+      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+      var expires = "expires=" + d.toUTCString();
+      console.log(cname, cvalue)
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    const getCookie = (cname) => {
+      var name = cname + "=";
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) === ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) === 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
+    const checkCookie = () => {
+      var user = getCookie("_wtk_lgc");
+      console.log(user)
+      if (user !== "") {
+        setIsPrevious(true)
+      } else {
+        setIsPrevious(false)
+        setCookie("_wtk_lgc", 'previous', 365);
+      }
+    }
+
+    checkCookie()
+  }, [isPrevious])
   const data = useStaticQuery(graphql`
     {
       file(name: {eq: "dosdandelions"}) {
@@ -45,12 +110,11 @@ export default function Layout({ children, location }) {
     }
   `)
 
-  const imageData = data.file.childImageSharp.fluid
   const { title, description, menuLinks } = data.site.siteMetadata
 
 
-  const activePage = _.find(menuLinks, (o) => {return o.path === location.pathname})
-  const [ lightTheme, setLightTheme ] = React.useState(true)
+  const activePage = _.find(menuLinks, (o) => { return o.path === location.pathname })
+  const [lightTheme, setLightTheme] = React.useState(true)
 
   const handleTheme = () => setLightTheme(!lightTheme)
   const components = {
@@ -65,34 +129,36 @@ export default function Layout({ children, location }) {
 
   return (
     <>
-    <ThemeProvider theme={lightTheme ? theme : darkTheme}>
-      <React.Fragment>
-      <GlobalStyles theme={lightTheme ? theme : darkTheme} />
-      <Seo title={activePage?.title || title} description={description} />
-      <header>
-        <BackgroundImage as="nav" fluid={imageData} alt="Dandelions blowing in the wind" isDarken={lightTheme} key={lightTheme ? `dark` : `light`} >
-          <MenuBar />
-        </BackgroundImage>
-      </header>
-      <Main>
+      <ThemeProvider theme={lightTheme ? theme : darkTheme}>
+        <React.Fragment>
+          <GlobalStyles theme={lightTheme ? theme : darkTheme} />
+          <Seo title={activePage?.title || title} description={description} />
+          {isPrevious ? (
+            <MenuBar links={menuLinks} activePage={activePage} />
+          ) : (
+            <IntroHeader>
+              <MenuBar links={menuLinks} isPrevious={isPrevious} />
+            </IntroHeader>
+          )}
+          <Main>
             <MDXProvider components={components}>
               {children}
             </MDXProvider>
-      </Main>
-      <Footer />
+          </Main>
+          <Footer />
 
-      {lightTheme ? (
-        <StickyButton onClick={handleTheme}>
-          Dark mode
-        </StickyButton>
-      )
-        : (
-          <StickyWhiteButton onClick={handleTheme} >
-            Light mode
-          </StickyWhiteButton>
-        )}
+          {lightTheme ? (
+            <StickyButton onClick={handleTheme}>
+              Dark mode
+            </StickyButton>
+          )
+            : (
+              <StickyWhiteButton onClick={handleTheme} >
+                Light mode
+              </StickyWhiteButton>
+            )}
         </React.Fragment>
-    </ThemeProvider>
+      </ThemeProvider>
     </>
   );
 }
