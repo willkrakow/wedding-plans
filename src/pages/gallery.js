@@ -3,37 +3,7 @@ import { useStaticQuery, graphql } from 'gatsby'
 import { H2 } from '../components/typography'
 import PhotoGrid from '../components/photoGrid'
 
-const Gallery = () => {
-  const data = useStaticQuery(graphql`
-    {
-      allAirtableField {
-        edges {
-          node {
-            parent {
-              id
-              ... on Airtable {
-                id
-                data {
-                  location
-                  date
-                  description
-                  title
-                }
-              }
-            }
-            localFiles {
-              childImageSharp {
-                gatsbyImageData
-                resize {
-                  aspectRatio
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `)
+const Gallery = ({data}) => {
 
   const photoData = data.allAirtableField.edges;
 
@@ -44,6 +14,37 @@ const Gallery = () => {
     </>
   )
 }
+
+export const query = graphql`
+  {
+    allAirtableField {
+      edges {
+        node {
+          parent {
+            id
+            ... on Airtable {
+              id
+              data {
+                location
+                date
+                description
+                title
+              }
+            }
+          }
+          localFiles {
+            childImageSharp {
+              gatsbyImageData(layout: CONSTRAINED)
+              resize(fit: CONTAIN) {
+                aspectRatio
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
 
 
 

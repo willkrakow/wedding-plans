@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import { Row, Col } from 'reactstrap'
 import { ClassyCard } from './classyCard'
 import FunFact from '../components/funFact'
-import Img from 'gatsby-image'
+import { GatsbyImage } from 'gatsby-plugin-image'
 
 const PageSectionImage = styled.img`
 width: 100%;
@@ -34,7 +34,7 @@ const PageSection = ({ sectionData }) => {
                         }
                         {subtitle && <H4>{subtitle}</H4>}
                         {sectionImg && <PageSectionImage src={sectionImg.src} alt={sectionImg.alt || title} />}
-                        {sectionFluid && <Img fluid={sectionFluid.fluid} alt={sectionFluid.alt || sectionImg.alt || title} />}
+                        {sectionFluid && <GatsbyImage image={sectionFluid.image} alt={sectionFluid.alt || sectionImg.alt || title} />}
                         {bodyText && <P>{bodyText}</P>}
                         {cta && (
                             <a href={cta.link} alt={cta.label} className={cta.centered ? "d-block" : ""}><Button>{cta.label}</Button></a>
@@ -68,7 +68,7 @@ PageSection.propTypes = {
             body: PropTypes.string,
         }),
         sectionFluid: PropTypes.shape({
-            fluid: PropTypes.any,
+            image: PropTypes.any,
             alt: PropTypes.string,
         })
     }),

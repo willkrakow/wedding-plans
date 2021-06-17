@@ -89,13 +89,6 @@ export default function Layout({ children, location }) {
   }, [isPrevious])
   const data = useStaticQuery(graphql`
     {
-      file(name: {eq: "dosdandelions"}) {
-        childImageSharp {
-          fluid(quality: 100) {
-            ...GatsbyImageSharpFluid
-          }
-        }
-      }
       site {
         siteMetadata {
           title

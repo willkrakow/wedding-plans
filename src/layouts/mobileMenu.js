@@ -36,7 +36,7 @@ background-color: ${props => props.theme.colors.overlap};
 box-shadow: 0px ${props => props.theme.spacing[2]} ${props => props.theme.spacing[2]} rgba(0,0,0,0.2);
 `
 
-const DropList = styled.ul`
+const DropList = styled.nav`
 list-style: none;
 `
 
@@ -55,7 +55,7 @@ const MobileMenu = ({menulinks}) => {
             <Dropper isOpen={dropdownOpen} >
                 <DropList>
                 {menulinks.map((link, index) => (
-                    <NavItem as="li" className="w-100 text-end" key={index} to={link.path} alt={link.title} activeStyle={{ textDecoration: 'underline', textDecorationColor: theme.colors.accent, textDecorationThickness: theme.spacing[1] }} >{link.title}</NavItem>
+                    <NavItem className="w-100 text-end" key={index} to={link.path} alt={link.title} activeStyle={{ textDecoration: 'underline', textDecorationColor: theme.colors.accent, textDecorationThickness: theme.spacing[1] }} >{link.title}</NavItem>
                 ))}
                 </DropList>
             </Dropper>

@@ -17,7 +17,7 @@ export default function About({data}) {
           sectionFluid: {
             alt: section.node.data.section_title,
             isUrl: false,
-            fluid: section.node.data.image.localFiles[0].childImageSharp.fluid 
+            image: section.node.data.image.localFiles[0].childImageSharp.gatsbyImageData 
           } 
         }} />
       ))}
@@ -35,7 +35,7 @@ About.propTypes = {
               localFiles: PropTypes.arrayOf(PropTypes.shape({
                 id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
                 childImageSharp: PropTypes.shape({
-                  fluid: PropTypes.any,
+                  gatsbyImageData: PropTypes.object,
                 })
               }))
             }),
@@ -51,7 +51,10 @@ About.propTypes = {
 
 export const query = graphql`
   {
-    allAirtable(filter: {table: {eq: "About"}}, sort: {order: ASC, fields: data___order}) {
+    allAirtable(
+      filter: {table: {eq: "About"}}
+      sort: {order: ASC, fields: data___order}
+    ) {
       edges {
         node {
           data {
@@ -59,9 +62,7 @@ export const query = graphql`
               localFiles {
                 id
                 childImageSharp {
-                  fluid(quality: 100) {
-                    ...GatsbyImageSharpFluid
-                  }
+                  gatsbyImageData(quality: 100)
                 }
               }
             }

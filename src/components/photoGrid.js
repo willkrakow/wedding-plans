@@ -7,16 +7,25 @@ import { P } from './typography'
 
 const Grid = styled.section`
 display: grid;
-grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+grid-auto-rows: 400px;
 grid-auto-flow: dense;
-width: 100vw;
-position: absolute;
+width: 100%;
+position: relative;
+grid-gap: ${props => props.theme.spacing[2]};
 left: 0;
+right: 0;
+max-width: 100vw;
+overflow: hidden;
+@media (max-width: 575px){
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+}
 `
 
 const GridItem = styled.div`
 grid-column: span ${props => props.aspectRatio > 1.25 ? 2 : 1};
-grid-row: span ${props => 1};
+grid-row: span 1;
 overflow: hidden;
 height: 100%;
 cursor: pointer;
@@ -28,6 +37,9 @@ transition-delay: 1s;
     transform: scale(1.2);
     z-index: 501;
     box-shadow: 0px ${props => props.theme.spacing[3]} ${props => props.theme.spacing[2]} rgba(10, 10, 10, 0.5);
+}
+@media (max-width: 575px){
+    grid-column: span 1;
 }
 `
 
@@ -145,9 +157,26 @@ const PhotoGrid = (props) => {
             }
         }
 
-        document.addEventListener('keydown', handleKeypress)
+        const handleNext = (e) => {
+            if (e.key === "ArrowRight" && open){
+                handleIncrement()
+            }
+        }
 
-        return () => document.removeEventListener('keydown', handleKeypress)
+        const handlePrevious = (e) => {
+            if (e.key === "ArrowLeft" && open){
+                handleDecrement()
+            }
+        }
+
+        document.addEventListener('keydown', handleKeypress)
+        document.addEventListener('keydown', handleNext)
+        document.addEventListener('keydown', handlePrevious)
+        return () => {
+            document.removeEventListener('keydown', handleKeypress)
+            document.removeEventListener('keydown', handleNext)
+            document.removeEventListener('keydown', handlePrevious)
+        }
     })
 
     return (
@@ -163,14 +192,14 @@ const PhotoGrid = (props) => {
             <ModalGateway open={open} >
                 <div></div>
                 <ModalItem aspectRatio={photos[currentIndex].node.localFiles[0].childImageSharp.resize.aspectRatio} >
-                    <GatsbyImage image={photos[currentIndex].node.localFiles[0].childImageSharp.gatsbyImageData} alt={photos[currentIndex].node.parent.data.title} />
+                    <GatsbyImage objectFit="contain" image={photos[currentIndex].node.localFiles[0].childImageSharp.gatsbyImageData} alt={photos[currentIndex].node.parent.data.title} />
                 </ModalItem>
                 <ModalControls>
                     <NextButton onClick={handleDecrement}>&larr;</NextButton>
                     <Caption>
                         <CaptionText>{photos[currentIndex].node.parent.data.description}</CaptionText>
                         <CaptionText muted >
-                            {makeDateString(photos[currentIndex].node.parent.data.date)}
+                            {photos[currentIndex].node.parent.data.date && makeDateString(photos[currentIndex].node.parent.data.date)}
                             <br />
                             {photos[currentIndex].node.parent.data.location}</CaptionText>
                     </Caption>
