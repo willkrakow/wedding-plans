@@ -55,7 +55,7 @@ background-blend-mode: hard-light;
 opacity: ${props => props.open ? 1.0 : 0.0};
 display: grid;
 grid-template-columns: 1fr;
-grid-template-rows: 1fr 7fr 2fr;
+grid-template-rows: 2fr 8fr 2fr;
 transition: all 0.7s ease;
 z-index: 600;
 max-width: 100vw;
@@ -74,18 +74,23 @@ display: flex;
 flex-direction: column;
 justify-content: center;
 overflow: hidden;
+padding: 0 ${props => props.theme.spacing[2]};
 `
 
 
 const ModalControls = styled.div`
-display: grid;
-grid-template-columns: 1fr 3fr 1fr;
-grid-template-rows: 1fr;
-width: 100%;
+display: flex;
+flex-direction: row;
 `
 
+const ModalInfoBox = styled.div`
+display: flex;
+flex-direction: row;
+`
+
+
 const NextButton = styled.button`
-display: inline-block;
+display: block;
 border: none;
 color: ${props => props.theme.colors.alwayslight};
 background: transparent;
@@ -94,14 +99,21 @@ transition: all 0.5s ease;
 text-decoration: underline;
 text-decoration-color: transparent;
 text-align: center;
+position: absolute;
+right: 0;
 text-decoration-thickness: ${props => props.theme.spacing[1]};
 &:hover {
     text-decoration-color: ${props => props.theme.colors.accent};
 }
 `
 
+const PrevButton = styled(NextButton)`
+right: auto;
+left: 0;
+`
+
 const CornerButton = styled(NextButton)`
-position: fixed;
+position: absolute;
 top: ${props => props.theme.spacing[3]};
 left: ${props => props.theme.spacing[3]};
 display: ${props => props.open ? 'inherit' : 'none'};
@@ -111,13 +123,14 @@ z-index: 601;
 const CaptionText = styled(P)`
 color: ${props => props.muted ? props.theme.colors.muted : props.theme.colors.alwayslight};
 text-align: center;
-display: inline-block;
+flex: 0 1 500px;
 width: 100%;
 font-size: ${props => props.muted ? props.theme.fontSizes[1] : props.theme.fontSizes[2]};
 `
 
 const Caption = styled.div`
-flex-basis: 50%;
+flex: 0 1 500px;
+padding: 0 ${props => props.theme.spacing[2]};
 `
 
 
@@ -188,14 +201,16 @@ const PhotoGrid = (props) => {
                     </GridItem>
                 ))}
             </Grid>
-            <CornerButton onClick={() => handleClick(currentIndex)} open={open}>&times;</CornerButton>
             <ModalGateway open={open} >
-                <div></div>
+                <div>
+                    <CornerButton onClick={() => handleClick(currentIndex)} open={open}>&times;</CornerButton>
+                </div>
                 <ModalItem aspectRatio={photos[currentIndex].node.localFiles[0].childImageSharp.resize.aspectRatio} >
                     <GatsbyImage objectFit="contain" image={photos[currentIndex].node.localFiles[0].childImageSharp.gatsbyImageData} alt={photos[currentIndex].node.parent.data.title} />
                 </ModalItem>
+                <PrevButton onClick={handleDecrement}>&larr;</PrevButton>
+                <NextButton onClick={handleIncrement}>&rarr;</NextButton>
                 <ModalControls>
-                    <NextButton onClick={handleDecrement}>&larr;</NextButton>
                     <Caption>
                         <CaptionText>{photos[currentIndex].node.parent.data.description}</CaptionText>
                         <CaptionText muted >
@@ -203,7 +218,6 @@ const PhotoGrid = (props) => {
                             <br />
                             {photos[currentIndex].node.parent.data.location}</CaptionText>
                     </Caption>
-                    <NextButton onClick={handleIncrement}>&rarr;</NextButton>
                 </ModalControls>
             </ModalGateway>
         </React.Fragment>
