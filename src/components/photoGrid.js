@@ -3,7 +3,7 @@ import { makeDateString } from '../utils'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { GatsbyImage } from 'gatsby-plugin-image'
-import { P } from './typography'
+import { P, H5 } from './typography'
 
 const Grid = styled.section`
 display: grid;
@@ -55,7 +55,7 @@ background-blend-mode: hard-light;
 opacity: ${props => props.open ? 1.0 : 0.0};
 display: grid;
 grid-template-columns: 1fr;
-grid-template-rows: 2fr 8fr 2fr;
+grid-template-rows: 1fr 8fr 2fr;
 transition: all 0.7s ease;
 z-index: 600;
 max-width: 100vw;
@@ -81,13 +81,8 @@ padding: 0 ${props => props.theme.spacing[2]};
 const ModalControls = styled.div`
 display: flex;
 flex-direction: row;
+justify-content: center;
 `
-
-const ModalInfoBox = styled.div`
-display: flex;
-flex-direction: row;
-`
-
 
 const NextButton = styled.button`
 display: block;
@@ -100,6 +95,7 @@ text-decoration: underline;
 text-decoration-color: transparent;
 text-align: center;
 position: absolute;
+top: 40%;
 right: 0;
 text-decoration-thickness: ${props => props.theme.spacing[1]};
 &:hover {
@@ -121,15 +117,27 @@ z-index: 601;
 `
 
 const CaptionText = styled(P)`
-color: ${props => props.muted ? props.theme.colors.muted : props.theme.colors.alwayslight};
+color: ${props => props.theme.colors.muted};
 text-align: center;
 flex: 0 1 500px;
 width: 100%;
-font-size: ${props => props.muted ? props.theme.fontSizes[1] : props.theme.fontSizes[2]};
+font-size: ${props => props.theme.fontSizes[1]};
+align-self: flex-end;
+display: block;
+`
+
+const CaptionTitle = styled(H5)`
+color: ${props => props.theme.colors.alwayslight};
+text-align: center;
+flex: 0 1 500px;
+width: 100%;
+font-size: ${props => props.theme.fontSizes[2]};
 `
 
 const Caption = styled.div`
 flex: 0 1 500px;
+display: flex;
+flex-wrap: wrap;
 padding: 0 ${props => props.theme.spacing[2]};
 `
 
@@ -212,8 +220,8 @@ const PhotoGrid = (props) => {
                 <NextButton onClick={handleIncrement}>&rarr;</NextButton>
                 <ModalControls>
                     <Caption>
-                        <CaptionText>{photos[currentIndex].node.parent.data.description}</CaptionText>
-                        <CaptionText muted >
+                        <CaptionTitle>{photos[currentIndex].node.parent.data.description}</CaptionTitle>
+                        <CaptionText>
                             {photos[currentIndex].node.parent.data.date && makeDateString(photos[currentIndex].node.parent.data.date)}
                             <br />
                             {photos[currentIndex].node.parent.data.location}</CaptionText>

@@ -84,6 +84,7 @@ module.exports = {
       options: {
         apiKey: process.env.AIRTABLE_API_KEY,
         concurrency: 0,
+        separateMapType: true,
         tables: [
           {
             baseId: process.env.AIRTABLE_BASE_ID,

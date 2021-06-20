@@ -2,16 +2,7 @@ import styled from "styled-components";
 import { Link } from 'gatsby'
 import "@fontsource/open-sans";
 import "@fontsource/courgette";
-import { keyframes } from 'styled-components'
 
-const fadein = keyframes`
-from {
-  opacity: 0.0;
-}
-to {
-  opacity: 1.0;
-}
-`
 export const H1 = styled.h1(props => ({
   display: 'block',
   textAlign: 'center',

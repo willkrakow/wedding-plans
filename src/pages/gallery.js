@@ -1,5 +1,5 @@
 import React from 'react'
-import { useStaticQuery, graphql } from 'gatsby'
+import { graphql } from 'gatsby'
 import { H2 } from '../components/typography'
 import PhotoGrid from '../components/photoGrid'
 
