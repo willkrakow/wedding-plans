@@ -3,7 +3,28 @@ import PageSection from '../containers/pageSection'
 import { graphql } from 'gatsby'
 import { H2 } from '../components/typography';
 
-const Lodging = ({ data }) => {
+interface LodgingNodeProps {
+  id: string,
+  data: {
+    price_range: number,
+    blocked_rooms: number,
+    location: string,
+    name: string,
+    image: {
+      localFiles: Array<any>
+    }
+  }
+}
+
+interface LodgingProps {
+  data: {
+    allAirtable: {
+      nodes: Array<LodgingNodeProps>
+    }
+  }
+}
+
+const Lodging = ({ data }: LodgingProps) => {
     const hotels = data.allAirtable.nodes;
 
     return (
@@ -12,14 +33,10 @@ const Lodging = ({ data }) => {
         {hotels.map(hotel => (
             <PageSection
               key={hotel.id}
-              sectionData={{
-                title: hotel.data.name,
-                subtitle: hotel.data.location,
-                sectionFluid: {
-                  image: hotel.data.image.localFiles[0].childImageSharp.gatsbyImageData,
-                  alt: hotel.data.name
-                },
-                bodyText: `$${hotel.data.price_range}+ per night` }}
+              title={hotel.data.name}
+              subtitle={hotel.data.location}
+              sectionFluid={{image: hotel.data.image.localFiles[0].childImageSharp.gatsbyImageData, alt: hotel.data.name}}
+              bodyText={`$${hotel.data.price_range}+ per night`}
             />
         ))}
         </>

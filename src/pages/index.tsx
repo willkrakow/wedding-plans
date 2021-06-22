@@ -1,8 +1,9 @@
 import React from 'react'
 import PageSection from "../containers/pageSection";
 import {StaticImage} from 'gatsby-plugin-image';
+import { PageProps } from 'gatsby';
 
-const IndexPage = () => {
+const IndexPage: React.FC<PageProps> = () => {
 
   const data = [
     {
@@ -75,7 +76,7 @@ const IndexPage = () => {
 
 
       {data.map((item, index) => (
-          <PageSection sectionData={item} key={index} />
+          <PageSection {...item} key={index} />
       ))}
 
     </React.Fragment>

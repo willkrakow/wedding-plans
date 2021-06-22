@@ -1,24 +1,24 @@
 import React from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import styled from 'styled-components'
-import Button, { WhiteButton, RedButton } from '../components/button'
+import Button, { WhiteButton, RedButton } from './button'
 import { Row, Container, Col } from 'reactstrap'
-import { H4 } from '../components/typography'
+import { H4 } from './typography'
 import { navigate } from "gatsby-link";
 
-const FancyInput = styled.input(props => ({
-  fontSize: props.theme.fontSizes[1],
-  color: props.theme.colors.text,
-  fontFamily: props.theme.fonts.body,
-  border: 'none',
-  borderBottom: `${props.theme.borders[1]} solid ${props.theme.colors.text}`,
-  borderTop: 'none',
-  borderLeft: 'none',
-  padding: props.theme.spacing[2],
-  marginTop: props.theme.spacing[3],
-  marginBottom: props.theme.spacing[3],
-  width: '100%',
-}))
+const FancyInput = styled.input`
+  font-size: ${props => props.theme.fontSizes[1]};
+  color: ${props => props.theme.colors.text};
+  font-family: ${props => props.theme.fonts.body};
+  border: none;
+  border-bottom: ${props => props.theme.borders[1]} solid ${props => props.theme.colors.text};
+  border-top: none;
+  border-left: none;
+  padding: ${props => props.theme.spacing[2]};
+  margin-top: ${props => props.theme.spacing[3]};
+  margin-bottom: ${props => props.theme.spacing[3]};
+  width: 100%;
+`
 
 
 const FormRow = styled(Row)(props => ({
@@ -62,13 +62,13 @@ const FieldArray = () => {
     name: "test"
   });
 
-  const handleToggle = (index, input) => {
+  const handleToggle = (index: number, input: boolean): void => {
     setValue(`test.${index}.over21`, input)
     console.log(getValues())
   }
 
-  const onSubmit = async (data) => {
-    const res = await fetch('/.netlify/functions/rsvp', {
+  const onSubmit = async (data: object) => {
+    const res: Response = await fetch('/.netlify/functions/rsvp', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -86,12 +86,10 @@ const FieldArray = () => {
   return (
     <Container>
       <form onSubmit={handleSubmit(data => onSubmit(data))}>
-
         {fields.map((item, index) => (
-          <Row key={item.id} className="justify-content-center">
-
+          <Row tag="fieldset" key={item.id} className="justify-content-center">
             <Col xs={12} md={8}>
-              <H4>Guest {index + 1}</H4>
+              <H4 alwaysdark={false} centered={false} inline={false} >Guest {index + 1}</H4>
             </Col>
             <FormCol xs={12} md={8}>
               <Container>
@@ -103,7 +101,7 @@ const FieldArray = () => {
                     <FancyInput
                       {...register(`test.${index}.name`)}
                       id={`test.${index}.name`}
-                      defaultValue={item.name} // make sure to set up defaultValue
+                      defaultValue={""} // make sure to set up defaultValue
                     />
                   </Col>
                 </Row>
@@ -114,7 +112,7 @@ const FieldArray = () => {
                   <Col xs={12} lg={8}>
                     <FancyInput
                       {...register(`test.${index}.phoneNumber`)}
-                      defaultValue={item.phoneNumber} // make sure to set up defaultValue
+                      defaultValue={""} // make sure to set up defaultValue
                     />
                   </Col>
                 </Row>
@@ -124,9 +122,9 @@ const FieldArray = () => {
                   </Col>
                   <Col xs={12} lg={8} className="justify-content-between d-flex">
                     <FancyInput
+                    defaultValue={"false"}
                     type="hidden"
                       {...register(`test.${index}.over21`)}
-                      defaultValue={item.over21 || false} // make sure to set up defaultValue
                     />
                     <YesButton status={status[index].over21} type="button" onClick={() => handleToggle(index, true)} >Yes</YesButton>
                     <NoButton status={status[index].over21} type="button" onClick={() => handleToggle(index, false)} >No</NoButton>
@@ -137,7 +135,7 @@ const FieldArray = () => {
                     <FancyLabel htmlFor={`test.${index}.notes`}>Notes</FancyLabel>
                   </Col>
                   <Col xs={12} lg={8}>
-                    <FancyInput {...register(`test.${index}.notes`)} defaultValue={item.notes} />
+                    <FancyInput {...register(`test.${index}.notes`)} defaultValue={""} />
                   </Col>
                 </Row>
                 <Row>

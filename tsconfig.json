@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "jsx": "preserve",
+        "lib": [
+            "dom",
+            "es2015",
+            "es2017"
+        ],
+        "strict": true,
+        "noEmit": true,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "removeComments": false,
+        "noImplicitAny": false,
+        "typeRoots": [
+            "./typings",
+            "./node_modules/@types/"
+        ]
+    },
+    "include": [
+        "./src/**/*"
+    ],
+    "exclude": [
+        "./src/images/*",
+        "./studio/**/*",
+        "./static/**/*"
+    ]
+}

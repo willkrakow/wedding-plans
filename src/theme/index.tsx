@@ -2,8 +2,10 @@ import "@fontsource/courgette"
 import "@fontsource/open-sans"
 import "@fontsource/great-vibes";
 import "@fontsource/crimson-text";
+import { DefaultTheme } from 'styled-components'
 
-export const theme = {
+
+export const theme: DefaultTheme = {
     colors: {
         text: "#1a1c1f",
         background: "#fafafa",
@@ -24,18 +26,20 @@ export const theme = {
     fontSizes: ["12px", "18px", "24px", "30px", "42px", "56px", "64px"],
     spacing: ["0", "8px", "12px", "16px", "24px", "30px", "36px", "64px"],
     fontWeights: {
-        lightest: 200,
-        light: 300,
-        body: 400,
-        heavy: 600,
+        lightest: "200",
+        light: "300",
+        body: "400",
+        heavy: "600",
     },
     borders: ["0px", "2px", "4px"],
     colorInvert: 0
 }
 
-export const darkTheme = {
+
+export const darkTheme: DefaultTheme = {
     ...theme,
     colors: {
+        ...theme.colors,
         background: "#1a1c1f",
         text: "#fafafa",
         primary: "hsl(235, 96%, 72%)",

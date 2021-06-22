@@ -5,15 +5,21 @@ import { useLocation } from "@reach/router";
 import { useStaticQuery, graphql } from "gatsby";
 
 
-const Seo = ({ title, description }) => {
+interface SeoProps {
+  title: string,
+  description: string,
+}
+
+const Seo = ({ title, description }: SeoProps) => {
   const { pathname } = useLocation();
-  const { site } = useStaticQuery(query);
+  const { site }: SiteProps = useStaticQuery(query);
   const {
     defaultTitle,
     titleTemplate,
     defaultDescription,
     siteUrl,
   } = site.siteMetadata;
+
   const seo = {
     title: title || defaultTitle,
     description: description || defaultDescription,
@@ -33,10 +39,21 @@ const Seo = ({ title, description }) => {
       {seo.description && (
         <meta name="twitter:description" content={seo.description} />
       )}
-      {seo.image && <meta name="twitter:image" content={seo.image} />}
     </Helmet>
   );
 };
+
+interface SiteProps {
+  site: {
+    siteMetadata: {
+      defaultTitle: string,
+      titleTemplate: string,
+      defaultDescription: string,
+      siteUrl: string,
+    }
+  }
+}
+
 Seo.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
@@ -45,7 +62,7 @@ Seo.defaultProps = {
   title: null,
   description: null,
 };
-export const query = graphql`
+const query: void = graphql`
   query Seo {
     site {
       siteMetadata {

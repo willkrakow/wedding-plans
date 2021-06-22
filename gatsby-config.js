@@ -136,6 +136,7 @@ module.exports = {
         openCartOnAdd: true,
 			},
     },
-    `gatsby-plugin-layout`
+    `gatsby-plugin-layout`,
+    `gatsby-plugin-typescript`,
   ],
 };

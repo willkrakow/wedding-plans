@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
 import { Popover } from 'reactstrap';
-import PropTypes from 'prop-types'
-import { H4, H5 } from './typography'
+import { H4, P } from './typography'
 import styled from 'styled-components'
+
+
+type Placements = "left" | "right" | "left" | "right";
+
+export interface factProps {
+    placement?: Placements,
+    header: string,
+    body: string,
+}
+
 
 const ElementPop = styled(Popover)`
 border-radius: 0;
@@ -15,8 +24,8 @@ border-radius: 0;
 border: ${props => `1px solid ${props.theme.colors.muted}`};
 `
 
-const FunFact = ({placement, header, body, ...props}) => {
-    const [popoverOpen, setPopoverOpen] = useState(false);
+const FunFact: React.FC<factProps> = ({placement = "left", header, body, ...props}) => {
+    const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
 
     const toggle = () => setPopoverOpen(!popoverOpen);
 
@@ -29,24 +38,12 @@ const FunFact = ({placement, header, body, ...props}) => {
             </div>
             <ElementPop popperClassName="border-0" placement={placement} isOpen={popoverOpen} target={targetRef} toggle={toggle}>
                 <PopInner as="aside">
-                    <H4>{header}</H4>
-                    <H5>{body}</H5>
+                    <H4 centered={true} alwaysdark={false} inline={true} >{header}</H4>
+                    <P centered={false} >{body}</P>
                 </PopInner>
             </ElementPop>
         </React.Fragment>
     );
-}
-
-FunFact.propTypes = {
-    placement: PropTypes.oneOf(["bottom", "top", "left", "right"]),
-    header: PropTypes.string,
-    body: PropTypes.string,
-}
-
-FunFact.defaultProps = {
-    placement: "left",
-    header: "Fun fact",
-    body: "",
 }
 
 export default FunFact;

@@ -1,9 +1,34 @@
 import React from 'react'
-import { graphql } from 'gatsby'
+import { graphql, PageProps } from 'gatsby'
 import { H2 } from '../components/typography'
 import PhotoGrid from '../components/photoGrid'
+import { IImage } from 'gatsby-plugin-image'
+interface GalleryNodeProps {
+  node: {
+    parent: {
+      id: String,
+      data: {
+        location: string | undefined,
+        date: string | undefined,
+        description: string | undefined,
+        title: string | undefined,
+      }
+    },
+    localFiles: Array<IImage>,
 
-const Gallery = ({data}) => {
+  }
+}
+
+interface GalleryProps extends PageProps {
+  data: {
+    allAirtableField: {
+      edges: Array<GalleryNodeProps>
+    }
+  }
+}
+
+
+const Gallery = ({data}: GalleryProps) => {
 
   const photoData = data.allAirtableField.edges;
 

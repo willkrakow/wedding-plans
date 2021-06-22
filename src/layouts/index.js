@@ -130,7 +130,7 @@ export default function Layout({ children, location }) {
             <MenuBar links={menuLinks} activePage={activePage} />
           ) : (
             <IntroHeader>
-              <MenuBar links={menuLinks} isPrevious={isPrevious} />
+              <MenuBar links={menuLinks} />
             </IntroHeader>
           )}
           <Main>
