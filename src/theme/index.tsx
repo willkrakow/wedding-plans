@@ -2,6 +2,7 @@ import "@fontsource/courgette"
 import "@fontsource/open-sans"
 import "@fontsource/great-vibes";
 import "@fontsource/crimson-text";
+import "@fontsource/crimson-text/600-italic.css"
 import { DefaultTheme } from 'styled-components'
 
 

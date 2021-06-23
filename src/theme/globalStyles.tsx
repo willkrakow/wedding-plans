@@ -16,11 +16,12 @@ const GlobalStyles = createGlobalStyle`
   body {
     letter-spacing: 0;
     line-height: 1.5em;
-    background-color: ${props => props.theme.colors.background};
+    background-color: ${(props) => props.theme.colors.background};
+    background: linear-gradient(142deg, rgba(34,193,195,0.0) 0%, rgba(253,187,45,0.1) 100%);
     font-size: 18px;
     max-width: 100vw;
     overflow-x: hidden;
   }
-`
+`;
 
 export default GlobalStyles

@@ -15,7 +15,6 @@ interface GalleryNodeProps {
       }
     },
     localFiles: Array<IImage>,
-
   }
 }
 

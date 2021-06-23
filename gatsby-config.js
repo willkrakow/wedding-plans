@@ -120,8 +120,9 @@ module.exports = {
           {
             baseId: process.env.AIRTABLE_BASE_ID,
             tableName: `lodging`,
-            mapping: { 'image': "fileNode" },
-          },
+            mapping: {
+              'image': "fileNode"            },
+            },
         ],
       },
     },

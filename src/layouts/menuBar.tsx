@@ -41,13 +41,13 @@ const MenuBar = ({links, activePage}: MenuBarProps): JSX.Element => {
     <MenuWrapper fluid>
         <Row>
             <Col xs={12}>
-            <BannerHeader to={'/'} ><H1>Laura Gale Campbell <br /> &amp; <br />William Tompkins Krakow</H1></BannerHeader>
+            <BannerHeader to={'/'} ><H1>LGC &amp; WTK</H1></BannerHeader>
               <H4 alwaysdark={false} inline={false} centered={true}><time dateTime="2022-05-01">May 1, 2022</time></H4>
             </Col>
           </Row>
           <DesktopMenu noGutters className="justify-content-center">
             {links.map((link, index) => (
-              <Col sm={3} md={3} lg={3} xl={2} className="text-center" key={index}>
+              <Col sm={3} md={3} lg={3} xl={3} className="text-center" key={index}>
                 <NavItem to={link.path} >{link.title}</NavItem>
               </Col>
             ))}

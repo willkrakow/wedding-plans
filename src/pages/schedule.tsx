@@ -13,7 +13,7 @@ interface ScheduleItemProps {
         data: {
           name: string,
           time: string,
-          description: string,
+          description: string | undefined,
         },
 }
 

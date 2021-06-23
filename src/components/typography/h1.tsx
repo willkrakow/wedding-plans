@@ -5,9 +5,8 @@ export const H1 = styled.h1`
   text-align: center;
   font-size: ${props => props.theme.fontSizes[3]};
   color: ${props => props.theme.colors.text};
-  animation-duration: 6s;
-  animation-timing-function: ease;
   font-family: ${props => props.theme.fonts.cursive};
   line-height: normal;
   font-weight: ${props => props.theme.fontWeights.lightest};
+  letter-spacing: ${props => props.theme.spacing[3]};
 `

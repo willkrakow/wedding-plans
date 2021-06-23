@@ -20,7 +20,7 @@ interface RegistryNodeProps {
       purchased: boolean;
       category: string;
       product_url: string;
-      description: string;
+      description: string | undefined;
     };
   };
 }

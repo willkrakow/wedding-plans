@@ -12,7 +12,6 @@ import { MDXProvider } from '@mdx-js/react'
 import _ from 'lodash';
 
 const Main = styled.main(props => ({
-  backgroundColor: props.theme.colors.background,
   maxWidth: '90rem',
   margin: 'auto',
 }))
@@ -33,6 +32,7 @@ const welcome = keyframes`
 }
 100% {
   min-height: 30vh;
+  opacity: 0.0;
 }
 `
 
@@ -86,6 +86,7 @@ export default function Layout({ children, location }) {
     }
 
     checkCookie()
+    setTimeout(() => setIsPrevious(true), 6000)
   }, [isPrevious])
   const data = useStaticQuery(graphql`
     {
@@ -130,7 +131,7 @@ export default function Layout({ children, location }) {
             <MenuBar links={menuLinks} activePage={activePage} />
           ) : (
             <IntroHeader>
-              <MenuBar links={menuLinks} />
+              <H1>William T Krakow & Laura Gale Campbell</H1>
             </IntroHeader>
           )}
           <Main>
