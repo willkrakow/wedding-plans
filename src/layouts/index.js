@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { ThemeProvider, keyframes } from 'styled-components'
+import styled, { ThemeProvider } from 'styled-components'
 import Seo from '../utils/seo'
 import { theme, darkTheme } from '../theme';
 import { StickyButton, StickyWhiteButton } from '../components/button';
@@ -15,35 +15,6 @@ const Main = styled.main(props => ({
   maxWidth: '90rem',
   margin: 'auto',
 }))
-
-
-const welcome = keyframes`
-0% {
-  min-height: 100vh;
-  opacity: 0.0;
-}
-20% {
-  min-height: 100vh;
-  opacity: 1.0;
-}
-
-50% {
-  min-height: 100vh;
-}
-100% {
-  min-height: 30vh;
-  opacity: 0.0;
-}
-`
-
-
-const IntroHeader = styled.header`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  animation: 6s ${welcome} ease forwards;
-`
 
 
 
@@ -127,13 +98,7 @@ export default function Layout({ children, location }) {
         <React.Fragment>
           <GlobalStyles theme={lightTheme ? theme : darkTheme} />
           <Seo title={activePage?.title || title} description={description} />
-          {isPrevious ? (
-            <MenuBar links={menuLinks} activePage={activePage} />
-          ) : (
-            <IntroHeader>
-              <H1>William T Krakow & Laura Gale Campbell</H1>
-            </IntroHeader>
-          )}
+          <MenuBar links={menuLinks} activePage={activePage} />
           <Main>
             <MDXProvider components={components}>
               {children}

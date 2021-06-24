@@ -53,10 +53,7 @@ const MenuBar = ({links, activePage}: MenuBarProps): JSX.Element => {
             ))}
           </DesktopMenu>
           <Row>
-            <Col >
-             
-            </Col>
-            <Col className="text-end">
+            <Col className="text-center">
               <MobileMenu menulinks={links} activePage={activePage} />
             </Col>
           </Row>

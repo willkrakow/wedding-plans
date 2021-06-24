@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled, { ThemeContext } from "styled-components";
+import styled, { ThemeContext, DefaultTheme } from "styled-components";
 import { NavItem } from "../components/typography";
 import { WhiteButton } from "../components/button";
 import { MenuBarLinkProps } from "./menuBar";
@@ -17,7 +17,19 @@ const MobileDropdown = styled.div`
     display: none;
   }
 `;
-const MobileDropdownToggle = styled(WhiteButton)`
+
+interface MobileDropdownToggleProps {
+  isOpen?: boolean;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  className?: string;
+  theme?: DefaultTheme;
+}
+
+const MobileDropdownToggle_: React.FunctionComponent<MobileDropdownToggleProps> = (props) => {
+  return <WhiteButton {...props} className={props.className}>{props.children}</WhiteButton>
+}
+
+const MobileDropdownToggle = styled(MobileDropdownToggle_)`
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='${(props) => props.theme.colors.accent}' stroke-linecap='square' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: center;
@@ -66,7 +78,7 @@ const MobileMenu = ({ menulinks, activePage }: MobileMenuProps) => {
         <DropList>
           {menulinks.map((link, index) => (
             <NavItem
-              className="w-100 text-end"
+              className="w-100 text-center"
               key={index}
               to={link.path}
               activeStyle={{
