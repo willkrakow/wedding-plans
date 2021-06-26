@@ -3,13 +3,10 @@ import styled, { ThemeContext, DefaultTheme } from "styled-components";
 import { NavItem } from "../components/typography";
 import { WhiteButton } from "../components/button";
 import { MenuBarLinkProps } from "./menuBar";
+import { globalHistory } from "@reach/router";
 
 interface MobileMenuProps {
   menulinks: Array<MenuBarLinkProps>;
-  activePage: {
-    path: string;
-    title: string;
-  };
 }
 
 const MobileDropdown = styled.div`
@@ -25,12 +22,17 @@ interface MobileDropdownToggleProps {
   theme?: DefaultTheme;
 }
 
-const MobileDropdownToggle_: React.FunctionComponent<MobileDropdownToggleProps> = (props) => {
-  return <WhiteButton {...props} className={props.className}>{props.children}</WhiteButton>
-}
+const MobileDropdownToggle_: React.FunctionComponent<MobileDropdownToggleProps> =
+  (props) => {
+    return (
+      <WhiteButton {...props} className={props.className}>
+        {props.children}
+      </WhiteButton>
+    );
+  };
 
 const MobileDropdownToggle = styled(MobileDropdownToggle_)`
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='${(props) => props.theme.colors.accent}' stroke-linecap='square' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  background-image: ${props => `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='${props.theme.colors.accent}' stroke-linecap='square' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")`};
   background-repeat: no-repeat;
   background-position: center;
   border: none;
@@ -60,15 +62,15 @@ const DropList = styled.nav`
   list-style: none;
 `;
 
-const MobileMenu = ({ menulinks, activePage }: MobileMenuProps) => {
+const MobileMenu = ({ menulinks }: MobileMenuProps) => {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const theme = React.useContext(ThemeContext);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
-  console.log(activePage);
-
   React.useEffect(() => {
-    return setDropdownOpen(false);
+    return globalHistory.listen(({ action }) => {
+      if (action === "PUSH") setDropdownOpen(false);
+    });
   }, [setDropdownOpen]);
 
   return (

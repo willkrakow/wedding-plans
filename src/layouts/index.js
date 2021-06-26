@@ -98,7 +98,7 @@ export default function Layout({ children, location }) {
         <React.Fragment>
           <GlobalStyles theme={lightTheme ? theme : darkTheme} />
           <Seo title={activePage?.title || title} description={description} />
-          <MenuBar links={menuLinks} activePage={activePage} />
+          <MenuBar links={menuLinks} />
           <Main>
             <MDXProvider components={components}>
               {children}

@@ -5,7 +5,6 @@ import { H1, H4, NavItem } from '../components/typography'
 import MobileMenu from './mobileMenu'
 import { Link } from 'gatsby'
 
-
 const MenuWrapper = styled(Container)`
     padding-top: ${props => props.theme.spacing[4]};
     padding-bottom: ${props => props.theme.spacing[3]};
@@ -29,13 +28,9 @@ export interface MenuBarLinkProps {
 
 interface MenuBarProps {
   links: Array<MenuBarLinkProps>,
-  activePage: {
-    path: string,
-    title: string,
-  }
 }
 
-const MenuBar = ({links, activePage}: MenuBarProps): JSX.Element => {
+const MenuBar = ({links}: MenuBarProps): JSX.Element => {
     
     return (
     <MenuWrapper fluid>
@@ -54,7 +49,7 @@ const MenuBar = ({links, activePage}: MenuBarProps): JSX.Element => {
           </DesktopMenu>
           <Row>
             <Col className="text-center">
-              <MobileMenu menulinks={links} activePage={activePage} />
+              <MobileMenu menulinks={links} />
             </Col>
           </Row>
     </MenuWrapper>
