@@ -2,7 +2,7 @@ import styled, { DefaultTheme } from "styled-components";
 import { GridItem } from './gridItem'
 import React from 'react'
 
-interface GridProps {
+export interface GridProps {
   rowHeight?: number;
   gridGap?: number;
   minColumnWidth?: number;

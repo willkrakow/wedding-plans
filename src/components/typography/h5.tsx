@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 type H5Props = {
   readonly centered?: boolean;
+  readonly className?: string;
 } & typeof defaultH5
 
 const defaultH5 = {

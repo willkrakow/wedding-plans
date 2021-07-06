@@ -1,9 +1,36 @@
 import React from "react";
 import { GatsbyImage } from "gatsby-plugin-image";
 import Modal from "../containers/modal";
-import Grid, { GridItem } from "../containers/grid";
+import Grid, { GridItem, GridProps } from "../containers/grid";
 
-const PhotoGrid = (props) => {
+interface PhotoGridProps {
+  options?: GridProps;
+  itemOptions?: {
+    minWidth: number;
+    maxWidth: number;
+  };
+  photos: Array<{
+    node: {
+      data: {
+        date: string;
+        title: string;
+        description: string;
+        location: string;
+        src: {
+          id: string;
+          localFiles: Array<{
+            childImageSharp: {
+              gatsbyImageData: any;
+              resize: any;
+            };
+          }>;
+        };
+      };
+    };
+  }>;
+}
+
+const PhotoGrid: React.FC<PhotoGridProps> = (props) => {
   const { options, itemOptions, photos } = props;
 
   const [open, setOpen] = React.useState(false);
@@ -65,21 +92,20 @@ const PhotoGrid = (props) => {
 
   return (
     <React.Fragment>
-      <Grid {...options}>
-        {photos.map((photo, index) => (
+      <Grid  {...options}>
+        {photos.filter((photo) => {return photo.node.data.src?.localFiles[0] !== null}).map((photo, index) => (
           <GridItem
             aspectRatio={
-              photo.node.localFiles[0].childImageSharp.resize.aspectRatio
+              photo.node.data?.src?.localFiles?.[0]?.childImageSharp?.resize.aspectRatio
             }
             {...itemOptions}
             key={index}
-            index={index}
             onClick={() => handleClick(index)}
           >
             <GatsbyImage
               style={{ maxWidth: "100%", height: "100%" }}
-              image={photo.node.localFiles[0].childImageSharp.gatsbyImageData}
-              alt={photo.node.parent.data.title}
+              image={photo.node.data?.src?.localFiles?.[0]?.childImageSharp?.gatsbyImageData}
+              alt={photo.node.data.title}
             />
           </GridItem>
         ))}
@@ -99,12 +125,6 @@ const PhotoGrid = (props) => {
 };
 
 PhotoGrid.defaultProps = {
-  options: {
-    columns: 5,
-    rowGap: "8px",
-    columnGap: "8px",
-    rowHeight: "400px",
-  },
   itemOptions: {
     minWidth: 200,
     maxWidth: 400,

@@ -19,7 +19,25 @@ interface ModalProps {
   currentIndex: number;
   open: boolean;
   handleClose: React.MouseEventHandler<HTMLButtonElement>;
-  photos: Array<any>;
+  photos: Array<{
+    node: {
+      data: {
+        date: string;
+        title: string;
+        description: string;
+        location: string;
+        src: {
+          id: string;
+          localFiles: Array<{
+            childImageSharp: {
+              gatsbyImageData: any;
+              resize: any;
+            };
+          }>;
+        };
+      };
+    };
+  }>;
   controls?: boolean;
   caption?: boolean;
 }
@@ -46,10 +64,10 @@ const Modal = ({
           imgStyle={{ boxShadow: "0 8px 8px 4px blue" }}
           objectFit="contain"
           image={
-            photos[currentIndex].node.localFiles[0].childImageSharp
+            photos[currentIndex].node.data.src.localFiles[0].childImageSharp
               .gatsbyImageData
           }
-          alt={photos[currentIndex].node.parent.data.title}
+          alt={photos[currentIndex].node.data.title}
         />
       </ModalItem>
       {controls && (
@@ -61,13 +79,13 @@ const Modal = ({
       {caption && (
         <Caption>
           <CaptionTitle>
-            {photos[currentIndex].node.parent.data.description}
+            {photos[currentIndex].node.data.description}
           </CaptionTitle>
           <CaptionText>
-            {photos[currentIndex].node.parent.data.date &&
-              makeDateString(photos[currentIndex].node.parent.data.date)}
+            {photos[currentIndex].node.data.date &&
+              makeDateString(photos[currentIndex].node.data.date)}
             <br />
-            {photos[currentIndex].node.parent.data.location}
+            {photos[currentIndex].node.data.description}
           </CaptionText>
         </Caption>
       )}
