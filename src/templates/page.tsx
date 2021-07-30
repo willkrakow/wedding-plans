@@ -1,6 +1,7 @@
 import React from 'react'
 import BlockContent from '@sanity/block-content-to-react'
 import { PageProps } from 'gatsby'
+import { H2 } from '../components/typography'
 
 interface IBlockChild {
     _key: string,
@@ -43,7 +44,7 @@ const Page = (props: Props) => {
 
 return (
         <>
-            <BlockContent  />
+        <H2>{props.pageContext.title}</H2>
         </>
     )
 }
