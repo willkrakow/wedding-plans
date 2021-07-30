@@ -85,7 +85,7 @@ const Modal = ({
             {photos[currentIndex].node.data.date &&
               makeDateString(photos[currentIndex].node.data.date)}
             <br />
-            {photos[currentIndex].node.data.description}
+            {photos[currentIndex].node.data.location}
           </CaptionText>
         </Caption>
       )}

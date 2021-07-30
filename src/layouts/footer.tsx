@@ -1,11 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Row, Col, Container } from 'reactstrap'
-import { P, H5 } from '../components/typography'
+import { P } from '../components/typography'
 
 const FooterWrapper = styled(Container)(props => ({
     padding: props.theme.spacing[3],
-    backgroundColor: props.theme.colors.background,
 }));
 
 const Footer = () => {
@@ -20,7 +19,7 @@ const Footer = () => {
                             William Krakow
                         </a>
                     </P>
-                    <H5 centered={false} className="text-center">&copy; {new Date().getFullYear().toString()}</H5>
+                    <P centered={false} className="text-center">&copy; {new Date().getFullYear().toString()}</P>
                 </Col>
             </Row>
         </FooterWrapper>

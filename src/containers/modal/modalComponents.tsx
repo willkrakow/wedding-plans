@@ -37,7 +37,7 @@ const ModalGateway = styled.div<{ open: boolean }>`
   transition: all 0.7s ease;
   z-index: 600;
   max-width: 100vw;
-  max-height: 100vh;
+  height: ${(props) => (props.open ? "100vh" : 0)};
   height: ${(props) => (props.open ? "-webkit-fill-available" : 0)};
 `;
 

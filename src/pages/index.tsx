@@ -72,13 +72,18 @@ const IndexPage: React.FC<PageProps> = () => {
   ]
   return (
     <React.Fragment>
-      <StaticImage src={`../images/us.jpg`} alt="Laura and Will, sitting on a log as the sun sets on the Hillsborough meadows" placeholder="blurred" layout="fullWidth" aspectRatio={16 / 12} />
-
+      <StaticImage
+        src={`../images/us.jpg`}
+        alt="Laura and Will, sitting on a log as the sun sets on the Hillsborough meadows"
+        placeholder="blurred"
+        layout="fullWidth"
+        aspectRatio={16 / 12}
+      />
 
       {data.map((item, index) => (
-          <PageSection {...item} key={index} />
+        <PageSection {...item} key={index} />
       ))}
-
+      
     </React.Fragment>
   );
 }

@@ -105,17 +105,6 @@ export default function Layout({ children, location }) {
             </MDXProvider>
           </Main>
           <Footer />
-
-          {lightTheme ? (
-            <StickyButton onClick={handleTheme}>
-              Dark mode
-            </StickyButton>
-          )
-            : (
-              <StickyWhiteButton onClick={handleTheme} >
-                Light mode
-              </StickyWhiteButton>
-            )}
         </React.Fragment>
       </ThemeProvider>
     </>

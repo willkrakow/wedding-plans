@@ -24,7 +24,7 @@ export const theme: DefaultTheme = {
         body: "Crimson Text, serif",
         cursive: "Great Vibes, cursive",
     },
-    fontSizes: ["12px", "18px", "24px", "30px", "42px", "56px", "64px"],
+    fontSizes: ["0.85em", "18px", "1.125em", "1.5em", "2.0em", "2.5em", "3em"],
     spacing: ["0", "8px", "12px", "16px", "24px", "30px", "36px", "64px"],
     fontWeights: {
         lightest: "200",

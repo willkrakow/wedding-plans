@@ -28,6 +28,7 @@
     "exclude": [
         "./src/images/*",
         "./studio/**/*",
-        "./static/**/*"
+        "./static/**/*",
+        "node_modules"
     ]
 }

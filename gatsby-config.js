@@ -64,6 +64,14 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-source-sanity`,
+      options: {
+        projectId: `70xbtdsl`,
+        dataset: `production`,
+        graphqlTag: 'default',
+      },
+    },
+    {
       resolve: "gatsby-source-filesystem",
       options: {
         name: "images",

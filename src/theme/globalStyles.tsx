@@ -11,7 +11,8 @@ const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
     scroll-behavior: smooth;
     transition: all 0.3s ease;
-
+    font-size: 18px;
+    min-height: 100vh;
   }
   body {
     letter-spacing: 0;
