@@ -78,11 +78,7 @@ const FieldArray = () => {
       },
       body: JSON.stringify(data),
     })
-    console.log(res);
-    if (res.ok){
-      navigate('/thank-you')
-    }
-    navigate('/404')
+    navigate('/thank-you')
   }
   const status = watch('test')
 
