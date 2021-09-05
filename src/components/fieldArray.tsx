@@ -44,12 +44,14 @@ margin: auto;
 
 const YesButton = styled(WhiteButton)`
 flex-basis: 45%;
-background-color: ${props => props.status ? props.theme.colors.accent : props.theme.colors.background};
+//@ts-ignore
+background-color: ${props => props?.status ? props.theme.colors.accent : props.theme.colors.background};
 transition: all 0.4s ease-out;
 `
 
 const NoButton = styled(YesButton)`
-background-color: ${props => props.status ? props.theme.colors.background : props.theme.colors.accent};
+//@ts-ignore
+background-color: ${props => props?.status ? props.theme.colors.background : props.theme.colors.accent};
 `
 
 
@@ -76,6 +78,7 @@ const FieldArray = () => {
       },
       body: JSON.stringify(data),
     })
+    console.log(res);
     if (res.ok){
       navigate('/thank-you')
     }
