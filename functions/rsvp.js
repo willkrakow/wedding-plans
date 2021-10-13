@@ -25,10 +25,12 @@ exports.handler = async function (event) {
 
   base('rsvps').create([...toUpdate], (err, records) => {
     if (err) {
+      console.log("Something went wrong")
       console.log(err);
       return false
     }
     records.forEach((record) => {
+      console.log("All went right")
       console.log(record.getId())
     })
   })

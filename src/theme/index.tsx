@@ -3,6 +3,7 @@ import "@fontsource/open-sans"
 import "@fontsource/great-vibes";
 import "@fontsource/crimson-text";
 import "@fontsource/crimson-text/600-italic.css"
+import "@fontsource/ephesis"
 import { DefaultTheme } from 'styled-components'
 
 
@@ -12,7 +13,7 @@ export const theme: DefaultTheme = {
         background: "#fafafa",
         primary: "hsl(235, 66%, 12%)",
         secondary: "hsl(208, 93%, 23%)",
-        accent: "hsl(17, 52%, 68%)",
+        accent: "hsl(17, 54%, 57%)",
         muted: "hsl(235, 6%, 50%)",
         danger: "hsl(9, 100%, 24%)",
         alwayslight: "#fafafa",
@@ -22,7 +23,7 @@ export const theme: DefaultTheme = {
     fonts: {
         headers: "Crimson Text, serif",
         body: "Crimson Text, serif",
-        cursive: "Great Vibes, cursive",
+        cursive: "'Ephesis', 'Great Vibes', cursive",
     },
     fontSizes: ["0.85em", "18px", "1.125em", "1.5em", "2.0em", "2.5em", "3em"],
     spacing: ["0", "8px", "12px", "16px", "24px", "30px", "36px", "64px"],

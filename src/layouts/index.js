@@ -2,7 +2,6 @@ import React from 'react'
 import styled, { ThemeProvider } from 'styled-components'
 import Seo from '../utils/seo'
 import { theme, darkTheme } from '../theme';
-import { StickyButton, StickyWhiteButton } from '../components/button';
 import { useStaticQuery, graphql, } from 'gatsby'
 import GlobalStyles from '../theme/globalStyles'
 import Footer from './footer'
@@ -14,6 +13,7 @@ import _ from 'lodash';
 const Main = styled.main(props => ({
   maxWidth: '90rem',
   margin: 'auto',
+  minHeight: '100vh',
 }))
 
 
@@ -81,7 +81,6 @@ export default function Layout({ children, location }) {
   const activePage = _.find(menuLinks, (o) => { return o.path === location.pathname })
   const [lightTheme, setLightTheme] = React.useState(true)
 
-  const handleTheme = () => setLightTheme(!lightTheme)
   const components = {
     h1: H1,
     h2: H2,

@@ -36,7 +36,7 @@ const MenuBar = ({links}: MenuBarProps): JSX.Element => {
     <MenuWrapper fluid>
         <Row>
             <Col xs={12}>
-            <BannerHeader to={'/'} ><H1>LGC &amp; WTK</H1></BannerHeader>
+            <BannerHeader to={'/'} ><H1>Laura &amp; Will</H1></BannerHeader>
               <H4 alwaysdark={false} inline={false} centered={true}><time dateTime="2022-05-01">May 1, 2022</time></H4>
             </Col>
           </Row>

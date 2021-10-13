@@ -12,7 +12,7 @@ export const H3 = styled.h3<H3Props>`
   font-family: ${props => props.theme.fonts.headers};
   font-weight: ${props => props.theme.fontWeights.heavy};
   padding-top: ${props => props.theme.spacing[0]};
-  margin-bottom: ${props => props.nosubtitle ? props.theme.spacing[2] : props.theme.spacing[0]};
+  margin-bottom: ${props => props.nosubtitle ? props.theme.spacing[1] : props.theme.spacing[0]};
   display: inline-block;
   text-align: ${props => props.centered ? "center" : "left"};
   width: 100%;

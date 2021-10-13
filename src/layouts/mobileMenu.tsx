@@ -4,6 +4,7 @@ import { NavItem } from "../components/typography";
 import { WhiteButton } from "../components/button";
 import { MenuBarLinkProps } from "./menuBar";
 import { globalHistory } from "@reach/router";
+import { CornerButton } from "../containers/modal/modalComponents";
 
 interface MobileMenuProps {
   menulinks: Array<MenuBarLinkProps>;
@@ -49,9 +50,10 @@ const Dropper = styled.div<{ isOpen: boolean }>`
   overflow: hidden;
   position: absolute;
   z-index: 999;
-  left: 0;
-  right: 0;
-  margin: ${(props) => props.theme.spacing[2]};
+  inset: 0;
+  padding: ${(props) => (props.isOpen ? `${props.theme.spacing[4]} ${props.theme.spacing[2]}` : "0px")};
+  display: flex;
+  flex-direction: column;
   opacity: ${(props) => (props.isOpen ? 1.0 : 0.0)};
   background-color: ${(props) => props.theme.colors.overlap};
   box-shadow: 0px ${(props) => props.theme.spacing[2]}
@@ -60,7 +62,16 @@ const Dropper = styled.div<{ isOpen: boolean }>`
 
 const DropList = styled.nav`
   list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 100%;
 `;
+
+
+const CloseButton = styled(CornerButton)`
+color: ${(props) => props.theme.colors.accent};
+`
 
 const MobileMenu = ({ menulinks }: MobileMenuProps) => {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
@@ -77,6 +88,9 @@ const MobileMenu = ({ menulinks }: MobileMenuProps) => {
     <MobileDropdown>
       <MobileDropdownToggle onClick={toggle} isOpen={dropdownOpen} />
       <Dropper isOpen={dropdownOpen}>
+        <CloseButton open={dropdownOpen} onClick={toggle}>
+          &times;
+        </CloseButton>
         <DropList>
           {menulinks.map((link, index) => (
             <NavItem

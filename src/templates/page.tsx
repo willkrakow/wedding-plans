@@ -1,5 +1,4 @@
 import React from 'react'
-import BlockContent from '@sanity/block-content-to-react'
 import { PageProps } from 'gatsby'
 import { H2 } from '../components/typography'
 

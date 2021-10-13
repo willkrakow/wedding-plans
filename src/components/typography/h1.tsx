@@ -5,8 +5,9 @@ export const H1 = styled.h1`
   text-align: center;
   font-size: ${props => props.theme.fontSizes[3]};
   color: ${props => props.theme.colors.text};
-  font-family: ${props => props.theme.fonts.cursive};
+  font-family: ${props => props.theme.fonts.headers};
+  text-transform: uppercase;
   line-height: normal;
   font-weight: ${props => props.theme.fontWeights.lightest};
-  letter-spacing: ${props => props.theme.spacing[3]};
+  letter-spacing: "3px";
 `

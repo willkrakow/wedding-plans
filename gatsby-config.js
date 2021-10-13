@@ -143,6 +143,7 @@ module.exports = {
         defaultLang: "en",
         currency: "usd",
         openCartOnAdd: true,
+        version: "3.0.29",
 			},
     },
     `gatsby-plugin-layout`,

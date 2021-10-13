@@ -33,7 +33,7 @@ const ModalGateway = styled.div<{ open: boolean }>`
   opacity: ${(props) => (props.open ? 1.0 : 0.0)};
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 9fr 1fr 3fr;
+  grid-template-rows: 0.5fr 8fr 2fr 1.5fr;
   transition: all 0.7s ease;
   z-index: 600;
   max-width: 100vw;
@@ -64,7 +64,7 @@ const PrevButton = styled(NextButton)`
 
 const CornerButton = styled(NextButton)<{ open: boolean }>`
   position: absolute;
-  top: ${(props) => props.theme.spacing[3]};
+  top: ${(props) => props.theme.spacing[0]};
   left: ${(props) => props.theme.spacing[3]};
   display: ${(props) => (props.open ? "inherit" : "none")};
   z-index: 601;
@@ -77,6 +77,9 @@ const CaptionText = styled(P)`
   font-size: ${(props) => props.theme.fontSizes[1]};
   align-self: flex-end;
   display: block;
+  margin-bottom: ${(props) => props.theme.spacing[0]};
+  margin-top: ${(props) => props.theme.spacing[0]};
+  place-self: center;
 `;
 
 const CaptionTitle = styled(H3)`

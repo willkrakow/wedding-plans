@@ -70,24 +70,24 @@ const Modal = ({
           alt={photos[currentIndex].node.data.title}
         />
       </ModalItem>
-      {controls && (
-        <ModalControls>
-          <PrevButton onClick={handleDecrement}>&larr;</PrevButton>
-          <NextButton onClick={handleIncrement}>&rarr;</NextButton>
-        </ModalControls>
-      )}
       {caption && (
         <Caption>
           <CaptionTitle>
             {photos[currentIndex].node.data.description}
           </CaptionTitle>
-          <CaptionText>
-            {photos[currentIndex].node.data.date &&
-              makeDateString(photos[currentIndex].node.data.date)}
-            <br />
-            {photos[currentIndex].node.data.location}
-          </CaptionText>
-        </Caption>
+        <CaptionText>
+          {photos[currentIndex].node.data.date &&
+            makeDateString(photos[currentIndex].node.data.date)}
+          <br />
+          {photos[currentIndex].node.data.location}
+        </CaptionText>
+            </Caption>
+      )}
+      {controls && (
+        <ModalControls>
+          <PrevButton onClick={handleDecrement}>&larr;</PrevButton>
+          <NextButton onClick={handleIncrement}>&rarr;</NextButton>
+        </ModalControls>
       )}
     </ModalGateway>
   );

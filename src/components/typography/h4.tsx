@@ -21,8 +21,8 @@ const H4 = styled.h4<H4Props>`
   text-align: ${props => props.centered ? "center" : "left"};
   display: inline-block;
   width: 100%;
-  margin-bottom: ${props => props.inline ? props.theme.spacing[1] : props.theme.spacing[4]};
-  margin-top: ${props => props.theme.spacing[1]};
+  margin-bottom: ${props => props.inline ? props.theme.spacing[1] : props.theme.spacing[6]};
+  margin-top: ${props => props.theme.spacing[0]};
 `
 
 H4.defaultProps = defaultH4
