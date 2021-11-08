@@ -5,9 +5,6 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async function (event, context) {    
     const sessions = await stripe.checkout.sessions.list();
-    
-
-    
 
     const paidSessions = sessions.data.filter((session) => session.payment_status === 'paid')
 
