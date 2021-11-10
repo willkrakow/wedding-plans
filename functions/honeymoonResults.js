@@ -2,14 +2,17 @@
 // Watch this video to get started: https://youtu.be/rPR2aJ6XnAc.
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
+const DESTINATIONS = require('../src/utils/constants').DESTINATIONS;
 exports.handler = async function (event, context) {    
+    // Get all checkout sessions from stripe
     const sessions = await stripe.checkout.sessions.list();
 
+    // Filter out unpaid sessions
     const paidSessions = sessions.data.filter((session) => session.payment_status === 'paid')
 
-    const allSessionsLineItems = await Promise.all(paidSessions.map(async (session) => {
-        const data = await new Promise((resolve, reject) => {
+    // Helper to get line items for a session
+    async function getLineItems(session) {
+        return await new Promise((resolve, reject) => {
             stripe.checkout.sessions.listLineItems(
                 session.id,
                 {},
@@ -21,23 +24,26 @@ exports.handler = async function (event, context) {
                 }
             )
         })
-        return {...data.data[0]}
+    }
+    // Get first line item for paid sessions
+    const allSessionsLineItems = await Promise.all(paidSessions.map(async (session) => {
+        const {data} = await getLineItems(session);
+        return {...data[0]}
     }))
 
     
 
-    const destinations = [
-        {title: "Big Sur"},
-        {title: "Swiss Alps"},
-        {title: "Rocky Mountains"},
-    ]
-
-    const results = destinations.map(destination => {
+    const results = DESTINATIONS.map(destination => {
         const { title } = destination
+        // All completed sessions for this destination
         const destinationPayments = allSessionsLineItems.filter(session => {
             return session.description === destination.title
         })
+
+        // Total of all payments for this destination
         const totalPaymentValue = destinationPayments.reduce((prev, curr) => prev + curr.amount_total, 0)
+
+        // Total count of all payments for this destination
         const totalPaymentCount = destinationPayments.length
 
         return {
@@ -47,8 +53,10 @@ exports.handler = async function (event, context) {
         }
     })
 
-    
+    // Total value of all payments
     const sumTotal = results.reduce((prev, curr) => prev + curr.totalPaymentValue, 0)
+
+    // Total count of all payments
     const sumCount = results.reduce((prev, curr) => prev + curr.totalPaymentCount, 0)
 
     return {
