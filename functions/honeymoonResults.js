@@ -2,8 +2,15 @@
 // Watch this video to get started: https://youtu.be/rPR2aJ6XnAc.
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const DESTINATIONS = require('../src/utils/constants').DESTINATIONS;
-exports.handler = async function (event, context) {    
+
+exports.handler = async function (event, context) {
+    const DESTINATIONS = [
+        { title: "Big Sur" },
+        { title: "Swiss Alps" },
+        { title: "Rocky Mountains" },
+    ]
+
+
     // Get all checkout sessions from stripe
     const sessions = await stripe.checkout.sessions.list();
 
@@ -27,11 +34,11 @@ exports.handler = async function (event, context) {
     }
     // Get first line item for paid sessions
     const allSessionsLineItems = await Promise.all(paidSessions.map(async (session) => {
-        const {data} = await getLineItems(session);
-        return {...data[0]}
+        const data = await getLineItems(session);
+        return { ...data.data[0] }
     }))
 
-    
+
 
     const results = DESTINATIONS.map(destination => {
         const { title } = destination

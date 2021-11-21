@@ -3,4 +3,3 @@ export const DESTINATIONS = [
         {title: "Swiss Alps"},
         {title: "Rocky Mountains"},
 ]
-

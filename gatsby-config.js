@@ -20,8 +20,8 @@ module.exports = {
         path: "/rsvp"
       },
       {
-        title: "Registry",
-        path: "/registry"
+        title: "Honeymoon",
+        path: "/honeymoon"
       },
       {
         title: "About Us",
@@ -129,8 +129,16 @@ module.exports = {
             baseId: process.env.AIRTABLE_BASE_ID,
             tableName: `lodging`,
             mapping: {
-              'image': "fileNode"            },
+              'image': "fileNode"
             },
+          },
+          {
+            baseId: process.env.AIRTABLE_BASE_ID,
+            tableName: `honeymoon`,
+            mapping: {
+              'image': "fileNode",
+            },
+          },
         ],
       },
     },
