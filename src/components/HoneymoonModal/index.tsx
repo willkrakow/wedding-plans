@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'reactstrap';
 import { IGatsbyImageData, GatsbyImage } from 'gatsby-plugin-image'
 import styled from 'styled-components'
 import Button, { WhiteButton } from '../button';
-import { H3 } from '../typography';
+import { H3, P } from '../typography';
 
 const HoneymoonModalWrapper = styled.div`
   position: fixed;
@@ -18,7 +18,6 @@ const HoneymoonModalWrapper = styled.div`
   align-items: center;
 `;
 
-
 const HoneymoonModalBox = styled(Container)`
     background-color: ${props => props.theme.colors.background};
     padding: ${props => props.theme.spacing[3]};
@@ -28,22 +27,23 @@ const HoneymoonModalBox = styled(Container)`
 const PaymentBox = styled(Col)`
 display: flex;
 flex-direction: column;
-justify-content: space-between;
+justify-content: center;
 `
-
 
 const MoneyInput = styled.input`
   padding-left: 16px;
   padding-right: 16px;
   font-family: ${props => props.theme.fonts.body};
   color: ${props => props.theme.colors.text};
-  font-size: ${props => props.theme.fontSizes[3]};
+  font-size: 18px;
   text-align: right;
   border-radius: 0;
   border-color: ${props => props.theme.colors.text};
-  border-width: 1px;
+  border-width: 2px;
   margin-bottom: ${props => props.theme.spacing[2]};
   margin-top: ${props => props.theme.spacing[2]};
+  padding: ${props => props.theme.spacing[1]};
+  box-sizing: border-box;
   &:before {
     content: "$";
   }
@@ -72,7 +72,6 @@ display: flex;
 justify-content: space-between;
 `
 
-
 interface IHoneymoonModalProps {
   isOpen: boolean;
   handleClose: (any) => void;
@@ -81,39 +80,44 @@ interface IHoneymoonModalProps {
   image: IGatsbyImageData;
   handleAmountChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   paymentAmount: number;
+  description?: string;
 }
 
 const HoneymoonModal = ({
   handleSubmit,
   destination,
+  description,
   isOpen,
   handleClose,
   handleAmountChange,
   paymentAmount,
   image,
 }: IHoneymoonModalProps) => {
+
+
   return isOpen ? (
-    <HoneymoonModalWrapper>
+    <HoneymoonModalWrapper className="honeymoon-modal-wrapper">
       <HoneymoonModalBox>
         <ModalForm onSubmit={handleSubmit}>
           <Row>
-            <Col xs={12} md={6}>
+            <Col xs={12} md={6} className="d-flex">
               <GatsbyImage image={image} alt={destination} />
             </Col>
             <PaymentBox xs={12} md={6}>
               <H3 className="mb-3">{destination}</H3>
-              <MoneyLabel>
-                <LabelWrapper>
-                  <MoneyInput
-                    type="number"
-                    value={paymentAmount}
-                    onChange={handleAmountChange}
-                  />
-                </LabelWrapper>
-              </MoneyLabel>
+              <P>{description}</P>
               <div>
-                <WhiteButton onClick={handleClose}>Cancel</WhiteButton>
+                <MoneyLabel>
+                  <LabelWrapper>
+                    <MoneyInput
+                      type="number"
+                      value={paymentAmount}
+                      onChange={handleAmountChange}
+                    />
+                  </LabelWrapper>
+                </MoneyLabel>
                 <Button type="submit">Pay and vote</Button>
+                <WhiteButton onClick={handleClose}>Cancel</WhiteButton>
               </div>
             </PaymentBox>
           </Row>

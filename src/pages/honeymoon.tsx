@@ -127,6 +127,7 @@ const Honeymoon = ({ data }: HoneymoonPageProps) => {
   const [destination, setDestination] = React.useState("");
   const [isOpen, setIsOpen] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState<IGatsbyImageData | null>(null);
+  const [selectedDescription, setSelectedDescription] = React.useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -153,7 +154,7 @@ const Honeymoon = ({ data }: HoneymoonPageProps) => {
         Help us choose our honeymoon destination by casting your vote below!
       </H4>
       <Container className="mt-5">
-      {isOpen && selectedImage && <HoneymoonModal handleAmountChange={handleAmountChange} paymentAmount={paymentAmount} isOpen={isOpen} handleClose={() => setIsOpen(false)} image={selectedImage} destination={destination} handleSubmit={handleSubmit} />}
+      {isOpen && selectedImage && <HoneymoonModal description={selectedDescription || ""} handleAmountChange={handleAmountChange} paymentAmount={paymentAmount} isOpen={isOpen} handleClose={() => setIsOpen(false)} image={selectedImage} destination={destination} handleSubmit={handleSubmit} />}
         <HoneymoonForm onSubmit={handleSubmit}>
           <OptionContainer>
             <Row className="justify-content-center mb-5">
@@ -183,12 +184,13 @@ const Honeymoon = ({ data }: HoneymoonPageProps) => {
                         onChange={handleChange}
                       />
                     </DestinationOption>
-                    <DestinationDescription>{description}</DestinationDescription>
                     <DestinationButton
+                    className="mt-3"
                       onClick={(e) => {
                         e.preventDefault();
                         setDestination(name);
                         setSelectedImage(destinationImage);
+                        setSelectedDescription(description);
                         setIsOpen(true);
                       }}
                     >
