@@ -1,25 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { P, H2 } from "../components/typography";
-import { navigate } from "gatsby";
+import React from "react";
+import { H2, H4 } from "../components/typography";
+import HoneymoonResults from "../components/HoneymoonResults";
 
 const ThankYou = () => {
-  const [counter, setCounter] = useState(5);
 
-  useEffect(() => {
-    if (counter > 0) {
-      setTimeout(() => setCounter(counter - 1), 1000);
-    } else {
-      navigate("/");
-    }
-  }, [counter]);
   return (
     <React.Fragment>
       <H2 className="text-center w-100 d-block">
         Thanks for casting your vote!
       </H2>
-      <P className="text-center w-100 d-block">
-        Redirecting back to home page in <span>{counter.toString()}</span>...
-      </P>
+      {/* @ts-ignore */}
+      <H4 centered>Here are the results so far...</H4>
+      <HoneymoonResults />
     </React.Fragment>
   );
 };

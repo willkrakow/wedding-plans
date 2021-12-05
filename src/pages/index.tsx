@@ -18,58 +18,62 @@ const IndexPage: React.FC<PageProps> = () => {
       funFact: {
         header: "A mysterious holiday",
         body: "Mayday is a seldom-celebrated holiday that takes place each year on May 1. While scholars are uncertain of the holiday's origins, many believe it to be a celebration of the first day of May.",
-      }
+      },
     },
     {
-      label: "Venue",
-      title: "The Parlour at Manns Chapel",
-      subtitle: "125 Farrington Rd. Chapel Hill, NC 27517",
-      bodyText: "Located in beautiful Chapel Hill, North Carolina, The Parlour is an intimate venue in the sweetest vintage chapel. With a capacity of 100 or less, the small guest count affords you and your guests a higher quality experience. Now your day will be filled with personal touches that leave your loved ones feeling valued and inspired.",
+      label: "Ceremony",
+      title: "River Park",
+      subtitle: "140 E Margaret Lane | Hillsborough, NC 27278",
+      bodyText:
+        "Wide open grassy area in downtown Hillsborough with a greenway along the Eno River and a Farmers' Market. Visitors can attend outdoor music and movie events during the warmer months.",
       sectionImg: {
-        alt: "White chairs at rustic wooden tables surrounded by greenery",
+        alt: "Wooden walkway through the park",
         isUrl: true,
-        src: "http://static.showit.co/2400/xENhftg_QS2pGfzKfp-wUw/58186/schuh-788.jpg",
+        src: "https://res.cloudinary.com/djmk8xgrk/image/upload/v1638716075/riverpark_slkecf.jpg",
       },
       cta: {
-        link: "https://theparlourchapel.com/",
+        link: "https://www.visitchapelhill.org/listing/river-park/32/",
         label: "Learn more",
       },
       funFact: {
         header: "An unlikely venue",
-        body: "Early in the wedding planning process, both Will and Laura agreed that they did not want to get married in a church. Thus–a chapel."
-      }
+        body: "River Park is a small, but popularly known outdoor venue in Hillsborough, North Carolina. It is located on the Eno River, which is the main river in the city. It is a popular destination for outdoor enthusiasts and is a popular destination for visitors to the city.",
+      },
     },
     {
       label: "Catering",
-      title: "Carolina Crust",
-      subtitle: "Wood-fired pizza and apps",
-      bodyText: "Carolina Crust offers wood-fired pizza cooked on a Mugnani Valoriani® oven, fresh salads, seasonal appetizers and a variety of other top-notch entrees out of a custom International Harvester truck.",
+      title: "Nomad",
+      subtitle:
+        "122 W King Street | Hillsborough, NC 27278",
+      bodyText:
+        "Nomad delivers traditional ethnic dishes and craft cocktails with a unique spin, all in a cozy, rustic interior. It’s a modern neighborhood spot that lets you travel the world without leaving Hillsborough.",
       sectionImg: {
-        src: "https://static.wixstatic.com/media/1ddb7c_930ed368d8d54742beb4c917bcabdd18~mv2_d_2304_1536_s_2.jpg/v1/fill/w_1280,h_672,al_c,q_85,usm_0.66_1.00_0.01/1ddb7c_930ed368d8d54742beb4c917bcabdd18~mv2_d_2304_1536_s_2.webp",
-        alt: "1950s era flatbed truck that has been converted into a mobile pizza oven",
+        src: "https://res.cloudinary.com/djmk8xgrk/image/upload/v1638712961/nomadfood_foebwt.jpg",
+        alt: "Asian shrimp and grits",
         isUrl: true,
       },
       cta: {
-        link: "https://carolinacrust.com",
+        link: "https://thenomadnc.com",
         label: "Learn more",
-      }
+      },
     },
     {
-      label: "Bar service",
-      title: "Yonder",
-      subtitle: "Eryk Pruitt and Lana Pierce",
-      bodyText: "Yonder serves as Hillsborough’s unofficial living room and art space where folks gather to enjoy craft cocktails, beer, wine, and the arts. Live music and local rotating artist installations make Yonder a comfortable, safe place for friends to gather and relax.",
+      label: "Cocktails",
+      title: "Yonder Bar",
+      subtitle: "114 W King St | Hillsborough, NC 27278",
+      bodyText:
+        "Yonder serves as Hillsborough’s unofficial living room and art space where folks gather to enjoy craft cocktails, beer, wine, and the arts. Live music and local rotating artist installations make Yonder a comfortable, safe place for friends to gather and relax.",
       sectionImg: {
-        src: "https://yonderbarnc.com/wp-content/uploads/2019/07/Yonder-Full-Logo-1024x629.png",
+        src: "https://res.cloudinary.com/djmk8xgrk/image/upload/v1638715947/yonderglass_bguclf.jpg",
         alt: "Martini glass with olive on toothpick",
         isUrl: true,
       },
       cta: {
         link: "https://yonderbarnc.com",
         label: "Learn more",
-      }
-    }
-  ]
+      },
+    },
+  ];
   return (
     <React.Fragment>
       <StaticImage

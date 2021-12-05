@@ -1,10 +1,9 @@
-import { graphql, PageProps } from 'gatsby'
+import { PageProps } from 'gatsby'
 import React from 'react'
 import { H2, P } from '../components/typography'
 
 
-const Catering: React.FC<PageProps> = (props) => {
-    console.log(props)
+const Catering: React.FC<PageProps> = () => {
     return (
         <>
         <H2>Catering</H2>

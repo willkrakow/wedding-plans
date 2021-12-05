@@ -1,105 +1,113 @@
 import React from "react";
 import Button from "../components/button";
-import HoneymoonResultsChart from "../components/honeymoonResults";
 import styled from "styled-components";
-import { GatsbyImage, GatsbyImageProps, IGatsbyImageData } from 'gatsby-plugin-image'
+import {
+  GatsbyImage,
+  GatsbyImageProps,
+  IGatsbyImageData,
+} from "gatsby-plugin-image";
 import { graphql } from "gatsby";
-import { H3, H4, P } from "../components/typography";
+import { H2, H3, H4, P } from "../components/typography";
+import { Col, Container, Row } from "reactstrap";
 
-const ResultsContainer = styled.section`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-width: 300px;
-    min-height: 500px;
-    padding: 20px;
-    margin: auto;
-`
 
-const HoneymoonForm = styled.form`
-max-width: 900px;
-margin: auto;
-`
-
-const OptionContainer = styled.section`
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-`
-
-const DestinationWrapper = styled.div`
-display: flex;
-flex-direction: column;
-margin-bottom: ${props => props.theme.spacing[6]};
-`
-
-const DestinationOption = styled.label`
-flex: 1;
-min-width: 200px;
-z-index: 400;
-transition: all 0.3s ease-in-out;
-&:hover {
-    cursor: pointer;
-    transform: scale(1.1);
-    box-shadow: 0px 0px 20px 10px rgba(0,0,0,0.3);
-}
-`
-
-const HiddenInput = styled.input`
-  opacity: 0.0;
-  height: 0px;
-  width: 0px;
-`
 
 interface IGatsbyImageInput {
   checked: boolean;
 }
 
-const GatsbyImageInput = styled(GatsbyImage)<GatsbyImageProps & IGatsbyImageInput>`
-cursor: pointer;
-position: relative;
-transition: all 0.3s ease-in-out;
-&:before {
+const DestinationButton = styled(Button)`
+width: fit-content;
+`
+
+const HoneymoonForm = styled.form`
+  max-width: 900px;
+  margin: auto;
+`;
+
+const OptionContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const DestinationWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: ${(props) => props.theme.spacing[7]};
+  height: 100%;
+`;
+
+const DestinationOption = styled.label`
+  min-width: 200px;
+  z-index: 400;
   transition: all 0.3s ease-in-out;
-  content: ${(props) => props.checked ? 'x' : 'none'};
-  position: absolute;
-  inset: 0;;
-  background-color: ${(props) => props.checked ? "rgba(0,20,30,0.5)" : "transparent"} ;
-}
-&:hover {
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const HiddenInput = styled.input`
+  opacity: 0;
+  height: 0px;
+  width: 0px;
+`;
+
+const GatsbyImageInput = styled(GatsbyImage)<GatsbyImageProps & IGatsbyImageInput>`
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  border: ${(props) => props.checked ? `${props.theme.spacing[3]} solid ${props.theme.colors.secondary}` : "2px solid transparent"};
   &:before {
-    content: "";
+    transition: all 0.3s ease-in-out;
+    content: ${(props) => (props.checked ? "x" : "none")};
     position: absolute;
     inset: 0;
-    background-color: rgba(0,0,0,0.4);
+    background-color: ${(props) =>
+      props.checked ? "rgba(0,20,30,0.5)" : "transparent"};
   }
-};
-`
+  &:hover {
+    &:before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+  }
+`;
 
 const MoneyInput = styled.input`
-&:before {
-  content: "$";
-}
+  padding-left: 16px;
+  text-align: right;
+  &:before {
+    content: "$";
+  }
+`;
+
+const MoneyLabel = styled.label`
+margin-right: ${(props) => props.theme.spacing[2]};
+font-weight: ${(props) => props.theme.fontWeights.heavy};
+color: ${(props) => props.theme.colors.muted};
 `
 
-export type Destination = {
-    title: string;
-    totalPaymentValue: number;
-    totalPaymentCount: number;
-}
+const LabelWrapper = styled.div`
+  position: relative;
+  &:before {
+    content: "$";
+    position: absolute;
+    top: 3px;
+    left: 12px;
+    color: ${(props) => props.theme.colors.muted};
+  }
+`
+const MoneyContainer = styled(Row)`
+display: flex;
+`
 
-export type HoneymoonResults = {
-    results: Destination[];
-    sumCount?: number;
-    sumTotal: number;
-}
-
-export type ApiResponse = {
-  data: HoneymoonResults;
-  message: string;
-}
+const DestinationDescription = styled(P)`
+flex: 1;
+`
 
 async function submit(paymentAmount: number, destination: string) {
   const res = await fetch("/.netlify/functions/pay", {
@@ -126,12 +134,11 @@ export type HoneymoonOptionProps = {
       localFiles: {
         childImageSharp: {
           gatsbyImageData: IGatsbyImageData;
-        }
+        };
       }[];
-    }
-  }
-
-}
+    };
+  };
+};
 
 export type HoneymoonPageProps = {
   data: {
@@ -139,17 +146,13 @@ export type HoneymoonPageProps = {
       edges: {
         node: HoneymoonOptionProps;
       }[];
-    }
-  }
-}
-
-
+    };
+  };
+};
 
 const Honeymoon = ({ data }: HoneymoonPageProps) => {
   const [paymentAmount, setPaymentAmount] = React.useState(10);
   const [destination, setDestination] = React.useState("");
-  const [ loading, setLoading ] = React.useState(false);
-  const [ apiData, setApiData ] = React.useState<ApiResponse | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -164,80 +167,78 @@ const Honeymoon = ({ data }: HoneymoonPageProps) => {
     setPaymentAmount(parseInt(e.target.value));
   };
 
-  React.useEffect(() => {
-    console.log(destination)
-    console.log(data.allAirtable.edges[0].node.data.name)
-    setLoading(true)
-    fetch("/.netlify/functions/honeymoonResults", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    .then(res => res.json())
-    .then(setApiData)
-    .catch(err => console.log(err))
-    .finally(() => setLoading(false))
-  }, [])
-
   return (
     <>
-      <HoneymoonForm onSubmit={handleSubmit}>
-        <OptionContainer>
-          {data.allAirtable.edges.map(({ node }) => (
-            <DestinationWrapper key={node.id}>
-              <H3>{node.data.name}</H3>
-              {/* @ts-ignore */}
-              <H4 alwaysdark >{node.data.location}</H4>
-              <DestinationOption>
-                <GatsbyImageInput
-                  image={
-                    node.data.image.localFiles[0].childImageSharp
-                      .gatsbyImageData
-                  }
-                  alt={node.data.name}
-                  checked={
-                    destination.toLowerCase() === node.data.name.toLowerCase()
-                  }
-                />
-                <HiddenInput
-                  type="radio"
-                  name="destination"
-                  value={node.data.name}
-                  checked={destination === node.data.name}
-                  onChange={(e) => setDestination(e.target.value)}
-                />
-              </DestinationOption>
-              <P>{node.data.description}</P>
-              <Button onClick={(e) => {e.preventDefault(); setDestination(node.data.name)}}>{destination === node.data.name ? "✅ " : ""} Vote for {node.data.name}</Button>
-            </DestinationWrapper>
-          ))}
-        </OptionContainer>
-        <label>
-          <MoneyInput
-            type="number"
-            value={paymentAmount}
-            onChange={handleAmountChange}
-          />
-        </label>
-        <Button type="submit">Cast your vote!</Button>
-      </HoneymoonForm>
-      <ResultsContainer>
-        {!loading && apiData?.data.results && (
-          <HoneymoonResultsChart
-            results={apiData.data.results}
-            sumCount={apiData.data.sumCount}
-            sumTotal={apiData.data.sumTotal}
-          />
-        )}
-      </ResultsContainer>
+      <H2 centered>Honeymoon</H2>
+      <H4 centered inline={false} alwaysdark>
+        Help us choose our honeymoon destination by casting your vote below!
+      </H4>
+      <Container>
+        <HoneymoonForm onSubmit={handleSubmit}>
+          <OptionContainer>
+            <Row className="justify-content-center mb-5">
+              {data.allAirtable.edges.map(({ node }) => (
+                <Col key={node.id} xs={12} md={6} lg={4}>
+                  <DestinationWrapper key={node.id}>
+                    <H3>{node.data.name}</H3>
+                    {/* @ts-ignore */}
+                    <H4 alwaysdark>{node.data.location}</H4>
+                    <DestinationOption>
+                      <GatsbyImageInput
+                        image={
+                          node.data.image.localFiles[0].childImageSharp
+                            .gatsbyImageData
+                        }
+                        alt={node.data.name}
+                        checked={
+                          destination.toLowerCase() ===
+                          node.data.name.toLowerCase()
+                        }
+                      />
+                      <HiddenInput
+                        type="radio"
+                        name="destination"
+                        value={node.data.name}
+                        checked={destination === node.data.name}
+                        onChange={(e) => setDestination(e.target.value)}
+                      />
+                    </DestinationOption>
+                    <DestinationDescription>{node.data.description}</DestinationDescription>
+                    <DestinationButton
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setDestination(node.data.name);
+                      }}
+                    >
+                      {destination === node.data.name ? "✅ " : ""} Vote for{" "}
+                      {node.data.name}
+                    </DestinationButton>
+                  </DestinationWrapper>
+                </Col>
+              ))}
+            </Row>
+            <Row className="justify-content-center">
+              <Col xs={12} md={9}>
+                <MoneyLabel>
+                  <LabelWrapper>
+                    <MoneyInput
+                      type="number"
+                      value={paymentAmount}
+                      onChange={handleAmountChange}
+                    />
+                  </LabelWrapper>
+                </MoneyLabel>
+                <Button type="submit">Cast your vote!</Button>
+              </Col>
+            </Row>
+          </OptionContainer>
+        </HoneymoonForm>
+      </Container>
     </>
   );
 };
 
 export default Honeymoon;
-
-
 
 export const query = graphql`
   {
