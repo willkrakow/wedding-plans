@@ -9,7 +9,7 @@ import {
 import { graphql } from "gatsby";
 import { H2, H3, H4, P } from "../components/typography";
 import { Col, Container, Row } from "reactstrap";
-
+import HoneymoonModal from '../components/HoneymoonModal'
 
 
 interface IGatsbyImageInput {
@@ -36,7 +36,6 @@ const DestinationWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: ${(props) => props.theme.spacing[7]};
-  height: 100%;
 `;
 
 const DestinationOption = styled.label`
@@ -77,33 +76,6 @@ const GatsbyImageInput = styled(GatsbyImage)<GatsbyImageProps & IGatsbyImageInpu
   }
 `;
 
-const MoneyInput = styled.input`
-  padding-left: 16px;
-  text-align: right;
-  &:before {
-    content: "$";
-  }
-`;
-
-const MoneyLabel = styled.label`
-margin-right: ${(props) => props.theme.spacing[2]};
-font-weight: ${(props) => props.theme.fontWeights.heavy};
-color: ${(props) => props.theme.colors.muted};
-`
-
-const LabelWrapper = styled.div`
-  position: relative;
-  &:before {
-    content: "$";
-    position: absolute;
-    top: 3px;
-    left: 12px;
-    color: ${(props) => props.theme.colors.muted};
-  }
-`
-const MoneyContainer = styled(Row)`
-display: flex;
-`
 
 const DestinationDescription = styled(P)`
 flex: 1;
@@ -153,6 +125,8 @@ export type HoneymoonPageProps = {
 const Honeymoon = ({ data }: HoneymoonPageProps) => {
   const [paymentAmount, setPaymentAmount] = React.useState(10);
   const [destination, setDestination] = React.useState("");
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [selectedImage, setSelectedImage] = React.useState<IGatsbyImageData | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -167,69 +141,64 @@ const Honeymoon = ({ data }: HoneymoonPageProps) => {
     setPaymentAmount(parseInt(e.target.value));
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDestination(e.target.value);
+    setIsOpen(true);
+  };
+
   return (
     <>
       <H2 centered>Honeymoon</H2>
       <H4 centered inline={false} alwaysdark>
         Help us choose our honeymoon destination by casting your vote below!
       </H4>
-      <Container>
+      <Container className="mt-5">
+      {isOpen && selectedImage && <HoneymoonModal handleAmountChange={handleAmountChange} paymentAmount={paymentAmount} isOpen={isOpen} handleClose={() => setIsOpen(false)} image={selectedImage} destination={destination} handleSubmit={handleSubmit} />}
         <HoneymoonForm onSubmit={handleSubmit}>
           <OptionContainer>
             <Row className="justify-content-center mb-5">
-              {data.allAirtable.edges.map(({ node }) => (
-                <Col key={node.id} xs={12} md={6} lg={4}>
+              {data.allAirtable.edges.map(({ node }) => {
+                const { name, image, location, description } = node.data
+                const { gatsbyImageData: destinationImage } = image.localFiles[0].childImageSharp;
+                return (
+                  <Col key={node.id} xs={12} md={6} lg={6} className="mb-5">
                   <DestinationWrapper key={node.id}>
-                    <H3>{node.data.name}</H3>
+                    <H3>{name}</H3>
                     {/* @ts-ignore */}
-                    <H4 alwaysdark>{node.data.location}</H4>
+                    <H4 alwaysdark>{location}</H4>
                     <DestinationOption>
                       <GatsbyImageInput
-                        image={
-                          node.data.image.localFiles[0].childImageSharp
-                            .gatsbyImageData
-                        }
-                        alt={node.data.name}
+                        image={destinationImage}
+                        alt={name}
                         checked={
                           destination.toLowerCase() ===
-                          node.data.name.toLowerCase()
+                          name.toLowerCase()
                         }
                       />
                       <HiddenInput
                         type="radio"
                         name="destination"
-                        value={node.data.name}
-                        checked={destination === node.data.name}
-                        onChange={(e) => setDestination(e.target.value)}
+                        value={name}
+                        checked={destination === name}
+                        onChange={handleChange}
                       />
                     </DestinationOption>
-                    <DestinationDescription>{node.data.description}</DestinationDescription>
+                    <DestinationDescription>{description}</DestinationDescription>
                     <DestinationButton
                       onClick={(e) => {
                         e.preventDefault();
-                        setDestination(node.data.name);
+                        setDestination(name);
+                        setSelectedImage(destinationImage);
+                        setIsOpen(true);
                       }}
                     >
-                      {destination === node.data.name ? "✅ " : ""} Vote for{" "}
-                      {node.data.name}
+                      {destination === name ? "✅ " : ""} Vote for{" "}
+                      {name}
                     </DestinationButton>
                   </DestinationWrapper>
                 </Col>
-              ))}
-            </Row>
-            <Row className="justify-content-center">
-              <Col xs={12} md={9}>
-                <MoneyLabel>
-                  <LabelWrapper>
-                    <MoneyInput
-                      type="number"
-                      value={paymentAmount}
-                      onChange={handleAmountChange}
-                    />
-                  </LabelWrapper>
-                </MoneyLabel>
-                <Button type="submit">Cast your vote!</Button>
-              </Col>
+                )}
+              )}
             </Row>
           </OptionContainer>
         </HoneymoonForm>

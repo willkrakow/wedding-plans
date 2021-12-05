@@ -5,9 +5,10 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async function (event, context) {
     const DESTINATIONS = [
-        { title: "Big Sur" },
-        { title: "Swiss Alps" },
-        { title: "Rocky Mountains" },
+        { title: "Basque Country" },
+        { title: "Provence" },
+        { title: "Valais" },
+        { title: "Big Sur"}
     ]
 
 
