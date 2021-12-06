@@ -29,6 +29,7 @@
         "./src/images/*",
         "./studio/**/*",
         "./static/**/*",
-        "node_modules"
+        "node_modules",
+        "node_modules/**/*",
     ]
 }
