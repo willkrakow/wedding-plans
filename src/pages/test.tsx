@@ -1,16 +1,43 @@
-import React from 'react'
-import { PageProps } from 'gatsby';
-import TestComponents from '../components/test-components';
+import React from "react";
+import netlifyIdentity, { User } from "netlify-identity-widget";
+import Button from "../components/button";
 
-const Test = (props: PageProps) => {
+const Test = () => {
+  const [user, setUser] = React.useState<User | null>(null);
 
-    const thinger = () => console.log("passed function called")
-    return (
+  React.useEffect(() => {
+    netlifyIdentity.init();
+    netlifyIdentity.on("login", (user) => {
+      setUser(user);
+      console.log("User logged in", user);
+    });
+  }, []);
+
+  const onClickLogin = () => {
+    netlifyIdentity.open("login");
+  };
+
+  const onClickLogout = () => {
+    netlifyIdentity.logout();
+  };
+
+  const onClickSignup = () => {
+    netlifyIdentity.open("signup");
+  };
+
+  return (
+    <div>
+      {user
+      ? <Button onClick={onClickLogout}>Logout</Button>
+      : (
         <>
-        <p>hi {props.path}</p>
-        <TestComponents name={`will`} func={thinger} response={4} />
+          <Button onClick={onClickLogin}>Login</Button>
+          <Button onClick={onClickSignup}>Signup</Button>
         </>
-    );
+      )}
+      {user && <p>{user.email}</p>}
+    </div>
+  );
 };
 
-export default Test
+export default Test;

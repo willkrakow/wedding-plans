@@ -7,7 +7,7 @@ import {
   IGatsbyImageData,
 } from "gatsby-plugin-image";
 import { graphql } from "gatsby";
-import { H2, H3, H4, P } from "../components/typography";
+import { H2, H3, H4 } from "../components/typography";
 import { Col, Container, Row } from "reactstrap";
 import HoneymoonModal from '../components/HoneymoonModal'
 
@@ -76,10 +76,6 @@ const GatsbyImageInput = styled(GatsbyImage)<GatsbyImageProps & IGatsbyImageInpu
   }
 `;
 
-
-const DestinationDescription = styled(P)`
-flex: 1;
-`
 
 async function submit(paymentAmount: number, destination: string) {
   const res = await fetch("/.netlify/functions/pay", {
