@@ -26,6 +26,7 @@ const ResultsContainer = styled.section`
   justify-content: center;
   min-width: 300px;
   min-height: 500px;
+  height: 100%;
   padding: 20px;
   margin: auto;
 `;

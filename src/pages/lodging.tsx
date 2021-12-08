@@ -1,5 +1,4 @@
 import React from "react";
-import PageSection from "../containers/pageSection";
 import { graphql } from "gatsby";
 import { H2, H3, H4, P } from "../components/typography";
 import useAuth from "../hooks/useAuth";
@@ -32,15 +31,15 @@ interface LodgingProps {
   };
 }
 
-const determineDollarSigns = (price: number): number => {
-  if (price < 200) {
-    return 1;
-  }
-  if (price < 260) {
-    return 2;
-  }
-  return 3;
-};
+// const determineDollarSigns = (price: number): number => {
+//   if (price < 200) {
+//     return 1;
+//   }
+//   if (price < 260) {
+//     return 2;
+//   }
+//   return 3;
+// };
 
 const LoginForm = styled.section`
   display: flex;
@@ -51,7 +50,7 @@ const LoginForm = styled.section`
 
 const Lodging = ({ data }: LodgingProps) => {
   const hotels = data.allAirtable.nodes;
-  const { login, logout, user, signup } = useAuth();
+  const { login, user, signup } = useAuth();
 
   return (
     <>
