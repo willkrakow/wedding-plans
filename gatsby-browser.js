@@ -22,13 +22,3 @@ export const onInitialClientRender = () => {
     });
 };
 
-
-export const wrapRootElement = ({ element }) => {
-    const url = "https://campbellkrakow.com"
-    return (
-        <IdentityContextProvider url={url}>
-            {element}
-        </IdentityContextProvider>
-    )
-}
-

@@ -5,10 +5,10 @@ import { H3, H4 } from "../components/typography";
 import Button, { RedButton, WhiteButton } from "../components/button";
 import RsvpList from "../components/RsvpList";
 import { FancyInput } from "../components/RsvpList/styles";
-import { User } from "react-netlify-identity";
+import { User } from "netlify-identity-widget";
 import { UserData } from "gotrue-js";
 
-function extractUserMetadata(user?: UserData | User) {
+function extractUserMetadata(user?: UserData | User | null) {
   if (!user) return {};
   return {
     ...user,
@@ -30,7 +30,7 @@ const Account = () => {
     isLoggedIn,
     logout,
   } = useAuth();
-  const [newValues, setNewValues] = React.useState<User | null | any>(
+  const [newValues, setNewValues] = React.useState<User | any>(
     extractUserMetadata(user)
   );
 
