@@ -20,7 +20,7 @@
         "typeRoots": [
             "./typings",
             "./node_modules/@types/"
-        ]
+        ],
     },
     "include": [
         "./src/**/*"
@@ -31,5 +31,6 @@
         "./static/**/*",
         "node_modules",
         "node_modules/**/*",
+        "public"
     ]
 }

@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Container, Row, Col } from 'reactstrap'
-import { H1, H4, NavItem } from '../components/typography'
+import { H1, H4, NavItem, P } from '../components/typography'
 import MobileMenu from './mobileMenu'
 import { Link } from 'gatsby'
+import useAuth from '../hooks/useAuth'
 
 const MenuWrapper = styled(Container)`
     padding-top: ${props => props.theme.spacing[4]};
@@ -31,7 +32,7 @@ interface MenuBarProps {
 }
 
 const MenuBar = ({links}: MenuBarProps): JSX.Element => {
-    
+    const { login, signup, logout, isLoggedIn, user } = useAuth();
     return (
     <MenuWrapper fluid>
         <Row>
@@ -42,10 +43,17 @@ const MenuBar = ({links}: MenuBarProps): JSX.Element => {
           </Row>
           <DesktopMenu noGutters className="justify-content-center">
             {links.map((link, index) => (
-              <Col sm={3} md={3} lg={3} xl={3} className="text-center" key={index}>
+              <Col sm={3} md={3} lg={2} xl={2} className="text-center" key={index}>
                 <NavItem to={link.path} >{link.title}</NavItem>
               </Col>
             ))}
+            <Col sm={3} md={3} lg={2} xl={2} className="text-center">
+              {isLoggedIn && user ? (
+                <NavItem to={'/account'}>My account</NavItem>
+              ) : (
+                <P centered onClick={login}>Log in</P>
+              )}
+            </Col>
           </DesktopMenu>
           <Row>
             <Col className="text-center">

@@ -1,26 +1,9 @@
 import React from 'react'
-import netlifyIdentity, { User } from 'netlify-identity-widget'
-
+import netlifyIdentity from 'netlify-identity-widget'
+import { useIdentityContext } from 'react-netlify-identity';
 
 export default function useAuth() {
-    const [user, setUser] = React.useState<User | null>(null);
-
-    React.useEffect(() => {
-      netlifyIdentity.on("login", (user) => {
-        setUser(user);
-      });
-
-      netlifyIdentity.on("logout", () => {
-        setUser(null);
-      });
-
-      setUser(netlifyIdentity.currentUser());
-
-      return () => {
-        netlifyIdentity.off("login");
-        netlifyIdentity.off("logout");
-      };
-    }, []);
+    const { isLoggedIn, isConfirmedUser, user, updateUser, settings, requestPasswordRecovery } = useIdentityContext()
 
     const login = () => {
       netlifyIdentity.open("login");
@@ -40,5 +23,10 @@ export default function useAuth() {
         logout,
         signup,
         user,
+        updateUser,
+        isConfirmedUser,
+        isLoggedIn,
+        settings,
+        requestPasswordRecovery,
     }
 }

@@ -1,113 +1,30 @@
 import React from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import styled from 'styled-components'
-import Button, { WhiteButton, RedButton } from './button'
+import Button, { WhiteButton } from './button'
 import { Row, Container, Col } from 'reactstrap'
-import { H4 } from './typography'
 import { navigate } from "gatsby-link";
-
-interface IFancyInput {
-  index: number;
+import useAuth from "../hooks/useAuth";
+import { AgeToggle, TableHeaderRow, TableBodyCell, TableBodyRow, TableHeader, TableHeaderText, CheckboxCell, DeleteCell, FancyInput } from './RsvpList/styles'
+export interface RsvpRecord {
+  name: string;
+  phoneNumber: string;
+  notes: string;
+  over21: boolean;
+  over_21: boolean;
+  id: string;
+  phone_number: string;
+  email: string;
 }
 
-const FancyInput = styled.input<IFancyInput>`
-  font-size: ${props => props.theme.fontSizes[1]};
-  color: ${props => props.index % 2 === 0 ? props.theme.colors.text : props.theme.colors.background};
-  font-family: ${props => props.theme.fonts.body};
-  border: none;
-  padding: ${props => props.theme.spacing[2]};
-  width: 100%;
-  background-color: ${props => props.index % 2 === 0 ? "rgba(0,0,0,0.03)" : "rgba(255,255,255,0.03)"};
-`
-
-const TableHeader = styled(Col)`
-padding-bottom: ${props => props.theme.spacing[1]};
-`
-
-const TableHeaderRow = styled(Row)`
-  background-color: ${props => props.theme.colors.text};
-`
-
-const TableHeaderText = styled(H4)`
-  color: ${props => props.theme.colors.background};
-  padding: ${props => props.theme.spacing[2]};
-  margin: 0;
-`
-
-interface ITableBodyRow {
-  index: number;
+interface Props {
+  existingData?: RsvpRecord[];
+  httpMethod?: "POST" | "UPDATE" | "DELETE";
+  onDelete?: (id: string) => void;
 }
 
-const TableBodyRow = styled(Row)<ITableBodyRow>`
-  background-color: ${props => props.index % 2 === 0 ? props.theme.colors.background : props.theme.colors.text};
-`
+const FieldArray = ({existingData, onDelete, httpMethod = "POST"}: Props) => {
+  const { user, login } = useAuth();
 
-const TableBodyCell = styled(Col)`
-  padding: ${props => props.theme.spacing[2]};
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  display: flex;
-  align-items: center;
-`
-
-interface IAgeToggle {
-  status: boolean;
-  index: number;
-}
-
-const CheckboxCell = styled(TableBodyCell)<IAgeToggle>`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0;
-`
-
-const AgeToggle = styled.span<IAgeToggle>`
-  cursor: pointer;
-  box-sizing: border-box;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: ${props => props.theme.spacing[1]};
-  border: 1px solid ${props => {
-    if (props.status) {
-      return props.theme.colors.accent;
-    }
-    return props.index % 2 === 0 ? props.theme.colors.background : props.theme.colors.text;
-  }};
-  text-decoration: ${props => props.status ? "underline" : "none"};
-  color: ${props => props.index % 2 === 0 ? props.theme.colors.text : props.theme.colors.background};
-  font-weight: ${props => props.status ? "bold" : "light"};
-  font-family: ${props => props.theme.fonts.body};
-  background-color: ${props => props.status ? props.theme.colors.accent : "transparent"};
-  transition: all 0.2s ease-in-out;
-  &:hover {
-    text-decoration: underline;
-  }
-`
-
-interface IDeleteCell {
-  index: number;
-}
-
-const DeleteCell = styled(TableBodyCell)<IDeleteCell>`
-  cursor: pointer;
-  text-align: center;
-  vertical-align: middle;
-  transition: all 0.2s ease-in-out;
-  font-size: ${props => props.theme.fontSizes[3]};
-  display: flex;
-  justify-content: center;
-  color: ${props => props.index % 2 === 0 ? props.theme.colors.text : props.theme.colors.muted};
-  &:hover {
-    color: ${props => props.theme.colors.danger};
-  }
-`
-
-
-const FieldArray = () => {
   const { register, control, handleSubmit, setValue, getValues, watch } = useForm({
     // defaultValues: {}; you can populate the fields by this attribute 
   });
@@ -116,32 +33,53 @@ const FieldArray = () => {
     name: "test"
   });
 
+  React.useEffect(() => {
+    if (existingData) {
+      existingData.forEach(data => {
+        append({
+          name: data.name,
+          phoneNumber: data.phoneNumber,
+          notes: data.notes,
+          over21: data.over21,
+          id: data.id
+        });
+      });
+    }
+  }, [existingData, append]);
+
   const handleToggle = (index: number, input: boolean): void => {
     setValue(`test.${index}.over21`, input)
     console.log(getValues())
   }
 
   const onSubmit = async (data: object) => {
+    if (!user){
+      login()
+      return
+    }
+    const formData = {user, ...data}
     const res: Response = await fetch('/.netlify/functions/rsvp', {
-      method: "POST",
+      method: httpMethod,
       headers: {
         'Content-Type': 'application/json'
         // 'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(formData),
     })
     if (res.ok){
       await navigate("/thank-you");
       return;
     }
-
     console.log(res)
-
   }
   const status = watch('test')
 
 
-  const handleDelete = (index: number) => {
+  const handleDelete = (index: number, id: string) => {
+    if (onDelete) {
+      console.log(id)
+      onDelete(id);
+    }
     if (fields.length > 1) {
       remove(index)
     }
@@ -178,6 +116,11 @@ const FieldArray = () => {
         </TableHeaderRow>
         {fields.map((item, index) => (
           <TableBodyRow index={index} key={item.id}>
+            <input
+              type="hidden"
+              {...register(`test.${index}.id`)}
+              defaultValue={item.id || ""}
+            />
             <TableBodyCell xs={12} md={6} lg={3}>
               <FancyInput
                 index={index}
@@ -209,7 +152,7 @@ const FieldArray = () => {
                 Yes
               </AgeToggle>
               <AgeToggle
-              index={index}
+                index={index}
                 status={!status[index].over21}
                 onClick={() => handleToggle(index, false)}
               >
@@ -224,7 +167,13 @@ const FieldArray = () => {
                 placeholder="Special requests"
               />
             </TableBodyCell>
-            <DeleteCell index={index} xs={6} md={3} lg={1} onClick={() => handleDelete(index)}>
+            <DeleteCell
+              index={index}
+              xs={6}
+              md={3}
+              lg={1}
+              onClick={() => handleDelete(index, item.id)}
+            >
               {fields.length > 1 && <span>&times;</span>}
             </DeleteCell>
           </TableBodyRow>
