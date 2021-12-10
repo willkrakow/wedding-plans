@@ -7,13 +7,15 @@ import useAuth from "../hooks/useAuth";
 import { AgeToggle, TableHeaderRow, TableBodyCell, TableBodyRow, TableHeader, TableHeaderText, CheckboxCell, DeleteCell, FancyInput } from './RsvpList/styles'
 export interface RsvpRecord {
   name: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   notes: string;
-  over21: boolean;
-  over_21: boolean;
+  over21?: boolean;
+  over_21?: boolean;
   id: string;
   phone_number: string;
   email: string;
+  is_account_owner: boolean;
+  user_account_id: string;
 }
 
 interface Props {

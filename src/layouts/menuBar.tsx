@@ -34,34 +34,52 @@ interface MenuBarProps {
 const MenuBar = ({links}: MenuBarProps): JSX.Element => {
     const { login, signup, logout, isLoggedIn, user } = useAuth();
     return (
-    <MenuWrapper fluid>
+      <MenuWrapper fluid>
         <Row>
-            <Col xs={12}>
-            <BannerHeader to={'/'} ><H1>Laura &amp; Will</H1></BannerHeader>
-              <H4 alwaysdark={false} inline={false} centered={true}><time dateTime="2022-05-01">May 1, 2022</time></H4>
+          <Col xs={12}>
+            <BannerHeader to={"/"}>
+              <H1>Laura &amp; Will</H1>
+            </BannerHeader>
+            <H4 alwaysdark={false} inline={false} centered={true}>
+              <time dateTime="2022-05-01">May 1, 2022</time>
+            </H4>
+          </Col>
+        </Row>
+        <DesktopMenu noGutters className="justify-content-center">
+          {links.map((link, index) => (
+            <Col
+              sm={3}
+              md={3}
+              lg={2}
+              xl={2}
+              className="text-center"
+              key={index}
+            >
+              <NavItem to={link.path}>{link.title}</NavItem>
             </Col>
-          </Row>
-          <DesktopMenu noGutters className="justify-content-center">
-            {links.map((link, index) => (
-              <Col sm={3} md={3} lg={2} xl={2} className="text-center" key={index}>
-                <NavItem to={link.path} >{link.title}</NavItem>
-              </Col>
-            ))}
-            <Col sm={3} md={3} lg={2} xl={2} className="text-center">
-              {isLoggedIn && user ? (
-                <NavItem to={'/account'}>My account</NavItem>
-              ) : (
-                <P centered onClick={login}>Log in</P>
-              )}
-            </Col>
-          </DesktopMenu>
-          <Row>
-            <Col className="text-center">
-              <MobileMenu menulinks={links} />
-            </Col>
-          </Row>
-    </MenuWrapper>
-    )
+          ))}
+          <Col sm={3} md={3} lg={2} xl={2} className="text-center">
+            {isLoggedIn && user ? (
+                <NavItem to={"/account"}>My account</NavItem>
+            ) : (
+              <NavItem to="#" as="span" onClick={login}>
+                Log in
+              </NavItem>
+            )}
+          </Col>
+          <Col sm={3} md={3} lg={2} xl={2} className="text-center">
+            {isLoggedIn && user && (
+              <NavItem as="span" to={"#"} onClick={logout}>Log out</NavItem>
+            )}
+          </Col>
+        </DesktopMenu>
+        <Row>
+          <Col className="text-center">
+            <MobileMenu menulinks={links} />
+          </Col>
+        </Row>
+      </MenuWrapper>
+    );
 }
 
 

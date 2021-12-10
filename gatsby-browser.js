@@ -25,7 +25,6 @@ export const onInitialClientRender = () => {
 
 export const wrapRootElement = ({ element }) => {
     const url = "https://campbellkrakow.com"
-    const identity = netlifyIdentity.currentUser()
     return (
         <IdentityContextProvider url={url}>
             {element}

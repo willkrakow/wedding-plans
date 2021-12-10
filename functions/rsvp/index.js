@@ -44,11 +44,7 @@ async function handler(event, context) {
     if (event.httpMethod === "PUT") {
         const {data, id} = JSON.parse(event.body);
         try {
-            const stuff = await updateRsvp(id, data);
-            return {
-                statusCode: 200,
-                body: JSON.stringify(stuff)
-            }
+            return await updateRsvp(id, data);
         }
         catch (err) {
             return {

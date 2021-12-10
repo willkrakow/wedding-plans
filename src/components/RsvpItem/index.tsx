@@ -2,32 +2,26 @@ import React from "react";
 import { RsvpRecord } from "../fieldArray";
 import { FancyInput, TwentyOneToggle } from "../RsvpList/styles";
 import Button, { WhiteButton } from "../../components/button";
-import { Container, Col, Row } from "reactstrap";
-import { GuestFieldLabel } from "../RsvpList";
-import styled from "styled-components";
+import { Col, Row } from "reactstrap";
+import { GuestFieldLabel, FullHeightContainer } from "./styles";
 
 interface Props {
   data?: RsvpRecord | any;
   onSubmit: (data: any, id?: string) => void;
+  onPostSubmit?: () => void;
   onCancel: () => void;
 }
-
-const FullHeightContainer = styled(Container)`
-    height: 100%;
-    flex: 1;
-`
 
 const defaultData = {
   name: "",
   email: "",
   phone_number: "",
-  over21: false,
+  over_21: false,
   notes: "",
 };
 
 const RsvpItemForm = ({ data = defaultData, onSubmit, onCancel }: Props) => {
   const [formData, setFormData] = React.useState<RsvpRecord | null | any>(data);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit(formData, data?.id || null);
@@ -73,21 +67,21 @@ const RsvpItemForm = ({ data = defaultData, onSubmit, onCancel }: Props) => {
           <Col xs={12}>
             <GuestFieldLabel>Over 21?</GuestFieldLabel>
             <label className="w-100 pb-2">
-              <input type="checkbox" hidden value={formData?.over21} />
+              <input type="checkbox" hidden value={formData?.over_21} />
               <TwentyOneToggle
-                active={formData?.over21}
+                active={formData?.over_21}
                 onClick={(e) => {
                   e.preventDefault();
-                  setFormData({ ...formData, over21: true });
+                  setFormData({ ...formData, over_21: true });
                 }}
               >
                 Yes
               </TwentyOneToggle>
               <TwentyOneToggle
-                active={!formData?.over21}
+                active={!formData?.over_21}
                 onClick={(e) => {
                   e.preventDefault();
-                  setFormData({ ...formData, over21: false });
+                  setFormData({ ...formData, over_21: false });
                 }}
               >
                 No

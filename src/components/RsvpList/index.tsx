@@ -1,35 +1,17 @@
 import React from "react";
-import { Row, Col, Container } from "reactstrap";
+import { Row, Col } from "reactstrap";
 import useAuth from "../../hooks/useAuth";
-import { H4, P } from "../typography";
-import styled from "styled-components";
-import Button, { RedButton, WhiteButton } from "../button";
+import Button, { WhiteButton } from "../button";
 import RsvpItemForm from "../RsvpItem";
 import useAirtable from "../../hooks/useAirtable";
-export const GuestBox = styled.article`
-  border: 1px solid ${(props) => props.theme.colors.muted};
-  padding: ${(props) => props.theme.spacing[3]};
-  margin: ${(props) => props.theme.spacing[3]} 0;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
+import { ErrorMessage, FullHeightContainer, GuestBox } from "../RsvpItem/styles";
+import RsvpCard from "../RsvpItem/rsvpCard";
 
-const ErrorMessage = styled(P)`
-  color: ${(props) => props.theme.colors.danger};
-  margin-top: ${(props) => props.theme.spacing[2]};
-  font-weight: bold;
-`;
 
-export const GuestFieldLabel = styled.span`
-  font-weight: bold;
-  color: ${(props) => props.theme.colors.accent};
-  font-size: ${(props) => props.theme.fontSizes[0]};
-  margin-top: ${(props) => props.theme.spacing[1]};
-`;
 const RsvpList = () => {
   const [editing, setEditing] = React.useState<null | string>(null);
   const [creating, setCreating] = React.useState(false);
+  
   const { user } = useAuth();
 
   const { data, errors, loading, updateData, addData, deleteData } =
@@ -43,9 +25,29 @@ const RsvpList = () => {
     setEditing(null);
   };
 
-  if (data.length === 0 && !loading) {
-    return <RsvpItemForm onSubmit={addData} onCancel={handleCancel} />;
+  const handleAddSelf = () => {
+    return addData({
+      name: user?.user_metadata?.full_name,
+      email: user?.email || "",
+      over21: false,
+      notes: "",
+      user_account_id: user?.id || "",
+      phone_number: "",
+      is_account_owner: true,
+    });
+  };
+
+  const accountOwnerInData = data.some(
+    (item) => item?.user_account_id === user?.id && item.is_account_owner
+  );
+
+  const handleUpdateData = (newData: any, id?: string) => {
+    updateData(newData, id)
+    .then(() => {
+      setEditing(null);
+    })
   }
+
   return (
     <Row>
       {!loading ? (
@@ -56,48 +58,13 @@ const RsvpList = () => {
                 <GuestBox>
                   {editing && item.id && editing === item.id ? (
                     <RsvpItemForm
-                      data={{ ...item, email: user?.email || "" }}
-                      onSubmit={updateData}
+                      data={{ ...item, email: user?.email || "", name: user?.user_metadata?.full_name, phone: user?.user_metadata?.phone_number || user?.user_metadata?.phone || ""}}
+                      onSubmit={handleUpdateData}
+                      onPostSubmit={() => setEditing(null)}
                       onCancel={handleCancel}
                     />
                   ) : (
-                    <Container>
-                      <Row>
-                        <Col xs={12}>
-                          <GuestFieldLabel>Name</GuestFieldLabel>
-                          {/* @ts-ignore */}
-                          <P className="font-bold">{item.name}</P>
-                        </Col>
-                        <Col xs={12}>
-                          <GuestFieldLabel>Email</GuestFieldLabel>
-                          <P>{item?.email || <span>No email provided</span>}</P>
-                        </Col>
-                        <Col xs={12}>
-                          <GuestFieldLabel>Phone number:</GuestFieldLabel>
-                          <P>
-                            {item.phoneNumber || item.phone_number || (
-                              <em>No phone number</em>
-                            )}
-                          </P>
-                        </Col>
-                        <Col xs={12}>
-                          <GuestFieldLabel>Over 21?</GuestFieldLabel>
-                          <P>{item.over21 || item.over_21 ? "Yes" : "No"}</P>
-                        </Col>
-                        <Col xs={12}>
-                          <GuestFieldLabel>Notes</GuestFieldLabel>
-                          <P>{item.notes}</P>
-                        </Col>
-                        <Col xs={12} className="d-flex mt-4">
-                          <WhiteButton onClick={() => handleEdit(item.id)}>
-                            Edit
-                          </WhiteButton>
-                          <RedButton onClick={() => deleteData(item.id)}>
-                            Delete
-                          </RedButton>
-                        </Col>
-                      </Row>
-                    </Container>
+                    <RsvpCard item={item} onDelete={deleteData} handleEdit={handleEdit} />
                   )}
                 </GuestBox>
               </Col>
@@ -109,6 +76,7 @@ const RsvpList = () => {
                 <>
                   <RsvpItemForm
                     onSubmit={addData}
+                    onPostSubmit={() => setCreating(false)}
                     onCancel={() => setCreating(false)}
                   />
                   {errors.length > 0 && (
@@ -120,11 +88,14 @@ const RsvpList = () => {
                   )}
                 </>
               ) : (
-                <div className="d-flex flex-column justify-content-center align-items-center h-100">
-                  {/* @ts-ignore */}
-                  <H4 centered>Add a guest</H4>
+                <FullHeightContainer className="align-items-center justify-content-center d-flex">
                   <Button onClick={() => setCreating(true)}>Add guest</Button>
-                </div>
+                  {!accountOwnerInData && (
+                    <WhiteButton onClick={handleAddSelf}>
+                      Add myself
+                    </WhiteButton>
+                  )}
+                </FullHeightContainer>
               )}
             </GuestBox>
           </Col>

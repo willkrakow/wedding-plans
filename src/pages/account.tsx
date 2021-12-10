@@ -5,6 +5,9 @@ import { H3, H4 } from "../components/typography";
 import Button, { RedButton, WhiteButton } from "../components/button";
 import RsvpList from "../components/RsvpList";
 import { FancyInput } from "../components/RsvpList/styles";
+import { User } from "react-netlify-identity";
+import { UserData } from "gotrue-js";
+import { isEqual } from "lodash";
 
 interface TempUserMetadata {
   name?: string;
@@ -13,53 +16,70 @@ interface TempUserMetadata {
   [key: string]: any;
 }
 
+function extractUserMetadata(user?: UserData | User) {
+  if (!user) return {};
+  return {
+    ...user,
+    full_name: user?.user_metadata?.full_name,
+    email: user?.email,
+    phone: user?.user_metadata?.phone,
+  };
+}
+
 const Account = () => {
-    const [ displayAccount, setDisplayAccount ] = React.useState(false);
-    const {
-      user,
-      updateUser,
-      login,
-      signup,
-      requestPasswordRecovery,
-      isLoggedIn,
-      logout,
-    } = useAuth();
-    const [ newValues, setNewValues ] = React.useState<TempUserMetadata | null>(user?.user_metadata);
-  
+  const [loading, setLoading] = React.useState(false);
+  const [ stale, setStale ] = React.useState(false);
+  const {
+    user,
+    updateUserData,
+    login,
+    signup,
+    requestPasswordRecovery,
+    isLoggedIn,
+    logout,
+  } = useAuth();
+  const [newValues, setNewValues] = React.useState<User | null | any>(
+    extractUserMetadata(user)
+  );
 
   React.useEffect(() => {
-    if (!isLoggedIn || !user) {
-      login();
-      return
-    }
+    const currentUserValues = extractUserMetadata(user);
+    setNewValues(currentUserValues);
+  }, [user]);
 
-    setDisplayAccount(isLoggedIn);
-    setNewValues(user?.user_metadata);
-    }, [isLoggedIn, user]);
-
-  const handleSave = () => {
-    updateUser({
-      name: newValues?.name,
-      email: newValues?.email,
-      phone: newValues?.phone,
-    });
-  }
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    updateUserData({
+      email: newValues.email,
+      data: {
+        full_name: newValues.full_name,
+        phone: newValues.phone,
+      },
+    })
+      .then((res: UserData | any) => {
+        const currentUserValues = extractUserMetadata(res);
+        setNewValues(currentUserValues);
+      })
+      .catch((err: any) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+        setStale(false);
+      });
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStale(true);
     const { name, value } = e.target;
-    if (name === "email") {
-      setNewValues({...newValues, email: value});
-    }
-    if (name === "name") {
-      setNewValues({ ...newValues, name: value});
-    }
+    setNewValues({ ...newValues, [name]: value });
+  };
 
-    if (name === "phone_number") {
-      setNewValues({ ...newValues, phone: value});
-    }
+  if (loading) {
+    return <H4 centered alwaysdark inline={false}>Loading...</H4>;
   }
-
-  return displayAccount ? (
+  return isLoggedIn ? (
     <Container>
       <Row>
         <Col>
@@ -68,49 +88,65 @@ const Account = () => {
         </Col>
       </Row>
       <form onSubmit={handleSave}>
-      <Row className="mt-3">
-        <Col>
-          {/* @ts-ignore */}
-          <H4 inline>Email address</H4>
-          <FancyInput
-            type="text"
-            value={newValues?.email}
-            onChange={handleChange}
-          />
-        </Col>
-        <Col>
-          {/* @ts-ignore */}
-          <H4 inline>Name</H4>
-          <FancyInput
-            type="text"
-            value={newValues?.name}
-            onChange={handleChange}
-          />
-        </Col>
-        <Col>
-          {/* @ts-ignore */}
-          <H4 inline>Phone</H4>
-          <FancyInput
-            type="text"
-            value={newValues?.phone}
-            onChange={handleChange}
-          />
-        </Col>
-        <Col>
-          {/* @ts-ignore */}
-          <H4 inline>Password</H4>
-          <WhiteButton
-            onClick={() => user?.email && requestPasswordRecovery(user?.email)}
-          >
-            Change password
-          </WhiteButton>
-        </Col>
-        <Col>
-          {/* @ts-ignore */}
-          <H4 inline></H4>
-          <RedButton onClick={logout}>Log out</RedButton>
-        </Col>
-      </Row>
+        <Row className="mt-3">
+          <Col>
+            {/* @ts-ignore */}
+            <H4 inline>Email address</H4>
+            <FancyInput
+              type="text"
+              name="email"
+              value={newValues?.email}
+              onChange={handleChange}
+            />
+          </Col>
+          <Col>
+            {/* @ts-ignore */}
+            <H4 inline>Name</H4>
+            <FancyInput
+              type="text"
+              name="full_name"
+              value={newValues?.full_name}
+              onChange={handleChange}
+            />
+          </Col>
+          <Col>
+            {/* @ts-ignore */}
+            <H4 inline>Phone</H4>
+            <FancyInput
+              type="text"
+              value={newValues?.phone}
+              name="phone"
+              onChange={handleChange}
+            />
+          </Col>
+          <Col>
+            {/* @ts-ignore */}
+            <H4 inline></H4>
+            {stale && <Button className="mt-2" type="submit">
+              Save
+            </Button>}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            {/* @ts-ignore */}
+            <H4 inline>Security</H4>
+            <WhiteButton
+              onClick={() =>
+                user?.email && requestPasswordRecovery(user?.email)
+              }
+            >
+              Change password
+            </WhiteButton>
+          </Col>
+          </Row>
+          <Row>
+          <Col>
+            {/* @ts-ignore */}
+            <H4 inline></H4>
+            <RedButton onClick={logout}>Log out</RedButton>
+          </Col>
+        </Row>
       </form>
       <Row className="mt-5">
         <Col xs={12}>
@@ -137,6 +173,6 @@ const Account = () => {
       </Row>
     </Container>
   );
-}
+};
 
-export default Account
+export default Account;

@@ -12,7 +12,7 @@ export default function useAirtable(userId?: string) {
         setLoading(false);
         setErrors(["No userId"]);
         return;
-    }
+      }
       const res = await fetch(`/.netlify/functions/rsvp?id=${userId}`);
 
       _handleErrors(res, "Failed to fetch data");
@@ -24,7 +24,7 @@ export default function useAirtable(userId?: string) {
     fetchData().then(() => setLoading(false));
 
     return () => {
-        setErrors([]);
+      setErrors([]);
     };
   }, [userId]);
 
@@ -47,15 +47,19 @@ export default function useAirtable(userId?: string) {
         break;
     }
   };
-
-  const addData = async (newItem: RsvpRecord) => {
+  type NewRsvpRecord = Omit<RsvpRecord, "id">;
+  const addData = async (newItem: NewRsvpRecord) => {
     setLoading(true);
     const res = await fetch(`/.netlify/functions/rsvp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({...newItem, user_account_id: userId}),
+      body: JSON.stringify({
+        ...newItem,
+        user_account_id: userId,
+        is_account_owner: newItem.is_account_owner || false,
+      }),
     });
 
     _handleErrors(res, "Failed to add data");
@@ -68,36 +72,39 @@ export default function useAirtable(userId?: string) {
 
   const updateData = async (updatedItem: RsvpRecord, id?: string) => {
     setLoading(true);
-    if(!id) {
-        setLoading(false);
-        setErrors(["No id"]);
-        return;
+    if (!id) {
+      setLoading(false);
+      setErrors(["No id"]);
+      return;
     }
-    const res = await fetch(`/.netlify/functions/rsvp`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id,
-        data: updatedItem,
-      }),
-    });
-
-    _handleErrors(res, "Failed to update data");
-
-    const json = await res.json();
-    const newData = data.map((d: RsvpRecord) => {
-      if (d.id === id) {
-        return {
-          ...d,
-          ...json.data,
-        };
-      }
-      return d;
-    });
-    setData(newData);
-    setLoading(false);
+    try {
+      const res = await fetch(`/.netlify/functions/rsvp`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id,
+          data: updatedItem,
+        }),
+      });
+      const json = await res.json();
+      const newData = data.map((d: RsvpRecord) => {
+        if (d.id === id) {
+          return {
+            ...d,
+            ...json.data,
+          };
+        }
+        return d;
+      });
+      setData(newData);
+      _handleErrors(res, "Failed to update data");
+    } catch (e) {
+      setErrors([...errors, "Something went wrong"]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const deleteData = async (id: string) => {

@@ -19,6 +19,7 @@ async function createRsvp(data) {
             notes: data.notes,
             rsvp: "Yes",
             user_account_id: data.user_account_id,
+            is_account_owner: data.is_account_owner ? "Yes" : "No",
         },
     }]
 
@@ -81,6 +82,7 @@ async function getRsvps(userId) {
             id: result.id,
             over_21: result.fields.over_21 === "Yes",
             rsvp: result.fields.rsvp === "Yes",
+            is_account_owner: result.fields.is_account_owner === "Yes",
         }
     })
 
@@ -114,6 +116,7 @@ async function deleteRsvp(recordId) {
 }
 
 async function updateRsvp(id, data) {
+    console.log(data)
     const toUpdate = [{
         id: id,
         fields: {
@@ -131,7 +134,15 @@ async function updateRsvp(id, data) {
         statusCode: 200,
         body: JSON.stringify({
             message: "RSVP updated",
-            data: res[0],
+            data: {
+                id: res[0].id,
+                over_21: res[0].fields.over_21 === "Yes",
+                phone_number: res[0].fields.phone_number,
+                notes: res[0].fields.notes,
+                user_account_id: res[0].fields.user_account_id,
+                email: res[0].fields.email,
+                name: res[0].fields.name,
+            },
         }),
     }
 }

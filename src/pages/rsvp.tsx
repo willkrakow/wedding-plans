@@ -1,26 +1,15 @@
 import React from "react";
-import Button, { RedButton, WhiteButton } from "../components/button";
-import FieldArray from "../components/fieldArray";
+import Button, { WhiteButton } from "../components/button";
 import { H2, H4 } from "../components/typography";
 import useAuth from "../hooks/useAuth";
+import RsvpList from "../components/RsvpList";
 
 const Rsvp = () => {
-  const { login, logout, signup, isLoggedIn, isConfirmedUser } = useAuth();
+  const { login, logout, signup, isLoggedIn, user } = useAuth();
   return (
       <>
         <H2 centered>RSVP</H2>
-        {isLoggedIn && isConfirmedUser && (
-          <>
-        <FieldArray />
-        <RedButton onClick={logout}>Log out</RedButton>
-        </>
-        )}
-        {isLoggedIn && !isConfirmedUser && (
-          <>
-            <H4 centered inline alwaysdark>You must confirm your email address before you can RSVP.</H4>
-            <WhiteButton onClick={logout}>Log out</WhiteButton>
-          </>
-        )}
+        {isLoggedIn && user && <RsvpList />}
         {!isLoggedIn && (
           <>
           <H4 centered inline alwaysdark >Please log in or create an account to RSVP</H4>
