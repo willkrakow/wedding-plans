@@ -8,9 +8,7 @@ const isBrowser = typeof window !== 'undefined'
 export default function useAuth() {
     const { isLoggedIn, isConfirmedUser, user, updateUser, settings, requestPasswordRecovery } = useIdentityContext()
 
-    const auth = isBrowser ? new GoTrue({
-      APIUrl: "https://campbellkrakow.com/.netlify/identity",
-    }) : null
+    const auth = isBrowser ? new GoTrue() : null
 
     const updateUserData = async (userData) => {
       const res = await auth?.currentUser()?.update(userData)
