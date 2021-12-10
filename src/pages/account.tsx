@@ -7,14 +7,6 @@ import RsvpList from "../components/RsvpList";
 import { FancyInput } from "../components/RsvpList/styles";
 import { User } from "react-netlify-identity";
 import { UserData } from "gotrue-js";
-import { isEqual } from "lodash";
-
-interface TempUserMetadata {
-  name?: string;
-  email?: string;
-  phone?: string;
-  [key: string]: any;
-}
 
 function extractUserMetadata(user?: UserData | User) {
   if (!user) return {};

@@ -5,7 +5,7 @@ import useAuth from "../hooks/useAuth";
 import RsvpList from "../components/RsvpList";
 
 const Rsvp = () => {
-  const { login, logout, signup, isLoggedIn, user } = useAuth();
+  const { login, signup, isLoggedIn, user } = useAuth();
   return (
       <>
         <H2 centered>RSVP</H2>

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Container, Row, Col } from 'reactstrap'
-import { H1, H4, NavItem, P } from '../components/typography'
+import { H1, H4, NavItem } from '../components/typography'
 import MobileMenu from './mobileMenu'
 import { Link } from 'gatsby'
 import useAuth from '../hooks/useAuth'
@@ -60,16 +60,23 @@ const MenuBar = ({links}: MenuBarProps): JSX.Element => {
           ))}
           <Col sm={3} md={3} lg={2} xl={2} className="text-center">
             {isLoggedIn && user ? (
-                <NavItem to={"/account"}>My account</NavItem>
+              <NavItem to={"/account"}>My account</NavItem>
             ) : (
-              <NavItem to="#" as="span" onClick={login}>
-                Log in
-              </NavItem>
+              <>
+                <NavItem to="#" as="span" onClick={login}>
+                  Log in
+                </NavItem>
+                <NavItem to="#" as="span" onClick={signup}>
+                  Sign up
+                </NavItem>
+              </>
             )}
           </Col>
           <Col sm={3} md={3} lg={2} xl={2} className="text-center">
             {isLoggedIn && user && (
-              <NavItem as="span" to={"#"} onClick={logout}>Log out</NavItem>
+              <NavItem as="span" to={"#"} onClick={logout}>
+                Log out
+              </NavItem>
             )}
           </Col>
         </DesktopMenu>
