@@ -4,32 +4,60 @@ require("@popperjs/core/dist/umd/popper.min.js")
 const netlifyIdentity = require("netlify-identity-widget");
 const GoTrue = require("gotrue-js").default;
 const React = require("react")
-
-export const NetlifyIdentityContext = React.createContext()
-
+const { NetlifyAuthProvider } = require('./src/contexts/netlifyAuth')
 
 export const onInitialClientRender = () => {
-    new GoTrue()
-    netlifyIdentity.init();
-    netlifyIdentity.on("init", user => {
-        console.log("init", user);
-    });
-
-    netlifyIdentity.on("login", user => {
-        console.log(netlifyIdentity.currentUser());
-    });
-
-    netlifyIdentity.on("logout", () => {
-        window.location.reload();
-    });
+    netlifyIdentity.init()
 };
 
 
 
 export const wrapRootElement = ({ element }) => {
+    const auth = new GoTrue()
+
+    netlifyIdentity.on("login", user => {
+        authContext.user = user;
+        authContext.isLoggedIn = true;
+    });
+
+    netlifyIdentity.on("logout", () => {
+        authContext.user = null;
+        authContext.isLoggedIn = false;
+        window.location.reload();
+    });
+
+    netlifyIdentity.on("close", () => window.location.reload());
+
+    const authContext = {
+        isLoggedIn: false,
+        user: null,
+        login: () => {
+            netlifyIdentity.open("login");
+        },
+        logout: () => {
+            netlifyIdentity.logout();
+        },
+        signup: () => {
+            netlifyIdentity.open("signup");
+        },
+        updateUserData: async (data) => {
+            const res = await auth.currentUser().update(data)
+            if (res) {
+                return await res.getUserData()
+            }
+            return null
+        },
+        requestPasswordReset: async email => {
+            return await auth.requestPasswordRecovery(email)
+        },
+        settings: async () => {
+            return await auth.settings()
+        },
+    };
+    
     return (
-    <NetlifyIdentityContext.Provider value={() => new GoTrue}>
+    <NetlifyAuthProvider value={authContext}>
         {element}
-    </NetlifyIdentityContext.Provider>
+    </NetlifyAuthProvider>
 )}
 

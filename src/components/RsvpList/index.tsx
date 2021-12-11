@@ -37,7 +37,7 @@ const RsvpList = () => {
     });
   };
 
-  const accountOwnerInData = data.some(
+  const accountOwnerInData = (data) => data.some(
     (item) => item?.user_account_id === user?.id && item.is_account_owner
   );
 
@@ -90,7 +90,7 @@ const RsvpList = () => {
               ) : (
                 <FullHeightContainer className="align-items-center justify-content-center d-flex">
                   <Button onClick={() => setCreating(true)}>Add guest</Button>
-                  {!accountOwnerInData && (
+                  {!accountOwnerInData(data) && (
                     <WhiteButton onClick={handleAddSelf}>
                       Add myself
                     </WhiteButton>

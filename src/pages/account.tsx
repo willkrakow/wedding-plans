@@ -1,12 +1,13 @@
 import React from "react";
 import { Col, Container, Row } from "reactstrap";
-import useAuth from "../hooks/useAuth";
-import { H3, H4 } from "../components/typography";
-import Button, { RedButton, WhiteButton } from "../components/button";
+import { H2, H3, H4 } from "../components/typography";
+import Button, { WhiteButton } from "../components/button";
 import RsvpList from "../components/RsvpList";
 import { FancyInput } from "../components/RsvpList/styles";
 import { User } from "netlify-identity-widget";
 import { UserData } from "gotrue-js";
+import { NetlifyAuthContext } from "../contexts/netlifyAuth";
+import netlifyIdentity from "netlify-identity-widget";
 
 function extractUserMetadata(user?: UserData | User | null) {
   if (!user) return {};
@@ -26,16 +27,17 @@ const Account = () => {
     updateUserData,
     login,
     signup,
-    requestPasswordRecovery,
-    isLoggedIn,
-    logout,
-  } = useAuth();
+    requestPasswordReset,
+  } = React.useContext(NetlifyAuthContext);
   const [newValues, setNewValues] = React.useState<User | any>(
     extractUserMetadata(user)
   );
+  const [ hackUser, setHackUser ] = React.useState<User | any>()
 
   React.useEffect(() => {
-    const currentUserValues = extractUserMetadata(user);
+    const pageLoadUser = netlifyIdentity.currentUser();
+    setHackUser(pageLoadUser);
+    const currentUserValues = extractUserMetadata(pageLoadUser);
     setNewValues(currentUserValues);
   }, [user]);
 
@@ -71,12 +73,12 @@ const Account = () => {
   if (loading) {
     return <H4 centered alwaysdark inline={false}>Loading...</H4>;
   }
-  return isLoggedIn ? (
+  return hackUser ? (
     <Container>
-      <Row>
-        <Col>
+      <Row className="justify-content-center mb-2">
+        <Col className="text-center">
           {/* @ts-ignore */}
-          <H3>Account</H3>
+          <H2 centered>Account</H2>
         </Col>
       </Row>
       <form onSubmit={handleSave}>
@@ -114,9 +116,11 @@ const Account = () => {
           <Col>
             {/* @ts-ignore */}
             <H4 inline></H4>
-            {stale && <Button className="mt-2" type="submit">
-              Save
-            </Button>}
+            {stale && (
+              <Button className="mt-2" type="submit">
+                Save
+              </Button>
+            )}
           </Col>
         </Row>
         <Row>
@@ -124,19 +128,10 @@ const Account = () => {
             {/* @ts-ignore */}
             <H4 inline>Security</H4>
             <WhiteButton
-              onClick={() =>
-                user?.email && requestPasswordRecovery(user?.email)
-              }
+              onClick={() => user?.email && requestPasswordReset(user?.email)}
             >
               Change password
             </WhiteButton>
-          </Col>
-          </Row>
-          <Row>
-          <Col>
-            {/* @ts-ignore */}
-            <H4 inline></H4>
-            <RedButton onClick={logout}>Log out</RedButton>
           </Col>
         </Row>
       </form>
@@ -145,20 +140,23 @@ const Account = () => {
           <H3>RSVPs</H3>
         </Col>
       </Row>
-      {isLoggedIn && user && <RsvpList />}
+      {hackUser && <RsvpList />}
     </Container>
   ) : (
     <Container>
-      <Row>
+      <Row className="mb-4">
         <Col>
-          <H3>Account</H3>
+          <H2 centered>Account</H2>
         </Col>
       </Row>
-      <Row>
-        <Col>
-          <H4 centered={false} inline={false} alwaysdark={true}>
+      <Row className="justify-content-center">
+        <Col xs={12}>
+          <H4 centered inline={false} alwaysdark={true}>
             Please login or create an account to continue
           </H4>
+        </Col>
+
+        <Col xs={12} md={5} lg={3} className="d-flex justify-content-between">
           <Button onClick={login}>Log in</Button>
           <WhiteButton onClick={signup}>Create account</WhiteButton>
         </Col>
