@@ -58,23 +58,27 @@ const MenuBar = ({links}: MenuBarProps): JSX.Element => {
               <NavItem to={link.path}>{link.title}</NavItem>
             </Col>
           ))}
-          <Col sm={3} md={3} lg={2} xl={2} className="text-center">
             {isLoggedIn && user ? (
-              <NavItem to={"/account"}>My account</NavItem>
+              <Col sm={3} md={3} lg={2} xl={2} className="text-center">
+                <NavItem to={"/account"}>My account</NavItem>
+              </Col>
             ) : (
-              <>
+              <div>
+                <Col sm={3} md={3} lg={2} xl={2} className="text-center">
                 <NavItem to="#" as="span" onClick={login}>
                   Log in
                 </NavItem>
+                </Col>
+                <Col sm={3} md={3} lg={2} xl={2} className="text-center">
                 <NavItem to="#" as="span" onClick={signup}>
                   Sign up
                 </NavItem>
-              </>
+                </Col>
+              </div>
             )}
-          </Col>
           <Col sm={3} md={3} lg={2} xl={2} className="text-center">
             {isLoggedIn && user && (
-              <NavItem as="span" to={"#"} onClick={logout}>
+              <NavItem as="span" to={"#"} onClick={() => logout()}>
                 Log out
               </NavItem>
             )}

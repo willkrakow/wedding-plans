@@ -5,8 +5,9 @@ import GoTrue, { UserData } from 'gotrue-js'
 const isBrowser = typeof window !== 'undefined'
 
 export default function useAuth() {
-    const auth = isBrowser ? new GoTrue() : null
     const [ user, setUser ] = React.useState<User | UserData | null>()
+    const [ auth, setAuth] = React.useState<GoTrue | null>(null)
+    const [ isLoggedIn, setIsLoggedIn ] = React.useState<boolean>(false)
 
     const updateUserData = async (userData: any) => {
       const res = await auth?.currentUser()?.update(userData)
@@ -15,8 +16,6 @@ export default function useAuth() {
       }
       return null
     }
-
-    const isLoggedIn = !!user
 
     const isConfirmedUser = () => !!user?.confirmed_at
 
@@ -28,21 +27,49 @@ export default function useAuth() {
       return "error"
     }
 
+    React.useEffect(() => {
+      if (!isBrowser) {
+        return
+      }
+
+      netlifyIdentity.on("login", (user) => {
+        setUser(user);
+        setIsLoggedIn(true);
+      });
+
+      netlifyIdentity.on("logout", () => {
+        setUser(null);
+        setIsLoggedIn(false);
+        window.location.reload()
+      });
+
+      if (!auth) {
+        const gotrue = new GoTrue()
+        setAuth(gotrue)
+      }
+
+      if (auth?.currentUser()){
+        setUser(auth.currentUser())
+      }
+      return () => {
+        netlifyIdentity.off("login")
+        netlifyIdentity.off("logout")
+      }
+    }, [auth])
+
     const settings = () => {
       return auth?.settings()
     }
 
     const login = () => {
       netlifyIdentity.open("login");
-      netlifyIdentity.on("login", user => {
-        setUser(user)
-      })
     };
 
     const logout = () => {
-      netlifyIdentity.logout();
-      netlifyIdentity.on("logout", () => {
+      netlifyIdentity?.logout()?.then(() => {
+        console.log("Logged out")
         setUser(null)
+        setIsLoggedIn(false)
       })
     };
 

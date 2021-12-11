@@ -145,7 +145,7 @@ const Account = () => {
           <H3>RSVPs</H3>
         </Col>
       </Row>
-      <RsvpList />
+      {isLoggedIn && user && <RsvpList />}
     </Container>
   ) : (
     <Container>
