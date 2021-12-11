@@ -4,8 +4,6 @@ import { Container, Row, Col } from 'reactstrap'
 import { H1, H4, NavItem } from '../components/typography'
 import MobileMenu from './mobileMenu'
 import { Link } from 'gatsby'
-import useAuth from '../hooks/useAuth'
-import { NetlifyAuthContext } from '../contexts/netlifyAuth'
 
 const MenuWrapper = styled(Container)`
     padding-top: ${props => props.theme.spacing[4]};
@@ -32,8 +30,7 @@ interface MenuBarProps {
   links: Array<MenuBarLinkProps>,
 }
 
-const MenuBar = ({links}: MenuBarProps): JSX.Element => {
-    const { login, signup, logout, isLoggedIn, user } = React.useContext(NetlifyAuthContext);
+const MenuBar = ({links}: MenuBarProps): JSX.Element => {    
     return (
       <MenuWrapper fluid>
         <Row>
@@ -59,36 +56,6 @@ const MenuBar = ({links}: MenuBarProps): JSX.Element => {
               <NavItem to={link.path}>{link.title}</NavItem>
             </Col>
           ))}
-          {user ? (
-            <Col sm={3} md={3} lg={2} xl={2} className="text-center">
-              <NavItem to={"/account"}>My account</NavItem>
-            </Col>
-          ) : (
-            <>
-              <Col sm={3} md={3} lg={2} xl={2} className="text-center">
-                {/* @ts-ignore */}
-                <NavItem as="span" onClick={login}>
-                  Log in
-                </NavItem>
-              </Col>
-              <Col sm={3} md={3} lg={2} xl={2} className="text-center">
-                {/* @ts-ignore */}
-                <NavItem as="span" onClick={signup}>
-                  Sign up
-                </NavItem>
-              </Col>
-            </>
-          )}
-          <Col sm={3} md={3} lg={2} xl={2} className="text-center">
-            {user && (
-              <>
-                {/* @ts-ignore */}
-                <NavItem as="span" onClick={async () => await logout()}>
-                  Log out
-                </NavItem>
-              </>
-            )}
-          </Col>
         </DesktopMenu>
         <Row>
           <Col className="text-center">

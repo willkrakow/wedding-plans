@@ -54,7 +54,7 @@ const RsvpList = () => {
         <>
           {data.map((item) => {
             return (
-              <Col key={item.id} xs={12} md={6} lg={3}>
+              <Col key={item.id} xs={12} md={6} lg={3} className="mb-4">
                 <GuestBox>
                   {editing && item.id && editing === item.id ? (
                     <RsvpItemForm
@@ -70,7 +70,7 @@ const RsvpList = () => {
               </Col>
             );
           })}
-          <Col xs={12} md={6} lg={3}>
+          <Col xs={12} md={6} lg={3} className="mb-4">
             <GuestBox>
               {creating ? (
                 <>

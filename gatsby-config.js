@@ -17,7 +17,7 @@ module.exports = {
       },
       {
         title: "RSVP",
-        path: "/rsvp"
+        path: "/app/rsvp"
       },
       {
         title: "Honeymoon",
@@ -43,6 +43,10 @@ module.exports = {
         title: "Schedule",
         path: "/schedule"
       },
+      {
+        title: "Account",
+        path: "/app/account"
+      }
     ]
   },
   plugins: [
@@ -86,6 +90,7 @@ module.exports = {
         path: `${__dirname}/src/pages/`,
       },
     },
+    `gatsby-plugin-netlify`,
     `gatsby-plugin-mdx`,
     {
       resolve: `gatsby-source-airtable`,

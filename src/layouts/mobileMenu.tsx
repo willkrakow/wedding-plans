@@ -3,9 +3,9 @@ import styled, { ThemeContext, DefaultTheme } from "styled-components";
 import { NavItem } from "../components/typography";
 import { WhiteButton } from "../components/button";
 import { MenuBarLinkProps } from "./menuBar";
-import { globalHistory } from "@reach/router";
+import { globalHistory, HistoryLocation } from "@reach/router";
 import { CornerButton } from "../containers/modal/modalComponents";
-import useAuth from "../hooks/useAuth";
+import netlifyIdentity from "netlify-identity-widget";
 
 interface MobileMenuProps {
   menulinks: Array<MenuBarLinkProps>;
@@ -44,6 +44,7 @@ const MobileDropdownToggle = styled(MobileDropdownToggle_)`
   height: 1.5rem;
   transform: rotate(${(props) => (props.isOpen ? "90deg" : "0deg")});
   transition: all 0.4s ease;
+  overflow: hidden;
 `;
 
 const Dropper = styled.div<{ isOpen: boolean }>`
@@ -65,37 +66,65 @@ const Dropper = styled.div<{ isOpen: boolean }>`
     ${(props) => props.theme.spacing[2]} rgba(0, 0, 0, 0.2);
 `;
 
-const DropList = styled.nav`
+interface IDropList {
+  isOpen: boolean;
+}
+
+const DropList = styled.nav<IDropList>`
   list-style: none;
-  display: flex;
+  display: ${props => props.isOpen ? "flex" : "none"};
   flex-direction: column;
   justify-content: space-between;
   flex: 100%;
+  position: fixed;
+  top: ${(props) => props.isOpen ? props.theme.spacing[4] : "100%"};
+  left: 0;
+  right: 0;
+  bottom: ${(props) => props.isOpen ? props.theme.spacing[4] : "0px"};
 `;
 
 const CloseButton = styled(CornerButton)`
   color: ${(props) => props.theme.colors.accent};
+  top: ${(props) => props.theme.spacing[2]};
 `;
+
+interface MyRefProps {
+  location: HistoryLocation | null;
+}
 
 const MobileMenu = ({ menulinks }: MobileMenuProps) => {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const theme = React.useContext(ThemeContext);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
-  const { login, logout, isLoggedIn, signup } = useAuth();
+
+  const myRef = React.useRef<MyRefProps>({
+    location: null,
+  });
   React.useEffect(() => {
-    return globalHistory.listen(({ action }) => {
-      if (action === "PUSH") setDropdownOpen(false);
+    if (!myRef.current.location) {
+      myRef.current.location = globalHistory.location;
+    } else if (myRef.current.location !== globalHistory.location) {
+      myRef.current.location = globalHistory.location;
+    }
+    netlifyIdentity.on("open", () => {
+      setDropdownOpen(false);
     });
-  }, [setDropdownOpen]);
+
+    return globalHistory.listen(({ action }) => {
+      if (action === "PUSH") {
+        setDropdownOpen(false);
+      }
+    });
+  }, [globalHistory]);
 
   return (
     <MobileDropdown>
-      <MobileDropdownToggle onClick={toggle} isOpen={dropdownOpen} />
+      <MobileDropdownToggle onClick={() => setDropdownOpen(!dropdownOpen)} isOpen={dropdownOpen} />
       <Dropper isOpen={dropdownOpen}>
         <CloseButton open={dropdownOpen} onClick={toggle}>
           &times;
         </CloseButton>
-        <DropList>
+        <DropList isOpen={dropdownOpen}>
           {menulinks.map((link, index) => (
             <NavItem
               className="w-100 text-center"
@@ -110,30 +139,6 @@ const MobileMenu = ({ menulinks }: MobileMenuProps) => {
               {link.title}
             </NavItem>
           ))}
-          {isLoggedIn ? (
-              <NavItem
-                to="#"
-                className="w-100 text-center"
-                as="span"
-                onClick={logout}
-                activeStyle={{
-                  textDecoration: "underline",
-                  textDecorationColor: theme.colors.accent,
-                  textDecorationThickness: theme.spacing[1],
-                }}
-              >
-                Logout
-              </NavItem>
-          ) : (
-            <>
-            <NavItem to="#" as="span" onClick={login} className="w-100 text-center">
-              Log in
-            </NavItem>
-              <NavItem to="#" as="span" onClick={signup}>
-                Sign Up
-              </NavItem>
-            </>
-          )}
         </DropList>
       </Dropper>
     </MobileDropdown>

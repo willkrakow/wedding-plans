@@ -1,12 +1,12 @@
 import React from "react";
 import { Col, Container, Row } from "reactstrap";
-import { H2, H3, H4 } from "../components/typography";
-import Button, { WhiteButton } from "../components/button";
-import RsvpList from "../components/RsvpList";
-import { FancyInput } from "../components/RsvpList/styles";
+import { H2, H3, H4 } from "../../components/typography";
+import Button, { RedButton, WhiteButton } from "../../components/button";
+import RsvpList from "../../components/RsvpList";
+import { FancyInput } from "../../components/RsvpList/styles";
 import { User } from "netlify-identity-widget";
 import { UserData } from "gotrue-js";
-import { NetlifyAuthContext } from "../contexts/netlifyAuth";
+import { NetlifyAuthContext } from "../../contexts/netlifyAuth";
 import netlifyIdentity from "netlify-identity-widget";
 
 function extractUserMetadata(user?: UserData | User | null) {
@@ -65,11 +65,14 @@ const Account = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStale(true);
     const { name, value } = e.target;
     setNewValues({ ...newValues, [name]: value });
+    setStale(true);
   };
 
+  const handleLogout = () => {
+    netlifyIdentity.logout();
+  };
   if (loading) {
     return <H4 centered alwaysdark inline={false}>Loading...</H4>;
   }
@@ -83,7 +86,7 @@ const Account = () => {
       </Row>
       <form onSubmit={handleSave}>
         <Row className="mt-3">
-          <Col>
+          <Col xs={12} md={6} lg={4} className="mb-4">
             {/* @ts-ignore */}
             <H4 inline>Email address</H4>
             <FancyInput
@@ -93,7 +96,7 @@ const Account = () => {
               onChange={handleChange}
             />
           </Col>
-          <Col>
+          <Col xs={12} md={6} lg={4} className="mb-4">
             {/* @ts-ignore */}
             <H4 inline>Name</H4>
             <FancyInput
@@ -103,7 +106,7 @@ const Account = () => {
               onChange={handleChange}
             />
           </Col>
-          <Col>
+          <Col xs={12} md={6} lg={4} className="mb-4">
             {/* @ts-ignore */}
             <H4 inline>Phone</H4>
             <FancyInput
@@ -113,20 +116,23 @@ const Account = () => {
               onChange={handleChange}
             />
           </Col>
-          <Col>
+          <Col xs={12} md={6} lg={4} className="mb-4">
             {/* @ts-ignore */}
             <H4 inline></H4>
-            {stale && (
-              <Button className="mt-2" type="submit">
+              <Button className="mt-2" type="submit" disabled={!stale}>
                 Save
               </Button>
-            )}
           </Col>
         </Row>
         <Row>
-          <Col>
-            {/* @ts-ignore */}
-            <H4 inline>Security</H4>
+          <Col xs={12}>
+            <H4 inline centered={false} alwaysdark>
+            </H4>
+          </Col>
+          <Col xs={12} md={6} lg={3} className="mb-4">
+            <RedButton onClick={handleLogout}>Log out</RedButton>
+          </Col>
+          <Col xs={12} md={6} lg={3}>
             <WhiteButton
               onClick={() => user?.email && requestPasswordReset(user?.email)}
             >

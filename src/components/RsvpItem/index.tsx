@@ -103,6 +103,8 @@ const RsvpItemForm = ({ data = defaultData, onSubmit, onCancel }: Props) => {
 
           <Col xs={12} className="d-flex mt-4">
             <Button type="submit">Save</Button>
+            </Col>
+            <Col xs={12} className="d-flex mt-4">
             <WhiteButton onClick={onCancel}>Cancel</WhiteButton>
           </Col>
         </Row>

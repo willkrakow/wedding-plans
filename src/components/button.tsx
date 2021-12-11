@@ -21,6 +21,11 @@ const Button = styled.button(props => ({
         textDecoration: 'underline',
         textDecorationColor: props.theme.colors.accent,
         textDecorationThickness: props.theme.spacing[2],
+    },
+    ":disabled": {
+        backgroundColor: "#e2e2e2",
+        color: props.theme.colors.muted,
+        cursor: 'default'
     }
 }))
 
