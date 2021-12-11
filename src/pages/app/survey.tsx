@@ -1,6 +1,9 @@
+import { HistoryLocation } from "@reach/router";
 import React from "react";
 import { Container, Row, Col } from "reactstrap";
 import { H2, H3, P } from "../../components/typography";
+import netlifyIdentity from "netlify-identity-widget";
+import GoTrue from 'gotrue-js'
 
 type Answer = {
   question_id: string;
@@ -13,6 +16,7 @@ type SurveyQuestion = {
   answers: Answer[];
 };
 
+
 const Survey = () => {
   const [questions, setQuestions] = React.useState<SurveyQuestion[] | null>([]);
   const [loading, setLoading] = React.useState(false);
@@ -20,10 +24,12 @@ const Survey = () => {
   React.useEffect(() => {
     const getQuestions = async () => {
       setLoading(true);
+      console.log(netlifyIdentity.currentUser())
+      
       const res = await fetch("/.netlify/functions/survey");
       const data = await res.json();
-      setQuestions(data);
-      setLoading(false);
+      console.log(data)
+      setLoading(false)
     };
 
     getQuestions();
@@ -71,3 +77,5 @@ const AnswerList = ({ answers }: IAnswers) => {
     </>
   );
 };
+
+export default Survey;

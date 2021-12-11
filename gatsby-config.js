@@ -17,7 +17,7 @@ module.exports = {
       },
       {
         title: "RSVP",
-        path: "/app/rsvp"
+        path: "/app"
       },
       {
         title: "Honeymoon",
@@ -43,10 +43,6 @@ module.exports = {
         title: "Schedule",
         path: "/schedule"
       },
-      {
-        title: "Account",
-        path: "/app/account"
-      }
     ]
   },
   plugins: [

@@ -10,10 +10,13 @@ interface Props {
 
 
 const PrivateRoute = ({ component: Component, location, ...rest }: Props) => {
-  if (!netlifyIdentity.currentUser() && location.pathname !== `/app/login`) {
-    navigate("/app/login");
-    return null;
-  }
+  React.useEffect(() => {
+    console.log(netlifyIdentity.currentUser());
+    if (!netlifyIdentity.currentUser()) {
+      
+      navigate("/app/login");
+    }
+  }, []);
   return <Component {...rest} />;
 };
 export default PrivateRoute;
