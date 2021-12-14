@@ -1,0 +1,8 @@
+# Proxy 
+[[redirects]]
+  from = "/api/airtable"
+  to = "https://api.airtable.com/v0/appDkNR2MuAvgiOAS"
+  status = 200
+
+  [redirects.headers]
+    Authorization = "Bearer $AIRTABLE_API_KEY"

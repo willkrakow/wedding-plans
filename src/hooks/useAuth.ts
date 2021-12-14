@@ -40,7 +40,6 @@ export default function useAuth() {
       netlifyIdentity.on("logout", () => {
         setUser(null);
         setIsLoggedIn(false);
-        window.location.reload()
       });
 
       if (!auth) {

@@ -1,7 +1,7 @@
 import React from "react";
-import Button, { WhiteButton } from "../../components/button";
-import { H2, H4 } from "../../components/typography";
-import RsvpList from "../../components/RsvpList";
+import Button, { WhiteButton } from "../button";
+import { H2, H4 } from "../typography";
+import RsvpList from "../RsvpList";
 import { NetlifyAuthContext } from "../../contexts/netlifyAuth";
 import { Col, Container, Row } from "reactstrap";
 

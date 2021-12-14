@@ -5,18 +5,19 @@ import netlifyIdentity from "netlify-identity-widget";
 interface Props {
     component: React.FC<any>;
     location: Location;
+    isLoggedIn: boolean;
     [key: string]: any;
 }
 
-
-const PrivateRoute = ({ component: Component, location, ...rest }: Props) => {
+const isBrowser = typeof window !== "undefined";
+const PrivateRoute = ({ component: Component, user, isLoggedIn, location, ...rest }: Props) => {
   React.useEffect(() => {
-    console.log(netlifyIdentity.currentUser());
-    if (!netlifyIdentity.currentUser()) {
-      
-      navigate("/app/login");
+    if(isBrowser && !isLoggedIn) {
+      navigate('/app/login')
     }
-  }, []);
-  return <Component {...rest} />;
+  }, [user, isLoggedIn]);
+  return isLoggedIn ? (
+    <Component {...rest} user={user} />
+  ) : <div>log in please</div>
 };
 export default PrivateRoute;

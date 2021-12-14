@@ -23,10 +23,7 @@ export const wrapRootElement = ({ element }) => {
     netlifyIdentity.on("logout", () => {
         authContext.user = null;
         authContext.isLoggedIn = false;
-        window.location.reload();
     });
-
-    netlifyIdentity.on("close", () => window.location.reload());
 
     const authContext = {
         isLoggedIn: false,

@@ -9,7 +9,13 @@ exports.handler = async (event, context) => {
         apiKey: process.env.AIRTABLE_API_KEY,
     }).base(process.env.AIRTABLE_BASE);
 
-    console.log(base);
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            message: "Go Serverless v1.0! Your function executed successfully!",
+            input: event,
+        }),
+    }
     // if (event.httpMethod === "POST") {
     //     const { data } = JSON.parse(event.body);
     //     const res = await base.table("survey_results").create([{
