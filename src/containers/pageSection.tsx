@@ -1,6 +1,5 @@
 import React from 'react'
 import { H3, P, H4, H5 } from '../components/typography'
-import Slide from 'react-reveal/Slide'
 import styled from 'styled-components'
 import Button, { WhiteButton } from '../components/button'
 import { Row, Col } from 'reactstrap'
@@ -65,7 +64,6 @@ font-size: ${props => props.theme.fontSizes[2]};
 const PageSection: React.FC<SectionProps> = (sectionData) => {
     const { label, title, subtitle, sectionImg, bodyText, cta, funFact, sectionFluid, cta_secondary, finalMessage, finalSymbol } = sectionData
     return (
-      <Slide up>
         <ClassyCard fluid>
           <Row>
             <Col xs={12} lg={3}></Col>
@@ -119,7 +117,6 @@ const PageSection: React.FC<SectionProps> = (sectionData) => {
             </Col>
           </Row>
         </ClassyCard>
-      </Slide>
     );
 }
 

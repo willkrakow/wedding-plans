@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Row, Col, Container } from 'reactstrap'
-import { P } from '../components/typography'
+import { ElementLink, P } from '../components/typography'
 
 const FooterWrapper = styled(Container)(props => ({
     padding: props.theme.spacing[3],
@@ -15,9 +15,9 @@ const Footer = () => {
                 <Col xs={10} md={6} lg={4}>
                     <P as="address" className="text-center">
                         Designed and Developed by{" "}
-                        <a href="https://williamkrakow.dev/" >
+                        <ElementLink href="https://williamkrakow.dev/" >
                             William Krakow
-                        </a>
+                        </ElementLink>
                     </P>
                     <P centered={false} className="text-center">&copy; {new Date().getFullYear().toString()}</P>
                 </Col>

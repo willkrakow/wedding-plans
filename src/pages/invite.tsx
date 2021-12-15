@@ -1,8 +1,7 @@
-import { Link, navigate } from "gatsby";
 import React from "react";
 import { Container, Row, Col } from "reactstrap";
 import Button from "../components/button";
-import { H2, H4, P } from "../components/typography";
+import { H2, H4 } from "../components/typography";
 import RsvpItemForm from "../components/RsvpItem";
 import styled from "styled-components";
 
@@ -20,10 +19,6 @@ type FamilyMember = {
     record_id: string;
     family: string[];
   };
-};
-type Family = {
-  familyName: string;
-  members: FamilyMember[];
 };
 
 type FamilyResponse = {
@@ -144,7 +139,7 @@ const Invite = () => {
         <Row className="justify-content-center">
           <Col xs={12}>
             <H4 centered inline={false} alwaysdark>
-              Invite not found. Try scanning the QR code in your invite!
+             Coming soon!
             </H4>
           </Col>
         </Row>

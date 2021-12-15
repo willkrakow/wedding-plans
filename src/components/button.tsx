@@ -11,16 +11,15 @@ const Button = styled.button(props => ({
     fontFamily: props.theme.fonts.body,
     borderRadius: props.theme.spacing[0],
     borderStyle: "solid",
+    boxSizing: "border-box",
     borderWidth: props.theme.borders[1],
     borderColor: "transparent",
     textDecoration: 'underline',
     textDecorationColor: 'transparent',
-    textDecorationThickness: props.theme.spacing[2],
     transition: 'text-decoration-color 0.5s ease',
     ":hover": {
         textDecoration: 'underline',
         textDecorationColor: props.theme.colors.accent,
-        textDecorationThickness: props.theme.spacing[2],
     },
     ":disabled": {
         backgroundColor: "#e2e2e2",
@@ -29,17 +28,19 @@ const Button = styled.button(props => ({
     }
 }))
 
-export const WhiteButton = styled(Button)(props => ({
-    backgroundColor: props.theme.colors.background,
-    color: props.theme.colors.text,
-    borderColor: props.theme.colors.text,
-}))
+export const WhiteButton = styled(Button)((props) => ({
+  backgroundColor: props.theme.colors.background,
+  boxSizing: "border-box",
+  color: props.theme.colors.text,
+  borderColor: props.theme.colors.text,
+}));
 
-export const RedButton = styled(Button)(props => ({
-    backgroundColor: props.theme.colors.background,
-    color: props.theme.colors.danger,
-    borderColor: props.theme.colors.danger
-}))
+export const RedButton = styled(Button)((props) => ({
+  backgroundColor: props.theme.colors.background,
+  color: props.theme.colors.danger,
+  borderColor: props.theme.colors.danger,
+  boxSizing: "border-box",
+}));
 
 
 export const StickyButton = styled(Button)`
