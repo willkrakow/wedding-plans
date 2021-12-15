@@ -1,9 +1,6 @@
-import { HistoryLocation } from "@reach/router";
 import React from "react";
 import { Container, Row, Col } from "reactstrap";
-import { H2, H3, P } from "../../components/typography";
-import netlifyIdentity from "netlify-identity-widget";
-import GoTrue from 'gotrue-js'
+import { H2, H3, H4, P } from "../../components/typography";
 
 type Answer = {
   question_id: string;
@@ -24,7 +21,6 @@ const Survey = () => {
   React.useEffect(() => {
     const getQuestions = async () => {
       setLoading(true);
-      console.log(netlifyIdentity.currentUser())
       
       const res = await fetch("/.netlify/functions/survey");
       const data = await res.json();
@@ -39,7 +35,14 @@ const Survey = () => {
     <Container>
       <Row>
         <Col>
-          <H2>Survey</H2>
+          <H2 centered>Survey</H2>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <H4 centered inline alwaysdark>
+            Coming soon!
+          </H4>
         </Col>
       </Row>
       {loading && (

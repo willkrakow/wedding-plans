@@ -1,6 +1,5 @@
 import React from "react";
 import { navigate } from "gatsby";
-import netlifyIdentity from "netlify-identity-widget";
 
 interface Props {
     component: React.FC<any>;

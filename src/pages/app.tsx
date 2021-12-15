@@ -1,7 +1,5 @@
 import React from "react";
 import { Router, globalHistory } from "@reach/router";
-// import { navigate } from "gatsby";
-import PrivateRoute from "../components/privateRoute";
 import netlifyIdentity, { User } from "netlify-identity-widget";
 import Button, { WhiteButton } from "../components/button";
 import { Container, Row, Col } from "reactstrap";
@@ -9,26 +7,38 @@ import { H2, H4 } from "../components/typography";
 import Rsvp from "../components/app/rsvp";
 import Survey from "../components/app/survey";
 import { navigate } from "gatsby";
-import { GoTrueInit } from "gotrue-js";
+import Music from "../components/app/music";
+import AccountComponent from "../components/app/account";
+
 interface ILogin {
   path: string;
+  user: User | null;
 }
 
-const Account = ({ path }: ILogin) => {
+const Account = ({ path, user }: ILogin) => {
   React.useEffect(() => {
-    console.log(netlifyIdentity.currentUser());
-  }, []);
+    if (!user) {
+      navigate("/app/login");
+    }
+  }, [user]);
   return (
     <div>
       USER IS LOGGED IN{" "}
-      <button onClick={async () => await netlifyIdentity.logout()}>
-        logout
-      </button>
+      <Button
+        onClick={async () =>
+          await netlifyIdentity.logout()?.then(() => navigate("/"))
+        }
+      >
+        Logout
+      </Button>
     </div>
   );
 };
 
-const Login = ({ path }: ILogin) => {
+const Login = ({ path, user }: ILogin) => {
+  React.useEffect(() => {
+    console.log(user);
+  }, []);
   return (
     <Container>
       <Row>
@@ -70,9 +80,28 @@ interface Account {
 
 const isBrowser = typeof window !== "undefined";
 
+const AppLanding = () => {
+  return (
+    <Container>
+      <Row className="justify-content-center">
+        <Col xs={12}>
+          <H4 centered inline={false} alwaysdark>
+            RSVP to the wedding, take our survey, and manage your guests.
+          </H4>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false);
   const [user, setUser] = React.useState<User | null>(null);
+  const [activePath, setActivePath] = React.useState<string>("");
+
+  const handleNavigate = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { value } = e.currentTarget;
+    navigate(value);
+  };
   const handleLogout = async () => {
     await netlifyIdentity.logout();
     setIsLoggedIn(false);
@@ -83,8 +112,8 @@ const App = () => {
     netlifyIdentity.on("login", () => {
       setIsLoggedIn(true);
       setUser(netlifyIdentity.currentUser());
-      navigate("/app/account")
     });
+    setActivePath(globalHistory.location.pathname);
     if (isBrowser) {
       const user = netlifyIdentity.currentUser();
       if (user) {
@@ -92,7 +121,7 @@ const App = () => {
         setIsLoggedIn(true);
       }
       if (!user) {
-          navigate('/app/login')
+        navigate("/app/login");
       }
     }
   }, [globalHistory.location.pathname]);
@@ -100,19 +129,49 @@ const App = () => {
   if (!isBrowser) {
     return null;
   }
+  const paths = [
+    { path: "/app/home", label: "Home", component: AppLanding },
+    { path: "/app/rsvp", label: "RSVP", component: Rsvp },
+    { path: "/app/survey", label: "Survey", component: Survey },
+    { path: "/app/account", label: "Account", component: Account },
+    { path: "/app/music", label: "Music", component: Music },
+  ];
   return (
     <>
-      <button onClick={() => navigate("/app/account")}>Account</button>
-      <button onClick={() => navigate("/app/rsvp")}>RSVP</button>
-      <button onClick={() => navigate("/app/survey")}>Survey</button>
-      <button onClick={handleLogout}>Logout</button>
-        <Router basepath="/app">
-            <Account path="account" />
-            <Rsvp path="rsvp" />
-            <Survey path="survey" />
-            <Login path="login" />
-        </Router>
-      
+      <Container>
+        <Row className="justify-content-center">
+          {paths.map((path, i) => {
+            if (!isLoggedIn) {
+              return null;
+            }
+            return activePath === path.path ? (
+              <Col key={i} className="text-center">
+                <Button value={path.path} onClick={handleNavigate}>
+                  {path.label}
+                </Button>
+              </Col>
+            ) : (
+              <Col key={i}>
+                <WhiteButton key={i} value={path.path} onClick={handleNavigate}>
+                  {path.label}
+                </WhiteButton>
+              </Col>
+            );
+          })}
+        </Row>
+      </Container>
+      <Router basepath="/app">
+        {/* @ts-ignore */}
+        <Rsvp path="rsvp" />
+        {/* @ts-ignore */}
+        <Survey path="survey" />
+        <AccountComponent path="account" user={user} />
+        {/* @ts-ignore */}
+        <AppLanding path="home" />
+        {/* @ts-ignore */}
+        <Music path="music" />
+        {!isLoggedIn && isBrowser && <Login path="login" user={user} />}
+      </Router>
     </>
   );
 };

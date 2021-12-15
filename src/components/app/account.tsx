@@ -22,7 +22,6 @@ function extractUserMetadata(user?: UserData | User | null) {
 interface Props {
   path: string;
   user: User | null;
-  isLoggedIn: boolean;
 }
 
 const Account = ({path, user}: Props) => {
