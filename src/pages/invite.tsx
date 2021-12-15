@@ -4,6 +4,7 @@ import Button from "../components/button";
 import { H2, H4 } from "../components/typography";
 import RsvpItemForm from "../components/RsvpItem";
 import styled from "styled-components";
+import Music from "../components/app/music";
 
 const isBrowser = typeof window !== "undefined";
 
@@ -136,11 +137,22 @@ const Invite = () => {
   if (!loading && !guestData) {
     return (
       <Container>
+        <Row>
+          <Col>
+            <H2 centered>RSVP</H2>
+          </Col>
+        </Row>
         <Row className="justify-content-center">
           <Col xs={12}>
             <H4 centered inline={false} alwaysdark>
-             Coming soon!
+              Coming soon! In the meantime, feel free to suggest some songs for
+              the reception.
             </H4>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Music />
           </Col>
         </Row>
       </Container>

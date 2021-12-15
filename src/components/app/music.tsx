@@ -1,8 +1,4 @@
 import React from "react";
-import { Container, Row, Col } from "reactstrap";
-import { FancyInput } from "../RsvpList/styles";
-import { H2, H3, H4, P } from "../../components/typography";
-import Button, { WhiteButton } from "../button";
 
 // const Music = () => {
 //   const [songData, setSongData] = React.useState<any>([]);
@@ -128,21 +124,7 @@ import Button, { WhiteButton } from "../button";
 
 const Music = () => {
     return (
-      <Container>
-        <Row className="justify-content-center mb-4">
-          <Col xs={12} className="text-center">
-            <H2 centered>Music</H2>
-          </Col>
-        </Row>
-        <Row className="justify-content-center mb-4">
-          <Col xs={12} className="text-center">
-            <H4 inline={false} alwaysdark centered>
-              Request a song at the wedding reception!
-            </H4>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
+      
             <iframe
               src="https://open.spotify.com/embed/playlist/7Jrho0fq9gsnuk75Gwlwkk?utm_source=generator"
               width="100%"
@@ -151,36 +133,33 @@ const Music = () => {
               allowFullScreen
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
             ></iframe>
-          </Col>
-        </Row>
-      </Container>
     );
 }
 
-function filterSongs(song: any) {
-    if (song?.disambiguation === "music video") {
-        return false;
-    }
+// function filterSongs(song: any) {
+//     if (song?.disambiguation === "music video") {
+//         return false;
+//     }
 
-    if (song?.title?.toLowerCase().includes("(live)")) {
-        return false;
-    }
+//     if (song?.title?.toLowerCase().includes("(live)")) {
+//         return false;
+//     }
 
-    if (song?.title?.toLowerCase().includes("karaoke")) {
-        return false;
-    }
+//     if (song?.title?.toLowerCase().includes("karaoke")) {
+//         return false;
+//     }
 
-    if (song?.country !== "US" || song?.releases?.[0]?.status === "Promotion") {
-        return false;
-    }
+//     if (song?.country !== "US" || song?.releases?.[0]?.status === "Promotion") {
+//         return false;
+//     }
 
-    if (song?.title?.toLowerCase().includes("commentary")){
-        return false;
-    }
+//     if (song?.title?.toLowerCase().includes("commentary")){
+//         return false;
+//     }
 
-    return true
+//     return true
 
-}
+// }
 
 
 export default Music
