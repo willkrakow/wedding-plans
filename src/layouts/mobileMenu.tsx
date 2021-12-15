@@ -133,7 +133,6 @@ const MobileMenu = ({ menulinks }: MobileMenuProps) => {
               activeStyle={{
                 textDecoration: "underline",
                 textDecorationColor: theme.colors.accent,
-                textDecorationThickness: theme.spacing[1],
               }}
             >
               {link.title}
