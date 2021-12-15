@@ -27,8 +27,9 @@ const RsvpItemForm = ({ data = defaultData, onSubmit, onCancel }: Props) => {
     onSubmit(formData, data?.id || null);
   };
 
+
   return (
-    <FullHeightContainer className="d-flex flex-column">
+    <FullHeightContainer className="d-flex flex-column border-bottom pb-2">
       <form onSubmit={handleSubmit} className="d-flex">
         <Row className="h-100">
           <Col xs={12}>
@@ -69,7 +70,7 @@ const RsvpItemForm = ({ data = defaultData, onSubmit, onCancel }: Props) => {
             <label className="w-100 pb-2">
               <input type="checkbox" hidden value={formData?.over_21} />
               <TwentyOneToggle
-                active={formData?.over_21}
+                active={formData?.over_21 === "Yes" || formData?.over_21 === true}
                 onClick={(e) => {
                   e.preventDefault();
                   setFormData({ ...formData, over_21: true });
@@ -78,7 +79,7 @@ const RsvpItemForm = ({ data = defaultData, onSubmit, onCancel }: Props) => {
                 Yes
               </TwentyOneToggle>
               <TwentyOneToggle
-                active={!formData?.over_21}
+                active={!formData?.over_21 || formData?.over_21 === "No"}
                 onClick={(e) => {
                   e.preventDefault();
                   setFormData({ ...formData, over_21: false });
@@ -92,7 +93,7 @@ const RsvpItemForm = ({ data = defaultData, onSubmit, onCancel }: Props) => {
             <GuestFieldLabel>Notes</GuestFieldLabel>
             <FancyInput
               as="textarea"
-              rows={1}
+              rows={3}
               placeholder="Anything you want to say"
               value={formData?.notes}
               onChange={(e) =>
@@ -101,10 +102,10 @@ const RsvpItemForm = ({ data = defaultData, onSubmit, onCancel }: Props) => {
             />
           </Col>
 
-          <Col xs={12} className="d-flex mt-4">
+          <Col xs={6} className="d-flex mt-4">
             <Button type="submit">Save</Button>
-            </Col>
-            <Col xs={12} className="d-flex mt-4">
+          </Col>
+          <Col xs={6} className="d-flex mt-4">
             <WhiteButton onClick={onCancel}>Cancel</WhiteButton>
           </Col>
         </Row>

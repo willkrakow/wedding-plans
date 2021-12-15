@@ -17,7 +17,7 @@ module.exports = {
       },
       {
         title: "RSVP",
-        path: "/app"
+        path: "/invite"
       },
       {
         title: "Honeymoon",

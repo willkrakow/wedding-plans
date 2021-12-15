@@ -16,10 +16,12 @@ export const FancyInput = styled.input<IFancyInput>`
   }};
   font-family: ${(props) => props.theme.fonts.body};
   border: none;
+  border-bottom: 1px solid ${(props) => props.theme.colors.muted};
   padding-top: 12px;
   padding-bottom: 15px;
   padding-left: 10px;
   padding-right: 10px;
+  margin-bottom: 15px;
   width: 100%;
   background-color: ${(props) => {
     if (!props?.index) return props.theme.colors.background;
@@ -113,14 +115,16 @@ interface ITwentyOneToggle {
 
 export const TwentyOneToggle = styled(Button)<ITwentyOneToggle>`
   border: 1px solid
-    ${(props) => props.active ? props.theme.colors.accent : "transparent"};
+    ${(props) => (props.active ? props.theme.colors.accent : "transparent")};
   text-decoration: ${(props) => (props.active ? "underline" : "none")};
-  color: ${props => props.active ? props.theme.colors.background : props.theme.colors.text};
+  color: ${(props) =>
+    props.active ? props.theme.colors.background : props.theme.colors.text};
   font-weight: ${(props) => (props.active ? "bold" : "light")};
   font-family: ${(props) => props.theme.fonts.body};
   background-color: ${(props) =>
     props.active ? props.theme.colors.accent : "initial"};
   transition: all 0.2s ease-in-out;
+  margin-bottom: 15px;
   &:hover {
     text-decoration: underline;
   }
