@@ -1,11 +1,12 @@
 import React from "react";
-import { Container, Row, Col } from "reactstrap";
+import { Row, Col } from "reactstrap";
 import Button from "../components/button";
 import { H2, H4 } from "../components/typography";
 import RsvpItemForm from "../components/RsvpItem";
 import styled from "styled-components";
 import Music from "../components/app/music";
 import { isBrowser } from '../utils'
+import { ClassyCard } from "../containers/classyCard";
 
 type FamilyMember = {
   id: string;
@@ -134,7 +135,7 @@ const Invite = () => {
 
   if (loading) {
     return (
-      <Container>
+      <ClassyCard>
         <Row className="justify-content-center">
           <Col xs={12}>
             <H4 centered inline={false} alwaysdark>
@@ -142,13 +143,13 @@ const Invite = () => {
             </H4>
           </Col>
         </Row>
-      </Container>
+      </ClassyCard>
     );
   }
 
   if (!loading && guestData.length === 0) {
     return (
-      <Container>
+      <ClassyCard>
         <Row>
           <Col>
             <H2 centered>RSVP</H2>
@@ -167,12 +168,12 @@ const Invite = () => {
             <Music />
           </Col>
         </Row>
-      </Container>
+      </ClassyCard>
     );
   }
 
   return (
-    <Container>
+    <ClassyCard>
       <Row>
         <Col>
           <H2 centered>RSVP</H2>
@@ -211,7 +212,7 @@ const Invite = () => {
         </H4>
         <Button onClick={() => setMessage("")}>Close</Button>
       </ModalMessage>
-    </Container>
+    </ClassyCard>
   );
 };
 

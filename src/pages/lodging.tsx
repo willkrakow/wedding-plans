@@ -5,7 +5,8 @@ import useAuth from "../hooks/useAuth";
 import styled from "styled-components";
 import Button, { WhiteButton } from "../components/button";
 import {GatsbyImage} from 'gatsby-plugin-image'
-import { Col, Container, Row } from "reactstrap";
+import { Col, Row } from "reactstrap";
+import { ClassyCard } from "../containers/classyCard";
 
 interface LodgingNodeProps {
   id: string;
@@ -55,7 +56,7 @@ const Lodging = ({ data }: LodgingProps) => {
   return (
     <>
       <H2 centered>Lodging</H2>
-      <Container>
+      <ClassyCard>
         {hotels.map((hotel) => (
           <Row className="justify-content-center">
             <Col xs={12} md={9} lg={6} >
@@ -90,7 +91,7 @@ const Lodging = ({ data }: LodgingProps) => {
             </Col>
           </Row>
         ))}
-      </Container>
+      </ClassyCard>
     </>
   );
 };
