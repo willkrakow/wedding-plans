@@ -29,3 +29,5 @@ export const centsToDollars = (rawCentInt: number, format = "float"): string | n
     return dollars;
   }
 };
+
+export const isBrowser = typeof window !== "undefined";

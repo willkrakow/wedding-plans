@@ -5,8 +5,7 @@ import { H2, H4 } from "../components/typography";
 import RsvpItemForm from "../components/RsvpItem";
 import styled from "styled-components";
 import Music from "../components/app/music";
-
-const isBrowser = typeof window !== "undefined";
+import { isBrowser } from '../utils'
 
 type FamilyMember = {
   id: string;
@@ -54,9 +53,12 @@ const Invite = () => {
       return urlParams.get("familyName") || null;
     };
     const getGuestId = async () => {
+      setLoading(true);
       const familyName = getQueryString();
       if (!familyName) {
-        return setGuestData([]);
+        setGuestData([]);
+        setLoading(false);
+        return
       }
       const res = await fetch(
         `/.netlify/functions/guests?familyName=${encodeURIComponent(
@@ -66,15 +68,25 @@ const Invite = () => {
       if (!res?.ok) {
         setGuestData([]);
         setMessage("Error loading guests");
+        setLoading(false);
         return;
       }
-      res.json().then((data: FamilyResponse) => {
+      res
+      .json()
+      .then((data: FamilyResponse) => {
         setMessage("Family found!");
         setGuestData(data.data);
-      });
-      setLoading(false);
-    };
-    getQueryString();
+        setLoading(false)
+      })
+      .catch((err) => {
+        setMessage("Error loading guests");
+        console.error(err)
+        setGuestData([]);
+        setLoading(false);
+      })
+      .finally(() => {
+        setLoading(false)});
+      };
     getGuestId();
   }, []);
 
@@ -134,7 +146,7 @@ const Invite = () => {
     );
   }
 
-  if (!loading && !guestData) {
+  if (!loading && guestData.length === 0) {
     return (
       <Container>
         <Row>

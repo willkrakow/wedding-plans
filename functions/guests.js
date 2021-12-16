@@ -1,13 +1,13 @@
 require("dotenv").config({
-  path: `.env.${process.env.NODE_ENV}`,
+    path: `.env.${process.env.NODE_ENV}`,
 });
 var Airtable = require("airtable");
 
 const base = new Airtable({
     apiKey: process.env.AIRTABLE_API_KEY,
-    }).base(process.env.AIRTABLE_BASE_ID);
+}).base(process.env.AIRTABLE_BASE_ID);
 
-async function getFamilyData(familyName){
+async function getFamilyData(familyName) {
     const family = await base
         .table("guest_list")
         .select({
@@ -17,105 +17,79 @@ async function getFamilyData(familyName){
     return family;
 }
 
-exports.handler = async (event, context) => {
-  if (event.httpMethod === "GET") {
-    const { familyName } = event.queryStringParameters;
-    console.log(familyName);
-    const decodedName = decodeURIComponent(familyName);
 
-    const family = await getFamilyData(decodedName);
-    
-    if (family.length === 0) {
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                message: "No family found",
-            }),
-        }
-    }
+const responseObject = (statusCode, message, data) => {
     return {
-        statusCode: 200,
+        statusCode,
         body: JSON.stringify({
-            message: "Go Serverless v1.0! Your function executed successfully!",
-            data: family,
-        }),
+            message,
+            data: data,
+        })
     }
-    // const decodedFamilyName = decodeURIComponent(familyName);                
-    // const base = new Airtable({
-    //   apiKey: process.env.AIRTABLE_API_KEY,
-    // }).base(process.env.AIRTABLE_BASE);
+}
 
-    // const familyMembers = await base
-    //   .table("guest_list")
-    //   .select({
-    //     filterByFormula: `family = "${decodedFamilyName}"`,
-    //   })
-    //   .all();
-    // if (!familyMembers?.length) {
-    //   return {
-    //     statusCode: 404,
-    //     body: JSON.stringify({
-    //       message: "Family not found",
-    //       data: {},
-    //     }),
-    //   };
-    // }
-    // return {
-    //   statusCode: 200,
-    //   body: JSON.stringify({
-    //     message: "Guest found",
-    //     data: {
-    //       familyName: decodedFamilyName,
-    //       members: familyMembers.map((member) => {
-    //         return {
-    //           id: member.id,
-    //           ...member.fields,
-    //         };
-    //       }),
-    //     },
-    //   }),
-    // };
-  }
-  if (event.httpMethod === "PUT") {
-    const {data} = JSON.parse(event.body);
-    
+
+async function getGuestById (id) {
+    const guest = await base('guest_list').find(id);
+    return guest;
+}
+
+async function updateGuests(data) {
     const newData = data.map((member) => {
         return {
-        id: member?.id || member?.record_id,
-        fields: {
-            name: member?.name,
-            email: member?.email || "",
-            phone_number: member?.phone_number || "",
-            over_21: member?.over_21 ? "Yes" : "No",
-            rsvp: member?.rsvp ? "Yes" : "No",
-            notes: member?.notes || "",
-            dinner_option: member?.dinner_option || "",
-        }
+            id: member?.id || member?.record_id,
+            fields: {
+                name: member?.name,
+                email: member?.email || "",
+                phone_number: member?.phone_number || "",
+                over_21: member?.over_21 ? "Yes" : "No",
+                rsvp: member?.rsvp ? "Yes" : "No",
+                notes: member?.notes || "",
+                dinner_option: member?.dinner_option || "",
+            }
         }
     });
-    console.log(newData)
     const updated = await base.table("guest_list").update(newData)
-    
-    if (updated?.length === 0) {
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                message: "No family found",
-            }),
+    return updated;
+}
+
+
+exports.handler = async (event, context) => {
+    if (event.httpMethod === "GET") {
+        const { familyName, id } = event.queryStringParameters;
+        // If family name provided, return all guests in that family
+        if (familyName) {
+            const decodedName = decodeURIComponent(familyName);
+            const family = await getFamilyData(decodedName);
+            
+            return family?.length === 0
+                ? responseObject(404, "Family not found", {})
+                : responseObject(200, "Success", family)
         }
+        if (id) {
+            // If id is provided, return that guest
+            const guest = await getGuestById(id);
+            if (guest === undefined) {
+                return responseObject(404, "Guest not found", {});
+            }
+            // Then return the guest's family
+            const family = await getFamilyData(guest.fields.family[0]);
+
+            return family?.length 
+            ? responseObject(201, "Family not found", family)
+            : responseObject(200, "Success", family);
+        }
+            
+        return responseObject(400, "Invalid request", {});
     }
-    return {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: "Family updated",
-            data: updated,
-        }),
-    }   
-    return {
-        statusCode: 200,
-        body: JSON.stringify({
-            message: "Go Serverless v1.0! Your function executed successfully!",
-        }),
+    if (event.httpMethod === "PUT") {
+        const { data } = JSON.parse(event.body);
+
+        const updated = await updateGuests(data);
+
+        return updated?.length === 0
+        ? responseObject(500, "Error updating data", {})
+        : responseObject(200, "Family updated", updated)
     }
-  }
 };
+
