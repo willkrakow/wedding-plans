@@ -1,9 +1,10 @@
-import React from 'react'
-import { Container, Row, Col } from 'reactstrap';
-import { IGatsbyImageData, GatsbyImage } from 'gatsby-plugin-image'
-import styled from 'styled-components'
-import Button, { WhiteButton } from '../button';
-import { H3, P } from '../typography';
+import React from "react";
+import { Container, Row, Col, Badge } from "reactstrap";
+import { GatsbyImage } from "gatsby-plugin-image";
+import styled from "styled-components";
+import Button, { WhiteButton } from "../button";
+import { H3, H4, P } from "../typography";
+import { HoneymoonOptionProps } from "../../pages/honeymoon";
 
 const HoneymoonModalWrapper = styled.div`
   position: fixed;
@@ -16,33 +17,35 @@ const HoneymoonModalWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: ${(props) => props.theme.spacing[3]};
 `;
 
 const HoneymoonModalBox = styled(Container)`
-    background-color: ${props => props.theme.colors.background};
-    padding: ${props => props.theme.spacing[3]};
-    margin: ${props => props.theme.spacing[2]};
-`
+  background-color: ${(props) => props.theme.colors.background};
+  padding: ${(props) => props.theme.spacing[3]};
+  margin: ${(props) => props.theme.spacing[2]};
+  max-width: 900px;
+`;
 
 const PaymentBox = styled(Col)`
-display: flex;
-flex-direction: column;
-justify-content: center;
-`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
 
 const MoneyInput = styled.input`
   padding-left: 16px;
   padding-right: 16px;
-  font-family: ${props => props.theme.fonts.body};
-  color: ${props => props.theme.colors.text};
+  font-family: ${(props) => props.theme.fonts.body};
+  color: ${(props) => props.theme.colors.text};
   font-size: 18px;
   text-align: right;
   border-radius: 0;
-  border-color: ${props => props.theme.colors.text};
+  border-color: ${(props) => props.theme.colors.text};
   border-width: 2px;
-  margin-bottom: ${props => props.theme.spacing[2]};
-  margin-top: ${props => props.theme.spacing[2]};
-  padding: ${props => props.theme.spacing[1]};
+  margin-bottom: ${(props) => props.theme.spacing[2]};
+  margin-top: ${(props) => props.theme.spacing[2]};
+  padding: ${(props) => props.theme.spacing[1]};
   box-sizing: border-box;
   &:before {
     content: "$";
@@ -67,45 +70,39 @@ const LabelWrapper = styled.div`
 `;
 
 const ModalForm = styled.form`
-min-height: 450px;
-display: flex;
-justify-content: space-between;
-`
+  min-height: 450px;
+  display: flex;
+  justify-content: space-between;
+`;
 
 interface IHoneymoonModalProps {
   isOpen: boolean;
   handleClose: (any) => void;
-  destination: string;
+  destination?: HoneymoonOptionProps;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-  image: IGatsbyImageData;
   handleAmountChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   paymentAmount: number;
-  description?: string;
 }
 
 const HoneymoonModal = ({
   handleSubmit,
   destination,
-  description,
   isOpen,
   handleClose,
   handleAmountChange,
   paymentAmount,
-  image,
 }: IHoneymoonModalProps) => {
-
-
-  return isOpen ? (
+  return isOpen && destination?.data  ? (
     <HoneymoonModalWrapper className="honeymoon-modal-wrapper">
       <HoneymoonModalBox>
         <ModalForm onSubmit={handleSubmit}>
           <Row>
             <Col xs={12} md={6} className="d-flex">
-              <GatsbyImage image={image} alt={destination} />
+              <GatsbyImage image={destination.data.image.localFiles[0].childImageSharp.gatsbyImageData} alt={destination.data.name} />
             </Col>
             <PaymentBox xs={12} md={6}>
-              <H3 className="mb-3">{destination}</H3>
-              <P>{description}</P>
+              <H3 className="mb-3">{destination.data.name}</H3>
+              <H4 centered={false} inline alwaysdark className="mb-2">{destination.data.location}</H4>
               <div>
                 <MoneyLabel>
                   <LabelWrapper>
@@ -127,5 +124,76 @@ const HoneymoonModal = ({
   ) : null;
 };
 
+const ActivityBadge = styled(Badge)`
+  color: ${(props) => props.theme.colors.text};
+  background-color: ${(props) => props.theme.colors.secondary};
+  font-family: ${(props) => props.theme.fonts.body};
+  text-transform: uppercase;
+  font-size: ${(props) => props.theme.fontSizes[1]};
+  letter-spacing: 2px;
+  font-weight: 600;
+`
+
+const ActivityList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: ${(props) => props.theme.spacing[2]} 0;
+`
 
 export default HoneymoonModal;
+
+interface HoneymoonDetails {
+  destination?: HoneymoonOptionProps;
+  isOpen: boolean;
+  handleClose: () => void;
+  handlePay: () => void;
+}
+
+const HoneymoonDetailsModal = ({
+  destination,
+  isOpen,
+  handleClose,
+  handlePay,
+}: HoneymoonDetails) => {
+  return isOpen && destination?.data ? (
+    <HoneymoonModalWrapper>
+      <HoneymoonModalBox>
+        <Row>
+          <Col xs={12} md={6}>
+            <GatsbyImage image={destination.data.image.localFiles[0].childImageSharp.gatsbyImageData} alt={destination.data.name} />
+          </Col>
+          <Col>
+            <PaymentBox xs={12} md={6}>
+              <H3>{destination.data.name}</H3>
+              <H4 centered={false} inline alwaysdark className="mb-2">{destination.data.location}</H4>
+              <P>{destination.data.description}</P>
+              <ActivityList>
+                {destination.data.activities.map((option, index) => (
+                  <li key={index}>
+                    <ActivityBadge>{option}</ActivityBadge>
+                  </li>
+                ))}
+              </ActivityList>
+              <Button className="my-2" onClick={handlePay}>
+                Vote and pay
+              </Button>
+              <WhiteButton className="my-2" onClick={handleClose}>
+                Cancel
+              </WhiteButton>
+            </PaymentBox>
+          </Col>
+          {destination.data.image.localFiles.slice(1).map((image, index) => (
+            <Col key={index} xs={12} md={6}>
+              <GatsbyImage
+                image={image.childImageSharp.gatsbyImageData}
+                alt={destination.data.name}
+              />
+            </Col>
+          ))}
+        </Row>
+      </HoneymoonModalBox>
+    </HoneymoonModalWrapper>
+  ) : null;
+};
+
+export { HoneymoonDetailsModal };

@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../components/button";
+import Button, { WhiteButton } from "../components/button";
 import styled from "styled-components";
 import {
   GatsbyImage,
@@ -9,16 +9,11 @@ import {
 import { graphql } from "gatsby";
 import { H2, H3, H4 } from "../components/typography";
 import { Col, Container, Row } from "reactstrap";
-import HoneymoonModal from '../components/HoneymoonModal'
-
+import HoneymoonModal, { HoneymoonDetailsModal } from "../components/HoneymoonModal";
 
 interface IGatsbyImageInput {
   checked: boolean;
 }
-
-const DestinationButton = styled(Button)`
-width: fit-content;
-`
 
 const HoneymoonForm = styled.form`
   max-width: 900px;
@@ -53,29 +48,13 @@ const HiddenInput = styled.input`
   width: 0px;
 `;
 
-const GatsbyImageInput = styled(GatsbyImage)<GatsbyImageProps & IGatsbyImageInput>`
+const GatsbyImageInput = styled(GatsbyImage)<
+  GatsbyImageProps & IGatsbyImageInput
+>`
   cursor: pointer;
   position: relative;
   transition: all 0.3s ease-in-out;
-  border: ${(props) => props.checked ? `${props.theme.spacing[3]} solid ${props.theme.colors.secondary}` : "2px solid transparent"};
-  &:before {
-    transition: all 0.3s ease-in-out;
-    content: ${(props) => (props.checked ? "x" : "none")};
-    position: absolute;
-    inset: 0;
-    background-color: ${(props) =>
-      props.checked ? "rgba(0,20,30,0.5)" : "transparent"};
-  }
-  &:hover {
-    &:before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.4);
-    }
-  }
 `;
-
 
 async function submit(paymentAmount: number, destination: string) {
   const res = await fetch("/.netlify/functions/pay", {
@@ -98,6 +77,7 @@ export type HoneymoonOptionProps = {
     name: string;
     location: string;
     description: string;
+    activities: string[];
     image: {
       localFiles: {
         childImageSharp: {
@@ -118,16 +98,20 @@ export type HoneymoonPageProps = {
   };
 };
 
+
 const Honeymoon = ({ data }: HoneymoonPageProps) => {
+console.log(data.allAirtable)
+function findDestination(id: string) {
+  return data.allAirtable.edges.find((option) => option.node.id === id);
+}
   const [paymentAmount, setPaymentAmount] = React.useState(10);
-  const [destination, setDestination] = React.useState("");
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [selectedImage, setSelectedImage] = React.useState<IGatsbyImageData | null>(null);
-  const [selectedDescription, setSelectedDescription] = React.useState<string | null>(null);
+  const [selected, setSelected] = React.useState("");
+  const [isPayOpen, setIsPayOpen] = React.useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await submit(paymentAmount, destination);
+    await submit(paymentAmount, data.allAirtable.edges.find((e) => e.node.id === selected)?.node?.data?.name || "any");
   };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,9 +123,14 @@ const Honeymoon = ({ data }: HoneymoonPageProps) => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDestination(e.target.value);
-    setIsOpen(true);
+    setSelected(e.target.value);
+    setIsPayOpen(true);
   };
+
+  const handlePayFromDetails = () => {
+    setIsDetailsOpen(false);
+    setIsPayOpen(true);
+  }
 
   return (
     <>
@@ -150,53 +139,75 @@ const Honeymoon = ({ data }: HoneymoonPageProps) => {
         Help us choose our honeymoon destination by casting your vote below!
       </H4>
       <Container className="mt-5">
-      {isOpen && selectedImage && <HoneymoonModal description={selectedDescription || ""} handleAmountChange={handleAmountChange} paymentAmount={paymentAmount} isOpen={isOpen} handleClose={() => setIsOpen(false)} image={selectedImage} destination={destination} handleSubmit={handleSubmit} />}
+        {isPayOpen && (
+          <HoneymoonModal
+            destination={findDestination(selected)?.node}
+            handleAmountChange={handleAmountChange}
+            paymentAmount={paymentAmount}
+            isOpen={isPayOpen}
+            handleClose={() => setIsPayOpen(false)}
+            handleSubmit={handleSubmit}
+          />
+        )}
+        {isDetailsOpen && (
+          <HoneymoonDetailsModal
+            isOpen={isDetailsOpen}
+            handleClose={() => setIsDetailsOpen(false)}
+            destination={findDestination(selected)?.node}
+            handlePay={handlePayFromDetails}
+          />
+        )}
         <HoneymoonForm onSubmit={handleSubmit}>
           <OptionContainer>
             <Row className="justify-content-center mb-5">
               {data.allAirtable.edges.map(({ node }) => {
-                const { name, image, location, description } = node.data
-                const { gatsbyImageData: destinationImage } = image.localFiles[0].childImageSharp;
+                const { name, image, location } = node.data;
+                const { gatsbyImageData: destinationImage } =
+                  image.localFiles[0].childImageSharp;
                 return (
                   <Col key={node.id} xs={12} md={6} lg={6} className="mb-5">
-                  <DestinationWrapper key={node.id}>
-                    <H3>{name}</H3>
-                    {/* @ts-ignore */}
-                    <H4 alwaysdark>{location}</H4>
-                    <DestinationOption>
-                      <GatsbyImageInput
-                        image={destinationImage}
-                        alt={name}
-                        checked={
-                          destination.toLowerCase() ===
-                          name.toLowerCase()
-                        }
-                      />
-                      <HiddenInput
-                        type="radio"
-                        name="destination"
-                        value={name}
-                        checked={destination === name}
-                        onChange={handleChange}
-                      />
-                    </DestinationOption>
-                    <DestinationButton
-                    className="mt-3"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setDestination(name);
-                        setSelectedImage(destinationImage);
-                        setSelectedDescription(description);
-                        setIsOpen(true);
-                      }}
-                    >
-                      {destination === name ? "✅ " : ""} Vote for{" "}
-                      {name}
-                    </DestinationButton>
-                  </DestinationWrapper>
-                </Col>
-                )}
-              )}
+                    <DestinationWrapper key={node.id}>
+                      <H3>{name}</H3>
+                      {/* @ts-ignore */}
+                      <H4 alwaysdark>{location}</H4>
+                      <DestinationOption>
+                        <GatsbyImageInput
+                          image={destinationImage}
+                          alt={name}
+                          checked={node.id === selected}
+                        />
+                        <HiddenInput
+                          type="radio"
+                          name="destination"
+                          value={name}
+                          checked={node.id === selected}
+                          onChange={handleChange}
+                        />
+                      </DestinationOption>
+                      <Button
+                        className="my-2"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSelected(node.id);
+                          setIsPayOpen(true);
+                        }}
+                      >
+                        Vote and pay
+                      </Button>
+                      <WhiteButton
+                        className="my-2"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSelected(node.id);
+                          setIsDetailsOpen(true);
+                        }}
+                      >
+                        More info
+                      </WhiteButton>
+                    </DestinationWrapper>
+                  </Col>
+                );
+              })}
             </Row>
           </OptionContainer>
         </HoneymoonForm>
@@ -214,6 +225,7 @@ export const query = graphql`
         node {
           id
           data {
+            activities
             name
             image {
               localFiles {
