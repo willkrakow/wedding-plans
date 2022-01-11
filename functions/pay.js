@@ -2,9 +2,11 @@
 // Watch this video to get started: https://youtu.be/rPR2aJ6XnAc.
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const dotenv = require('dotenv');
 
+dotenv.config();
 exports.handler = async function (event, context) {
-    const success_url = process.env.NODE_ENV === 'production' ? 'https://www.campbellkrakow.com/success' : 'http://localhost:8888/success';
+    const success_url = process.env.NODE_ENV === 'production' ? 'https://campbellkrakow.com/success' : 'http://localhost:8888/success';
     const { amount, destination } = JSON.parse(event.body);
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
