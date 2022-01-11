@@ -64,7 +64,7 @@ const PrevButton = styled(NextButton)`
 
 const CornerButton = styled(NextButton)<{ open: boolean }>`
   position: absolute;
-  top: ${(props) => props.theme.spacing[0]};
+  top: ${(props) => props.theme.spacing[1]};
   left: ${(props) => props.theme.spacing[3]};
   display: ${(props) => (props.open ? "inherit" : "none")};
   z-index: 601;

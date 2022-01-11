@@ -88,7 +88,7 @@ const PhotoGrid: React.FC<PhotoGridProps> = (props) => {
       document.removeEventListener("keydown", handleNext);
       document.removeEventListener("keydown", handlePrevious);
     };
-  });
+  }, [open, currentIndex]);
 
   return (
     <React.Fragment>
