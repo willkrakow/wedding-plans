@@ -83,8 +83,8 @@ const Lodging = ({ data }: LodgingProps) => {
                 </>
               ) : (
                 <>
-                  <Button onClick={login}>Login to book</Button>
-                  <WhiteButton onClick={signup}>Create an account</WhiteButton>
+                  <Button disabled>Login to book</Button>
+                  <WhiteButton disabled>Create an account</WhiteButton>
                 </>
               )}
             </LoginForm>

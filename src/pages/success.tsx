@@ -10,7 +10,6 @@ const ThankYou = () => {
         Thanks for casting your vote!
       </H2>
       {/* @ts-ignore */}
-      <H4 centered>Here are the results so far...</H4>
       <HoneymoonResults />
     </React.Fragment>
   );

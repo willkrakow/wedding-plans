@@ -18,6 +18,8 @@ exports.handler = async function (event, context) {
     // Filter out unpaid sessions
     const paidSessions = sessions.data.filter((session) => session.payment_status === 'paid')
 
+
+    console.log(paidSessions)
     // Helper to get line items for a session
     async function getLineItems(session) {
         return await new Promise((resolve, reject) => {
@@ -36,6 +38,7 @@ exports.handler = async function (event, context) {
     // Get first line item for paid sessions
     const allSessionsLineItems = await Promise.all(paidSessions.map(async (session) => {
         const data = await getLineItems(session);
+        console.log(data)
         return { ...data.data[0] }
     }))
 
@@ -47,6 +50,7 @@ exports.handler = async function (event, context) {
         const destinationPayments = allSessionsLineItems.filter(session => {
             return session.description === destination.title
         })
+
 
         // Total of all payments for this destination
         const totalPaymentValue = destinationPayments.reduce((prev, curr) => prev + curr.amount_total, 0)

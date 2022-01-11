@@ -24,7 +24,7 @@ const ResultsContainer = styled.section`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 300px;
+  max-width: 100%;
   min-height: 500px;
   height: 100%;
   padding: 20px;
@@ -44,8 +44,12 @@ const HoneymoonResults = () => {
           "Content-Type": "application/json",
         },
       })
-        .then((res) => res.json())
-        .then(setApiData)
+        .then(async (res) => {
+          console.log(res.body)
+          const data = await res.json();
+          console.log(data)
+          setApiData(data);
+        })
         .catch((err) => console.log(err))
         .finally(() => setLoading(false));
     }, []);

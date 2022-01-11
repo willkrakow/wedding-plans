@@ -5,8 +5,6 @@ import styled from "styled-components";
 import { HoneymoonResultsProps } from "./index";
 const ChartContainer = styled(ResponsiveContainer)`
   width: 100%;
-  min-width: 300px;
-  min-height: 400px;
   height: 100%;
   margin: 0 auto;
 `;
@@ -96,15 +94,14 @@ const HoneymoonResultsChart = ({ results, sumTotal }: HoneymoonResultsProps) => 
     };
   });
   return (
-    <ChartContainer width="100%" height="100%">
-      <PieChart width={chartSize} height={chartSize * 2}>
+    <ChartContainer height={400} >
+      <PieChart width={280} height={400}>
         <Pie
           data={data}
           cx="50%"
           cy="50%"
           labelLine={false}
           label={renderCustomizedLabel}
-          outerRadius={chartSize / 2}
           fill="#8884d8"
           nameKey="title"
           dataKey="percent"
