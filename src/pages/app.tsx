@@ -196,6 +196,12 @@ const Login = ({ path, user }: { path: string, user: netlifyIdentity.User | null
     </div>
   )
 };
+
+const Recovery = ({path} : {path: string}) => {
+  return (
+    <div>Recover forgotten password</div>
+  )
+}
 import React from "react";
 import netlifyIdentity from "netlify-identity-widget";
 import { globalHistory, Router } from "@reach/router";
