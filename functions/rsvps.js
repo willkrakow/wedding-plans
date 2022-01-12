@@ -51,11 +51,10 @@ exports.handler = async (event, context) => {
                         rsvps: formattedRsvps,
                     },
                 }),
-                HEADERS,
             };
         }
     }
-
+ 
     if (event.httpMethod === "POST") {
         const {name, email, phone_number, notes, family_id} = JSON.parse(event.body);
 
