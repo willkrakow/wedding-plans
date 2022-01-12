@@ -9,11 +9,29 @@ const base = new Airtable({
     apiKey: process.env.AIRTABLE_API_KEY,
 }).base(process.env.AIRTABLE_BASE_ID);
 
+let HEADERS = {
+    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin',
+    'Content-Type': 'application/json', //optional
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Max-Age': '8640'
+}
+
+HEADERS['Access-Control-Allow-Origin'] = '*'
+HEADERS['Vary'] = 'Origin'
+
 exports.handler = async (event, context) => {
+    if (event.httpMethod === 'OPTIONS') {
+        return { statusCode: '204', HEADERS }
+    }
     if (event.httpMethod === "GET") {
         const {inviteId} = event.queryStringParameters;
 
         if (inviteId) {
+            const invite = await base("invites").find(inviteId);
+            const formattedInvite = {
+                id: invite.id,
+                ...invite.fields
+            }
             const rsvps = await base("rsvps").select({
                 filterByFormula: `{family_id} = '${inviteId}'`,
             }).all();
@@ -28,8 +46,12 @@ exports.handler = async (event, context) => {
                 statusCode: 200,
                 body: JSON.stringify({
                     message: "Invite found",
-                    data: formattedRsvps,
+                    data: {
+                        invite: formattedInvite,
+                        rsvps: formattedRsvps,
+                    },
                 }),
+                HEADERS,
             };
         }
     }
