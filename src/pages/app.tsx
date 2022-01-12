@@ -181,31 +181,37 @@ const Test = ({ path }: { path: string }) => {
   return <div>{path}</div>;
 };
 
-const Login = ({ path }: { path: string }) => {
+const Login = ({ path, user }: { path: string, user: netlifyIdentity.User | null }) => {
+  if (!user) {
+
   return (
     <div>
-      <button onClick={() => netlifyIdentity.open()}>Login</button>
+      <button onClick={() => netlifyIdentity.open("login")}>Login</button>
+      <button onClick={() => netlifyIdentity.open("signup")}>Sign up</button>
     </div>
-  );
+  );}
+  return (
+    <div>
+      <button onClick={() => netlifyIdentity.logout()}>Logout</button>
+    </div>
+  )
 };
 import React from "react";
 import netlifyIdentity from "netlify-identity-widget";
 import { globalHistory, Router } from "@reach/router";
 
+const isBrowser = typeof window !== "undefined";
 const App = () => {
   const [user, setUser] = React.useState<netlifyIdentity.User | null>(null);
   React.useEffect(() => {
-    netlifyIdentity.init({});
     const currentUser = netlifyIdentity.currentUser();
-    console.log(currentUser)
     if (currentUser) {
-      console.log(currentUser)
       setUser(user);
     }
 
-    netlifyIdentity.on("login", (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
+    netlifyIdentity.on("login", (e) => {
+      if (e?.token) {
+        setUser(e);
       }
       globalHistory.navigate("/app/test");
     })
@@ -225,10 +231,14 @@ const App = () => {
     }
 
   }, []);
+
+  if (!isBrowser) {
+    return null;
+  }
   return (
     <Router basepath="/app">
       <Test path="test" />
-      <Login path="/" />
+      <Login user={user} path="/" />
     </Router>
   );
 };
