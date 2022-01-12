@@ -56,7 +56,7 @@ exports.handler = async (event, context) => {
     }
  
     if (event.httpMethod === "POST") {
-        const {name, email, phone_number, notes, family_id} = JSON.parse(event.body);
+        const {name, email, phone_number, notes, family_id, over_21, meal_preference} = JSON.parse(event.body);
 
         const newRsvp = {
             name,
@@ -64,6 +64,8 @@ exports.handler = async (event, context) => {
             phone_number,
             notes,
             family_id,
+            meal_preference,
+            over_21
         }
 
         const rsvpCreated = await base("rsvps").create(newRsvp);
