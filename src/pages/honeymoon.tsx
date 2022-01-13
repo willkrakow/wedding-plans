@@ -230,7 +230,7 @@ export const query = graphql`
             image {
               localFiles {
                 childImageSharp {
-                  gatsbyImageData
+                  gatsbyImageData(aspectRatio: 1.7)
                 }
               }
             }
