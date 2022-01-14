@@ -30,10 +30,10 @@ exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => 
         const tiles = Array.from(document.querySelectorAll(resultsSelector))
         return tiles
         .map(tile => {
-            const price = tile.querySelector('.price')?.innerText?.split("$")?.[1] || ""
+            const price = tile.querySelector('.price')?.innerText?.split("$")[1] || ""
             const name = tile.querySelector('.register-item-name_entity-name')?.innerText || ""
             const image = tile.querySelector('.entity-image picture img')?.getAttribute('src') || ""
-            const stillNeeds = tile.querySelector('.still-needs')?.innerText?.split(":")?.[1].trim() || ""
+            const stillNeeds = tile.querySelector('.still-needs')?.innerText?.split(":")[1]?.trim() || ""
             const productId = tile.querySelector('.registry-item-thumbnail')?.getAttribute('href')?.split('/')?.pop() || ""
             return {
                 productId,
