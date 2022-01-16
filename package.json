@@ -34,6 +34,7 @@
     "babel-plugin-styled-components": "^1.13.2",
     "bootstrap": "^5.0.2",
     "boring-avatars": "^1.5.8",
+    "chrome-aws-lambda": "^10.1.0",
     "dotenv": "^10.0.0",
     "gatsby": "3.14",
     "gatsby-plugin-image": "^1.9.0",
@@ -55,7 +56,7 @@
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "netlify-identity-widget": "^1.9.2",
-    "puppeteer": "^13.0.1",
+    "puppeteer-core": "^13.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
@@ -76,7 +77,8 @@
     "@types/netlify-identity-widget": "^1.9.2",
     "@types/node": "^16.11.12",
     "@types/reach__router": "^1.3.9",
-    "@types/uuid": "^8.3.3"
+    "@types/uuid": "^8.3.3",
+    "puppeteer": "^13.0.1"
   },
   "proxy": "http://localhost:8888"
 }
