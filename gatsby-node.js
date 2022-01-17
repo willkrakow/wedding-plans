@@ -1,6 +1,14 @@
 const { createRemoteFileNode } = require('gatsby-source-filesystem')
 const fetch = require('node-fetch')
 require('gatsby')
+
+const AMAZON_REGISTRY_ID = "A5UU7G422X2I"
+const AMAZON_REGISTRY_URL = "https://www.amazon.com/wedding/items/A5UU7G422X2I"
+const AMAZON_REGISTRY_QUERY = "?ref_=wedding_guest_view_product_tile&colid=A5UU7G422X2I"
+
+const createAmazonUrl = (item) => {
+    return `https://www.amazon.com${item.productUrl}${AMAZON_REGISTRY_QUERY}&coliid=${item.legacyItemId}&registryId=${AMAZON_REGISTRY_ID}`
+}
 exports.onCreatePage = async ({ page, actions }) => {
     const { createPage } = actions
     // page.matchPath is a special key that's used for matching pages
@@ -12,16 +20,31 @@ exports.onCreatePage = async ({ page, actions }) => {
     }
 }
 
-exports.sourceNodes = async ({ actions, reporter, createNodeId, createContentDigest }) => {
+exports.sourceNodes = async ({ actions, reporter, createNodeId, createContentDigest, cache }) => {
     const { createNode } = actions
-    const res = await fetch(`https://www.amazon.com/wedding/items/A5UU7G422X2I`)
-    const data = await res.json()
+    const getAmazonData = async () => {
+        const cacheName = "amazon-data"
 
-    if (!data.success) {
-        reporter.error("Error fetching Amazon data")
-        return
+        const value = await cache.get(cacheName)
+        if (value) {
+            reporter.info("Using Amazon cached data")
+            return value
+        }
+        reporter.info("Fetching Amazon data")
+        const res = await fetch(AMAZON_REGISTRY_URL)
+        const data = await res.json()
+
+        if (!data.success) {
+            reporter.error("Error fetching Amazon data")
+            return
+        }
+
+        reporter.info(`Fetched ${data.result.minimalRegistryItems.length} items from Amazon`)
+        await cache.set(cacheName, data)
+        return data
     }
-    reporter.info(`Fetched ${data.result.minimalRegistryItems.length} items from Amazon`)
+
+    const data = await getAmazonData()
     data.result.minimalRegistryItems.forEach((item) => {
         const nodeMeta = {
             id: createNodeId(`amazon-product-${item.itemId}`),
@@ -36,6 +59,7 @@ exports.sourceNodes = async ({ actions, reporter, createNodeId, createContentDig
 
         const extractedData = {
             productId: item.itemId,
+            legacyItemId: item.legacyItemId,
             requested: item.qtyRequested,
             needed: item.qtyNeeded,
             purchased: item.qtyPurchased,
@@ -46,7 +70,7 @@ exports.sourceNodes = async ({ actions, reporter, createNodeId, createContentDig
             priceString: item.itemPrice.displayString,
             inStock: item.inStock,
             primeShippingEligible: item.primeShippingEligible,
-            productUrl: `https://www.amazon.com/${item.productUrl}`,
+            productUrl: createAmazonUrl(item),
         }
 
         const node = Object.assign({}, extractedData, nodeMeta)

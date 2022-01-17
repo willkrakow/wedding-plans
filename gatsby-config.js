@@ -40,6 +40,10 @@ module.exports = {
         path: "/lodging"
       },
       {
+        title: "Registry",
+        path: "/registry"
+      },
+      {
         title: "Schedule",
         path: "/schedule"
       },

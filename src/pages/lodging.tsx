@@ -1,7 +1,6 @@
 import React from "react";
 import { graphql } from "gatsby";
 import { H2, H3, H4, P } from "../components/typography";
-import useAuth from "../hooks/useAuth";
 import styled from "styled-components";
 import Button, { WhiteButton } from "../components/button";
 import {GatsbyImage} from 'gatsby-plugin-image'
@@ -16,6 +15,7 @@ interface LodgingNodeProps {
     location: string;
     description: string | undefined;
     booking_url: string;
+    booking_info: string;
     main_url: string;
     name: string;
     image: {
@@ -42,16 +42,20 @@ interface LodgingProps {
 //   return 3;
 // };
 
-const LoginForm = styled.section`
+const BookingSection = styled.section`
   display: flex;
-  max-width: 600px;
   align-items: center;
   padding: ${(props) => props.theme.spacing[3]} 0;
+  flex-wrap: wrap;
 `;
+
+const BookingInfo = styled(P)`
+flex-basis: 100%;
+color: ${(props) => props.theme.colors.muted};
+`
 
 const Lodging = ({ data }: LodgingProps) => {
   const hotels = data.allAirtable.nodes;
-  const { login, user, signup } = useAuth();
 
   return (
     <>
@@ -59,35 +63,27 @@ const Lodging = ({ data }: LodgingProps) => {
       <ClassyCard>
         {hotels.map((hotel) => (
           <Row className="justify-content-center">
-            <Col xs={12} md={9} lg={6} >
-            {/* @ts-ignore */}
-            <H3>{hotel.data.name}</H3>
-            {/* @ts-ignore */}
-            <H4>{hotel.data.location}</H4>
-            <GatsbyImage
-              image={
-                hotel.data.image.localFiles[0].childImageSharp.gatsbyImageData
-              }
-              alt={hotel.data.name}
-            />
-            <P>{hotel.data.description}</P>
-            <LoginForm>
-              {user ? (
-                <>
-                  <a href={hotel.data.booking_url}>
-                    <Button>Book Now</Button>
-                  </a>
-                  <a href={hotel.data.main_url}>
-                    <WhiteButton>More Info</WhiteButton>
-                  </a>
-                </>
-              ) : (
-                <>
-                  <Button disabled>Login to book</Button>
-                  <WhiteButton disabled>Create an account</WhiteButton>
-                </>
-              )}
-            </LoginForm>
+            <Col xs={12} md={9} lg={6}>
+              {/* @ts-ignore */}
+              <H3>{hotel.data.name}</H3>
+              {/* @ts-ignore */}
+              <H4>{hotel.data.location}</H4>
+              <GatsbyImage
+                image={
+                  hotel.data.image.localFiles[0].childImageSharp.gatsbyImageData
+                }
+                alt={hotel.data.name}
+              />
+              <P>{hotel.data.description}</P>
+              <BookingSection>
+                <BookingInfo>{hotel.data.booking_info}</BookingInfo>
+                <a href={hotel.data.booking_url}>
+                  <Button>Call to book</Button>
+                </a>
+                <a href={hotel.data.main_url}>
+                  <WhiteButton>More info</WhiteButton>
+                </a>
+              </BookingSection>
             </Col>
           </Row>
         ))}
@@ -105,6 +101,7 @@ export const query = graphql`
           name
           price_range
           description
+          booking_info
           image {
             localFiles {
               childImageSharp {
