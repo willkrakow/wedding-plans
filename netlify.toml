@@ -7,6 +7,11 @@
   [redirects.headers]
     Authorization = "Bearer $AIRTABLE_API_KEY"
 
+[[redirects]]
+  from = "https:/registry.campbellkrakow.com/"
+  to = "https://www.zola.com/registry/campbellkrakow"
+  status = 301
+
 [[headers]]
   # Define which paths this specific [[headers]] block will cover.
   for = "/*"

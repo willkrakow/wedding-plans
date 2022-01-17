@@ -40,6 +40,10 @@ module.exports = {
         path: "/lodging"
       },
       {
+        title: "Registry",
+        path: "/registry"
+      },
+      {
         title: "Schedule",
         path: "/schedule"
       },
@@ -137,16 +141,6 @@ module.exports = {
     },
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
-      {
-			resolve: 'gatsby-plugin-snipcart-advanced',
-			options: {
-        publicApiKey: process.env.SNIPCART_PUBLIC_KEY,
-        defaultLang: "en",
-        currency: "usd",
-        openCartOnAdd: true,
-        version: "3.0.29",
-			},
-    },
     `gatsby-plugin-layout`,
     `gatsby-plugin-typescript`,
   ],

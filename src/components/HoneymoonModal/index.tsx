@@ -15,6 +15,7 @@ const HoneymoonModalWrapper = styled.div`
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 900;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: ${(props) => props.theme.spacing[3]};
@@ -22,9 +23,10 @@ const HoneymoonModalWrapper = styled.div`
 
 const HoneymoonModalBox = styled(Container)`
   background-color: ${(props) => props.theme.colors.background};
-  padding: ${(props) => props.theme.spacing[3]};
-  margin: ${(props) => props.theme.spacing[2]};
+  margin: ${(props) => props.theme.spacing[1]};
   max-width: 900px;
+  overflow-y: scroll;
+  height: auto;
 `;
 
 const PaymentBox = styled(Col)`
@@ -125,19 +127,20 @@ const HoneymoonModal = ({
 };
 
 const ActivityBadge = styled(Badge)`
-  color: ${(props) => props.theme.colors.text};
-  background-color: ${(props) => props.theme.colors.secondary};
+  color: ${(props) => props.theme.colors.background};
+  background-color: ${(props) => props.theme.colors.accent};
   font-family: ${(props) => props.theme.fonts.body};
   text-transform: uppercase;
   font-size: ${(props) => props.theme.fontSizes[1]};
   letter-spacing: 2px;
   font-weight: 600;
+  margin-bottom: ${(props) => props.theme.spacing[2]};
 `
 
 const ActivityList = styled.ul`
   list-style: none;
   padding: 0;
-  margin: ${(props) => props.theme.spacing[2]} 0;
+  margin: ${(props) => props.theme.spacing[1]} 0;
 `
 
 export default HoneymoonModal;
@@ -159,32 +162,42 @@ const HoneymoonDetailsModal = ({
     <HoneymoonModalWrapper>
       <HoneymoonModalBox>
         <Row>
-          <Col xs={12} md={6}>
-            <GatsbyImage image={destination.data.image.localFiles[0].childImageSharp.gatsbyImageData} alt={destination.data.name} />
+          <Col xs={12} md={6} className="my-2">
+            <GatsbyImage
+              className="d-flex"
+              image={
+                destination.data.image.localFiles[0].childImageSharp
+                  .gatsbyImageData
+              }
+              alt={destination.data.name}
+            />
           </Col>
-          <Col>
-            <PaymentBox xs={12} md={6}>
-              <H3>{destination.data.name}</H3>
-              <H4 centered={false} inline alwaysdark className="mb-2">{destination.data.location}</H4>
-              <P>{destination.data.description}</P>
-              <ActivityList>
-                {destination.data.activities.map((option, index) => (
-                  <li key={index}>
-                    <ActivityBadge>{option}</ActivityBadge>
-                  </li>
-                ))}
-              </ActivityList>
+          <PaymentBox xs={12} md={6} className="my-2">
+            <H3>{destination.data.name}</H3>
+            <H4 centered={false} inline alwaysdark className="mb-2">
+              {destination.data.location}
+            </H4>
+            <P>{destination.data.description}</P>
+            <ActivityList>
+              {destination.data.activities.map((option, index) => (
+                <li key={index} className="my-1">
+                  <ActivityBadge>{option}</ActivityBadge>
+                </li>
+              ))}
+            </ActivityList>
+            <div className="d-flex justify-content-between">
               <Button className="my-2" onClick={handlePay}>
                 Vote and pay
               </Button>
               <WhiteButton className="my-2" onClick={handleClose}>
                 Cancel
               </WhiteButton>
-            </PaymentBox>
-          </Col>
+            </div>
+          </PaymentBox>
           {destination.data.image.localFiles.slice(1).map((image, index) => (
-            <Col key={index} xs={12} md={6}>
+            <Col key={index} xs={12} md={6} className="my-2">
               <GatsbyImage
+                className="d-flex"
                 image={image.childImageSharp.gatsbyImageData}
                 alt={destination.data.name}
               />

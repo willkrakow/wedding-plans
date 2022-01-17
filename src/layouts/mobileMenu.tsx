@@ -5,7 +5,6 @@ import { WhiteButton } from "../components/button";
 import { MenuBarLinkProps } from "./menuBar";
 import { globalHistory, HistoryLocation } from "@reach/router";
 import { CornerButton } from "../containers/modal/modalComponents";
-import netlifyIdentity from "netlify-identity-widget";
 
 interface MobileMenuProps {
   menulinks: Array<MenuBarLinkProps>;
@@ -106,10 +105,7 @@ const MobileMenu = ({ menulinks }: MobileMenuProps) => {
     } else if (myRef.current.location !== globalHistory.location) {
       myRef.current.location = globalHistory.location;
     }
-    netlifyIdentity.on("open", () => {
-      setDropdownOpen(false);
-    });
-
+    
     return globalHistory.listen(({ action }) => {
       if (action === "PUSH") {
         setDropdownOpen(false);

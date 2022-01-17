@@ -6,3 +6,5 @@ public
 .netlify
 .env
 .env.development
+.env.production
+.env.*
