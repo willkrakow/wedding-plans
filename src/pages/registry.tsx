@@ -99,7 +99,7 @@ font-family: ${(props) => props.theme.fonts.body};
 font-weight: bold;
 font-size: ${(props) => props.theme.fontSizes[2]};
 margin-bottom: 0;
-}`;
+`;
 
 const Name = styled(H3)`
   font-size: ${(props) => props.theme.fontSizes[3]};
@@ -132,29 +132,10 @@ function removeAllChars(str: string, chars: string[]) {
   return chars.reduce((acc, char) => acc.replace(char, " "), str);
 }
 
-async function submit(paymentAmount: number, purpose: string) {
-  const res = await fetch("/.netlify/functions/honeymoondFund", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      amount: paymentAmount,
-      purpose,
-    }),
-  });
-  const json = await res.json();
-  window.location.replace(json.redirect_url);
-}
-
 const Registry = ({ data }: RegistryPageProps) => {
   const { nodes: products } = data.allAmazonProduct;
-  const [ amount, setAmount ] = React.useState(0);
-  const [purpose, setPurpose] = React.useState("");
+  console.log(data)
 
-  const handleAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(parseInt(e.target.value));
-  }
   
   return (
     <Container>
@@ -168,14 +149,15 @@ const Registry = ({ data }: RegistryPageProps) => {
       <Container fluid>
         <Row>
           {products.map((product) => (
-            <Col className="my-3 px-4" xs={12} md={6} lg={4} key={product.id}>
+            <Col className="my-3 p-5" xs={12} md={6} lg={4} key={product.id}>
               <article className="d-flex flex-column h-100 position-relative">
                 <GatsbyImage
                   image={product.localImage.childImageSharp.gatsbyImageData}
                   alt={product.title}
+                  className="mb-2"
                 />
                 <CategoryTitle centered={false} alwaysdark inline>
-                  {removeAllChars(capitalize(trimFirstN(product.category, 3)), [
+                  {product.category === "Other" ? "Other" : removeAllChars(capitalize(trimFirstN(product.category, 3)), [
                     "_",
                   ])}
                 </CategoryTitle>
@@ -202,13 +184,6 @@ const Registry = ({ data }: RegistryPageProps) => {
               </article>
             </Col>
           ))}
-          <Col>
-                  <form onSubmit={() => {submit(amount, purpose)}}>
-                    <input type="number" value={amount} onChange={handleAmount} />
-                    <input type="text" value={purpose} onChange={(e) => setPurpose(e.target.value)} />
-                    <Button type="submit">Submit</Button>
-                  </form>
-          </Col>
         </Row>
       </Container>
     </Container>
@@ -221,24 +196,50 @@ export const query = graphql`
   {
     allAmazonProduct {
       nodes {
-        id
+        inStock
+        image
         localImage {
           childImageSharp {
-            gatsbyImageData
+            gatsbyImageData(aspectRatio: 1)
           }
         }
-        priceString
-        price
+        category
+        id
         needed
+        primeShippingEligible
+        productId
         productUrl
         purchased
         requested
         title
-        productId
-        primeShippingEligible
-        inStock
-        category
+        price
+        priceString
       }
     }
   }
 `;
+// export const query = graphql`
+//   {
+//     allAmazonProduct {
+//       nodes {
+//         id
+//         localImage {
+//           childImageSharp {
+//             gatsbyImageData
+//           }
+//         }
+//         priceString
+//         price
+//         needed
+//         productUrl
+//         purchased
+//         requested
+//         title
+//         productId
+//         primeShippingEligible
+//         inStock
+//         category
+//       }
+//     }
+//   }
+// `;
