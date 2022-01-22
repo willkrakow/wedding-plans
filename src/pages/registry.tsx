@@ -162,7 +162,9 @@ const Registry = ({ data }: RegistryPageProps) => {
                   ])}
                 </CategoryTitle>
                 <DetailsBox>
-                  <Name>{getFirstPartOfTitle(product.title)}</Name>
+                  <Name>
+                    {product.title.slice(0,12)}...
+                  </Name>
                 </DetailsBox>
                 <FlexPrice>
                   <FlexNeed>
@@ -176,7 +178,7 @@ const Registry = ({ data }: RegistryPageProps) => {
                     </MutedP>
                   </FlexNeed>
                 </FlexPrice>
-                <a href={product.productUrl}>
+                <a href={product.productUrl} target="_blank">
                   <Button>
                     View{product.inStock && product.needed > 0 && " and buy"}
                   </Button>
