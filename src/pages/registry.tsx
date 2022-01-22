@@ -132,8 +132,30 @@ function removeAllChars(str: string, chars: string[]) {
   return chars.reduce((acc, char) => acc.replace(char, " "), str);
 }
 
+async function submit(paymentAmount: number, purpose: string) {
+  const res = await fetch("/.netlify/functions/honeymoondFund", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      amount: paymentAmount,
+      purpose,
+    }),
+  });
+  const json = await res.json();
+  window.location.replace(json.redirect_url);
+}
+
 const Registry = ({ data }: RegistryPageProps) => {
   const { nodes: products } = data.allAmazonProduct;
+  const [ amount, setAmount ] = React.useState(0);
+  const [purpose, setPurpose] = React.useState("");
+
+  const handleAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(parseInt(e.target.value));
+  }
+  
   return (
     <Container>
       <H2 centered>Registry</H2>
@@ -180,6 +202,13 @@ const Registry = ({ data }: RegistryPageProps) => {
               </article>
             </Col>
           ))}
+          <Col>
+                  <form onSubmit={() => {submit(amount, purpose)}}>
+                    <input type="number" value={amount} onChange={handleAmount} />
+                    <input type="text" value={purpose} onChange={(e) => setPurpose(e.target.value)} />
+                    <Button type="submit">Submit</Button>
+                  </form>
+          </Col>
         </Row>
       </Container>
     </Container>
