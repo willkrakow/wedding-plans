@@ -148,33 +148,40 @@ const Registry = ({ data }: RegistryPageProps) => {
           {products.map((product) => (
             <Col className="my-3 px-4" xs={12} md={6} lg={4} key={product.id}>
               <article className="d-flex flex-column h-100 position-relative">
-                <GatsbyImage
-                  image={product.localImage.childImageSharp.gatsbyImageData}
-                  alt={product.title}
-                />
-                <CategoryTitle centered={false} alwaysdark inline>
-                  {removeAllChars(capitalize(trimFirstN(product.category, 3)), [
-                    "_",
-                  ])}
-                </CategoryTitle>
+                {product?.localImage?.childImageSharp?.gatsbyImageData && (
+                  <GatsbyImage
+                    image={product.localImage?.childImageSharp?.gatsbyImageData}
+                    alt={product.title}
+                  />
+                )}
+                {product?.category && (
+                  <CategoryTitle centered={false} alwaysdark inline>
+                    {removeAllChars(
+                      capitalize(trimFirstN(product?.category, 3)),
+                      ["_"]
+                    )}
+                  </CategoryTitle>
+                )}
                 <DetailsBox>
-                  <Name>{getFirstPartOfTitle(product.title)}</Name>
+                  <Name>{getFirstPartOfTitle(product?.title)}</Name>
                 </DetailsBox>
                 <FlexPrice>
                   <FlexNeed>
-                    <Price>{product.priceString}</Price>
-                    <MutedP>{product.inStock && "In stock"}</MutedP>
+                    <Price>{product?.priceString}</Price>
+                    <MutedP>{product?.inStock && "In stock"}</MutedP>
                   </FlexNeed>
                   <FlexNeed>
-                    <NeededP style={{ textAlign: "right" }}>{product.needed} still needed</NeededP>
+                    <NeededP style={{ textAlign: "right" }}>
+                      {product?.needed} still needed
+                    </NeededP>
                     <MutedP style={{ textAlign: "right" }}>
-                       {product.requested} requested
+                      {product?.requested} requested
                     </MutedP>
                   </FlexNeed>
                 </FlexPrice>
-                <a href={product.productUrl}>
+                <a href={product?.productUrl}>
                   <Button>
-                    View{product.inStock && product.needed > 0 && " and buy"}
+                    View{product?.inStock && product?.needed > 0 && " and buy"}
                   </Button>
                 </a>
               </article>

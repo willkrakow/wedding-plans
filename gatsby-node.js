@@ -63,7 +63,7 @@ exports.sourceNodes = async ({ actions, reporter, createNodeId, createContentDig
             requested: item.qtyRequested,
             needed: item.qtyNeeded,
             purchased: item.qtyPurchased,
-            image: item.imageUrl,
+            image: item?.imageUrl,
             title: item.productTitle,
             category: item.productGroupType,
             price: item.itemPrice.amount,
