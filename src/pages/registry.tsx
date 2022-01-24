@@ -7,35 +7,6 @@ import { PageProps, graphql } from "gatsby";
 import Button from "../components/button";
 import styled from "styled-components";
 
-// const specialStrings  = {
-//   str: "",
-//   getFirstPartOfTitle() {
-//     this.str = this.str.split("with")[0].split("-")[0].split(",")[0].trim();
-//     return this;
-//   },
-//   trimFirstN(n: number) {
-//     this.str = this.str.slice(n);
-//     return this
-//   },
-//   capitalize(str: string) {
-//   return str.charAt(0).toUpperCase() + str.slice(1);
-//   },
-//   removeAllChars(chars: string[]) {
-//     this.str = chars.reduce((acc, char) => acc.replace(char, " "), this.str);
-//   },
-//   toString() {
-//     return this.str;
-//   },
-//   inspect() {
-//     return this.str;
-//   }
-// }
-
-// function pipe<T>(...fns: ((a: T, ...rest?: any) => T)[]) {
-//   return (arg: T) => fns.reduce((acc, fn) => fn(acc), arg);
-// }
-
-
 type LocalImage = {
   childImageSharp: {
     gatsbyImageData: IGatsbyImageData;
@@ -116,10 +87,6 @@ const CategoryTitle = styled(H4)`
 
 type RegistryPageProps = PageProps<Props>;
 
-function getFirstPartOfTitle(title: string) {
-  return title.split("with")[0].split("-")[0].split(",")[0].trim();
-}
-
 function trimFirstN(str: string, n = 1) {
   return str.slice(n);
 }
@@ -149,7 +116,7 @@ const Registry = ({ data }: RegistryPageProps) => {
       <Container fluid>
         <Row>
           {products.map((product) => (
-            <Col className="my-3 p-5" xs={12} md={6} lg={4} key={product.id}>
+            <Col className="my-3 p-5" xs={12} md={6} lg={6} xl={4} key={product.id}>
               <article className="d-flex flex-column h-100 position-relative">
                 <GatsbyImage
                   image={product.localImage.childImageSharp.gatsbyImageData}
@@ -163,7 +130,7 @@ const Registry = ({ data }: RegistryPageProps) => {
                 </CategoryTitle>
                 <DetailsBox>
                   <Name>
-                    {product.title.slice(0,12)}...
+                    {product.title.slice(0,50)}...
                   </Name>
                 </DetailsBox>
                 <FlexPrice>

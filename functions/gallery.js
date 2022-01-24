@@ -1,7 +1,6 @@
 const cloudinary = require("cloudinary").v2;
 const dotenv = require("dotenv");
 const Airtable = require("airtable");
-const fetch = require("node-fetch");
 
 
 dotenv.config({
@@ -74,7 +73,6 @@ exports.handler = async (event, context) => {
       const options = {
         type: "upload",
         prefix: "Wedding",
-        transformation: [{ width: 500, crop: "fill" }],
         max_results: 3,
       };
         if (next_cursor) {

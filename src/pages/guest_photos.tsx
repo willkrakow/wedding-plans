@@ -32,7 +32,6 @@ export default function GuestPhotos() {
     ).then((res) => res.json());
 
     setNextCursor(res.data?.next_cursor || null );
-    console.log(res.data);
     const allPhotos = [...photos, ...res.data.resources];
     setPhotos(allPhotos);
     setLoading(false);
