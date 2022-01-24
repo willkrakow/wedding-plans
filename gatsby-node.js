@@ -69,11 +69,7 @@ exports.sourceNodes = async ({ actions, reporter, createNodeId, createContentDig
             requested: item.qtyRequested,
             needed: item.qtyNeeded,
             purchased: item.qtyPurchased,
-<<<<<<< HEAD
-            image: item?.imageUrl,
-=======
             image: item.imageUrl.includes("NotAvail") ? PLACEHOLDER_IMAGE : item.imageUrl,
->>>>>>> staging
             title: item.productTitle,
             category: item?.productGroupType || "Other",
             price: item?.itemPrice?.amount || 0.0,
