@@ -7,35 +7,6 @@ import { PageProps, graphql } from "gatsby";
 import Button from "../components/button";
 import styled from "styled-components";
 
-// const specialStrings  = {
-//   str: "",
-//   getFirstPartOfTitle() {
-//     this.str = this.str.split("with")[0].split("-")[0].split(",")[0].trim();
-//     return this;
-//   },
-//   trimFirstN(n: number) {
-//     this.str = this.str.slice(n);
-//     return this
-//   },
-//   capitalize(str: string) {
-//   return str.charAt(0).toUpperCase() + str.slice(1);
-//   },
-//   removeAllChars(chars: string[]) {
-//     this.str = chars.reduce((acc, char) => acc.replace(char, " "), this.str);
-//   },
-//   toString() {
-//     return this.str;
-//   },
-//   inspect() {
-//     return this.str;
-//   }
-// }
-
-// function pipe<T>(...fns: ((a: T, ...rest?: any) => T)[]) {
-//   return (arg: T) => fns.reduce((acc, fn) => fn(acc), arg);
-// }
-
-
 type LocalImage = {
   childImageSharp: {
     gatsbyImageData: IGatsbyImageData;
@@ -99,7 +70,7 @@ font-family: ${(props) => props.theme.fonts.body};
 font-weight: bold;
 font-size: ${(props) => props.theme.fontSizes[2]};
 margin-bottom: 0;
-}`;
+`;
 
 const Name = styled(H3)`
   font-size: ${(props) => props.theme.fontSizes[3]};
@@ -116,10 +87,6 @@ const CategoryTitle = styled(H4)`
 
 type RegistryPageProps = PageProps<Props>;
 
-function getFirstPartOfTitle(title: string) {
-  return title.split("with")[0].split("-")[0].split(",")[0].trim();
-}
-
 function trimFirstN(str: string, n = 1) {
   return str.slice(n);
 }
@@ -134,6 +101,9 @@ function removeAllChars(str: string, chars: string[]) {
 
 const Registry = ({ data }: RegistryPageProps) => {
   const { nodes: products } = data.allAmazonProduct;
+  console.log(data)
+
+  
   return (
     <Container>
       <H2 centered>Registry</H2>
@@ -146,24 +116,22 @@ const Registry = ({ data }: RegistryPageProps) => {
       <Container fluid>
         <Row>
           {products.map((product) => (
-            <Col className="my-3 px-4" xs={12} md={6} lg={4} key={product.id}>
+            <Col className="my-3 p-5" xs={12} md={6} lg={6} xl={4} key={product.id}>
               <article className="d-flex flex-column h-100 position-relative">
-                {product?.localImage?.childImageSharp?.gatsbyImageData && (
-                  <GatsbyImage
-                    image={product.localImage?.childImageSharp?.gatsbyImageData}
-                    alt={product.title}
-                  />
-                )}
-                {product?.category && (
-                  <CategoryTitle centered={false} alwaysdark inline>
-                    {removeAllChars(
-                      capitalize(trimFirstN(product?.category, 3)),
-                      ["_"]
-                    )}
-                  </CategoryTitle>
-                )}
+                <GatsbyImage
+                  image={product.localImage.childImageSharp.gatsbyImageData}
+                  alt={product.title}
+                  className="mb-2"
+                />
+                <CategoryTitle centered={false} alwaysdark inline>
+                  {product.category === "Other" ? "Other" : removeAllChars(capitalize(trimFirstN(product.category, 3)), [
+                    "_",
+                  ])}
+                </CategoryTitle>
                 <DetailsBox>
-                  <Name>{getFirstPartOfTitle(product?.title)}</Name>
+                  <Name>
+                    {product.title.slice(0,50)}...
+                  </Name>
                 </DetailsBox>
                 <FlexPrice>
                   <FlexNeed>
@@ -179,7 +147,7 @@ const Registry = ({ data }: RegistryPageProps) => {
                     </MutedP>
                   </FlexNeed>
                 </FlexPrice>
-                <a href={product?.productUrl}>
+                <a href={product.productUrl} target="_blank">
                   <Button>
                     View{product?.inStock && product?.needed > 0 && " and buy"}
                   </Button>
@@ -199,24 +167,50 @@ export const query = graphql`
   {
     allAmazonProduct {
       nodes {
-        id
+        inStock
+        image
         localImage {
           childImageSharp {
-            gatsbyImageData
+            gatsbyImageData(aspectRatio: 1)
           }
         }
-        priceString
-        price
+        category
+        id
         needed
+        primeShippingEligible
+        productId
         productUrl
         purchased
         requested
         title
-        productId
-        primeShippingEligible
-        inStock
-        category
+        price
+        priceString
       }
     }
   }
 `;
+// export const query = graphql`
+//   {
+//     allAmazonProduct {
+//       nodes {
+//         id
+//         localImage {
+//           childImageSharp {
+//             gatsbyImageData
+//           }
+//         }
+//         priceString
+//         price
+//         needed
+//         productUrl
+//         purchased
+//         requested
+//         title
+//         productId
+//         primeShippingEligible
+//         inStock
+//         category
+//       }
+//     }
+//   }
+// `;

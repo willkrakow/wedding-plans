@@ -2,6 +2,7 @@ import React from "react";
 import { graphql, PageProps } from "gatsby";
 import { H2 } from "../components/typography";
 import PhotoGrid from "../components/photoGrid";
+import GalleryUpload from "../components/galleryUpload";
 
 
 interface GalleryProps extends PageProps {
@@ -37,6 +38,7 @@ const Gallery = ({ data }: GalleryProps) => {
     <>
       <H2 centered>Gallery</H2>
       <PhotoGrid photos={photoData} />
+      <GalleryUpload />
     </>
   );
 };

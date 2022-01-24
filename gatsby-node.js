@@ -7,7 +7,11 @@ const AMAZON_REGISTRY_URL = "https://www.amazon.com/wedding/items/A5UU7G422X2I"
 const AMAZON_REGISTRY_QUERY = "?ref_=wedding_guest_view_product_tile&colid=A5UU7G422X2I"
 
 const createAmazonUrl = (item) => {
+    if (item.productUrl.startsWith("http")) {
+        return item.productUrl
+    } else {
     return `https://www.amazon.com${item.productUrl}${AMAZON_REGISTRY_QUERY}&coliid=${item.legacyItemId}&registryId=${AMAZON_REGISTRY_ID}`
+    }
 }
 exports.onCreatePage = async ({ page, actions }) => {
     const { createPage } = actions
@@ -57,17 +61,23 @@ exports.sourceNodes = async ({ actions, reporter, createNodeId, createContentDig
             },
         }
 
+        const PLACEHOLDER_IMAGE = "https://images.pexels.com/photos/2501965/pexels-photo-2501965.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=750"
+
         const extractedData = {
             productId: item.itemId,
             legacyItemId: item.legacyItemId,
             requested: item.qtyRequested,
             needed: item.qtyNeeded,
             purchased: item.qtyPurchased,
+<<<<<<< HEAD
             image: item?.imageUrl,
+=======
+            image: item.imageUrl.includes("NotAvail") ? PLACEHOLDER_IMAGE : item.imageUrl,
+>>>>>>> staging
             title: item.productTitle,
-            category: item.productGroupType,
-            price: item.itemPrice.amount,
-            priceString: item.itemPrice.displayString,
+            category: item?.productGroupType || "Other",
+            price: item?.itemPrice?.amount || 0.0,
+            priceString: item?.itemPrice?.displayString || "",
             inStock: item.inStock,
             primeShippingEligible: item.primeShippingEligible,
             productUrl: createAmazonUrl(item),
@@ -108,13 +118,13 @@ exports.onCreateNode = async ({
     getCache,
 }) => {
     const { createNode, createNodeField } = actions
-    // For all MarkdownRemark nodes that have a featured image url, call createRemoteFileNode
+    
     if (
-        node.internal.type === "AmazonProduct" &&
-        node.image !== null
+        node.internal.type === "AmazonProduct"
     ) {
+        
         const fileNode = await createRemoteFileNode({
-            url: node.image, // string that points to the URL of the image
+            url: node.image,
             parentNodeId: node.id, // id of the parent node of the fileNode you are going to create
             createNode, // helper function in gatsby-node to generate the node
             createNodeId, // helper function in gatsby-node to generate the node id

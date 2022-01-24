@@ -1,9 +1,18 @@
 import React from "react";
 import { Col, Container, Row } from "reactstrap";
 import Button, { RedButton, WhiteButton } from "../components/button";
-import { GuestBox } from "../components/RsvpItem/styles";
 import { H2, H3, H4, H5, P } from "../components/typography";
 import styled from 'styled-components'
+
+export const GuestBox = styled.article`
+  border: 1px solid ${(props) => props.theme.colors.muted};
+  padding: ${(props) => props.theme.spacing[2]};
+  margin: ${(props) => props.theme.spacing[3]} 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
 const RsvpInput = styled.input`
 border-radius: 0;
 border: 1px solid ${props => props.theme.colors.muted};

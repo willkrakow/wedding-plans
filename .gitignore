@@ -6,3 +6,8 @@ public
 .netlify
 .env
 .env.development
+.env.staging
+.env.production
+.env.*
+
+
