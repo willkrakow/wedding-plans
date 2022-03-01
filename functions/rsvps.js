@@ -20,102 +20,40 @@ HEADERS['Access-Control-Allow-Origin'] = '*'
 HEADERS['Vary'] = 'Origin'
 
 exports.handler = async (event, context) => {
-    if (event.httpMethod === 'OPTIONS') {
-        return { statusCode: '204', HEADERS }
-    }
-    if (event.httpMethod === "GET") {
-        const {inviteId} = event.queryStringParameters;
-
-        if (inviteId) {
-            const invite = await base("invites").find(inviteId);
-            const formattedInvite = {
-                id: invite.id,
-                ...invite.fields
-            }
-            const rsvps = await base("rsvps").select({
-                filterByFormula: `{family_id} = '${inviteId}'`,
-            }).all();
-            const formattedRsvps = rsvps.map((rsvp) => {
-                return {
-                    id: rsvp.id,
-                    ...rsvp.fields,
-                }
-            });
-
-            return {
-                statusCode: 200,
-                body: JSON.stringify({
-                    message: "Invite found",
-                    data: {
-                        invite: formattedInvite,
-                        rsvps: formattedRsvps,
-                    },
-                }),
-            };
-        }
-    }
- 
     if (event.httpMethod === "POST") {
-        const {name, email, phone_number, notes, family_id, over_21, meal_preference} = JSON.parse(event.body);
-
-        const newRsvp = {
-            name,
-            email,
-            phone_number,
-            notes,
-            family_id,
-            meal_preference,
-            over_21
+        const {guests} = JSON.parse(event.body);
+        let response= {
+            message: "Success",
+            guests: []
         }
-
-        const rsvpCreated = await base("rsvps").create(newRsvp);
-        const formattedRsvp = {
-            id: rsvpCreated.id,
-            ...rsvpCreated.fields,
-        }
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                message: "Rsvp created",
-                data: formattedRsvp,
-            }),
-        };
-    }
-
-    if (event.httpMethod === "PUT") {
-        const {id, name, email, phone_number, notes, family_id} = JSON.parse(event.body);
-
-        const updatedRsvp = {
-            name,
-            email,
-            phone_number,
-            notes,
-            family_id,
-        }
-
-        const rsvpUpdated = await base("rsvps").update(id, updatedRsvp);
-        const formattedUpdatedRsvp = {
-            id: rsvpUpdated.id,
-            ...rsvpUpdated.fields,
-        }
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                message: "Rsvp updated",
-                data: formattedUpdatedRsvp,
-            }),
-        };
-    }
-
-    if (event.httpMethod === "DELETE") {
-        const {id} = JSON.parse(event.body);
-        const rsvpDeleted = await base("rsvps").destroy(id);
+        await guests.forEach(async (guest) => {
+            try{
+                const result = await base('rsvps').create({
+                    _id: guest.id,
+                    first_name: guest.first_name,
+                    last_name: guest.last_name,
+                    age: parseInt(guest.age),
+                    email: guest.email,
+                    attending: guest.attending,
+                    phone_number: guest.phone_number,
+                    notes: guest.notes,
+                    created_at: new Date().toISOString(),
+                    dietary_restrictions: guest.dietary_restrictions,
+                });
+                response.guests.push({ id: result.id, ...result.fields })
+            }
+            catch(error){
+                console.log(error)
+                response.message = "Error"
+            }
+            
+        });
 
         return {
             statusCode: 200,
             body: JSON.stringify({
-                message: "Rsvp deleted",
-                data: rsvpDeleted,
+                message: "Rsvps created",
+                data: response,
             }),
         };
     }

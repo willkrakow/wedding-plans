@@ -100,7 +100,6 @@ export type HoneymoonPageProps = {
 
 
 const Honeymoon = ({ data }: HoneymoonPageProps) => {
-console.log(data.allAirtable)
 function findDestination(id: string) {
   return data.allAirtable.edges.find((option) => option.node.id === id);
 }

@@ -83,7 +83,6 @@ module.exports = {
       },
     },
     `gatsby-plugin-netlify`,
-    `gatsby-plugin-mdx`,
     {
       resolve: `gatsby-source-airtable`,
       options: {
