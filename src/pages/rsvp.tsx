@@ -40,6 +40,7 @@ const FormWrapper = styled.form`
 const Rsvp = () => {
     const [guests, setGuests] = React.useState<Guest[]>([])
     const [errors, setErrors] = React.useState<string[]>([])
+    const [canSubmit, setCanSubmit] = React.useState(false)
     const handleAddGuest = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         const newGuest = {
@@ -114,6 +115,10 @@ const Rsvp = () => {
             return guest
         }))
     }
+
+    React.useEffect(() => {
+        setCanSubmit(guests.length > 0 && errors.length === 0)
+    }, [guests, errors])
 
     return (
       <>
@@ -261,7 +266,7 @@ const Rsvp = () => {
                 <WhiteButton onClick={handleAddGuest}>+ Add guest</WhiteButton>
               </Col>
               <Col className="d-flex flex-column">
-                {guests.length > 0 && errors.length === 0 && (
+                {canSubmit && (
                   <Button type="submit">Submit</Button>
                 )}
               </Col>
