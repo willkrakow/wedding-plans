@@ -40,7 +40,7 @@ const FormWrapper = styled.form`
 const Rsvp = () => {
     const [guests, setGuests] = React.useState<Guest[]>([])
     const [errors, setErrors] = React.useState<string[]>([])
-    const [canSubmit, setCanSubmit] = React.useState(false)
+    const [canSubmit, setCanSubmit] = React.useState<boolean>(false);
     const handleAddGuest = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         const newGuest = {
@@ -72,7 +72,15 @@ const Rsvp = () => {
     }
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+        e.preventDefault();
+        if(guests.length === 0) {
+            setErrors([...errors, 'You must add at least one guest.'])
+            return
+        }
+        if (guests.some(guest => guest.saved === false)) {
+            setErrors([...errors, 'Dont forget to save your guests!'])
+            return
+        }
         fetch('/.netlify/functions/rsvps', {
             method: 'POST',
             headers: {
@@ -119,6 +127,8 @@ const Rsvp = () => {
     React.useEffect(() => {
         setCanSubmit(guests.length > 0 && errors.length === 0)
     }, [guests, errors])
+
+    const isBrowser = typeof window !== 'undefined'
 
     return (
       <>
@@ -193,7 +203,7 @@ const Rsvp = () => {
                         }
                       />
                     </Col>
-                    <Col xs={12} md={4}>
+                    <Col xs={12} md={3}>
                       <InputLabel>Age</InputLabel>
                       <Input
                         className="w-100"
@@ -207,7 +217,7 @@ const Rsvp = () => {
                         }
                       />
                     </Col>
-                    <Col xs={12} md={8}>
+                    <Col xs={12} md={9}>
                       <InputLabel>Dietary restrictions</InputLabel>
                       <Input
                         className="w-100"
@@ -224,7 +234,7 @@ const Rsvp = () => {
                     <Col>
                       <InputLabel>Notes</InputLabel>
                       <TextArea
-                        className="w-100"
+                        className="w-100 p-2"
                         value={guest.notes}
                         name="notes"
                         placeholder="And so with the sunshine and the great bursts of leaves growing on the trees, just as things grow in fast movies, I had that familiar conviction that life was beginning over again with the summer."
@@ -266,9 +276,7 @@ const Rsvp = () => {
                 <WhiteButton onClick={handleAddGuest}>+ Add guest</WhiteButton>
               </Col>
               <Col className="d-flex flex-column">
-                {canSubmit && (
                   <Button type="submit">Submit</Button>
-                )}
               </Col>
             </Row>
           </Container>
