@@ -17,7 +17,7 @@ module.exports = {
       },
       {
         title: "RSVP",
-        path: "/invite"
+        path: "/rsvp"
       },
       {
         title: "Honeymoon",
@@ -87,13 +87,9 @@ module.exports = {
       resolve: `gatsby-source-airtable`,
       options: {
         apiKey: process.env.AIRTABLE_API_KEY,
-        concurrency: 5,
+        concurrency: 3,
         separateMapType: true,
         tables: [
-          {
-            baseId: process.env.AIRTABLE_BASE_ID,
-            tableName: `guest_list`,
-          },
           {
             baseId: process.env.AIRTABLE_BASE_ID,
             tableName: `Home`,
@@ -107,11 +103,6 @@ module.exports = {
             baseId: process.env.AIRTABLE_BASE_ID,
             tableName: `Photos`,
             mapping: { 'src': "fileNode" },
-          },
-          {
-            baseId: process.env.AIRTABLE_BASE_ID,
-            tableName: `registry`,
-            mapping: {'image': "fileNode"},
           },
           {
             baseId: process.env.AIRTABLE_BASE_ID,

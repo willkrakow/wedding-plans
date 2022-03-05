@@ -11,6 +11,7 @@ type Guest = {
     last_name: string;
     age: number;
     attending: boolean;
+    phone_country_code: string;
     phone_number: string;
     email: string;
     id: string;
@@ -44,17 +45,18 @@ const Rsvp = () => {
     const handleAddGuest = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         const newGuest = {
-            first_name: '',
-            last_name: '',
-            age: 0,
-            attending: true,
-            phone_number: '',
-            email: '',
-            id: v4(),
-            notes: '',
-            dietary_restrictions: '',
-            saved: false,
-        }
+          first_name: "",
+          last_name: "",
+          age: 0,
+          attending: true,
+          phone_country_code: "",
+          phone_number: "",
+          email: "",
+          id: v4(),
+          notes: "",
+          dietary_restrictions: "",
+          saved: false,
+        };
         setGuests([...guests, newGuest])
     }
 
@@ -71,7 +73,7 @@ const Rsvp = () => {
         }))
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if(guests.length === 0) {
             setErrors([...errors, 'You must add at least one guest.'])
@@ -81,21 +83,28 @@ const Rsvp = () => {
             setErrors([...errors, 'Dont forget to save your guests!'])
             return
         }
-        fetch('/.netlify/functions/rsvps', {
+        const res = await fetch('/.netlify/functions/rsvps', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Access-Control-Allow-Origin': '*',
             },
             body: JSON.stringify({
                 guests
             })
         })
-        .then((res) => {
-            res.json()
-        })
-        .then(data => console.log(data))
-        .catch(console.error)
-        .finally(() => navigate('/thank-you'))
+        
+        if (res.ok) {
+            const data = await res.json();
+            navigate('/thank-you', {
+                state: {
+                    data
+                }
+            })
+        } else {
+            setErrors([...errors, res.statusText])
+        }
     }
 
     const validateGuest = (guestData: any) => {
@@ -107,6 +116,9 @@ const Rsvp = () => {
         }
         if (!guestData.age) {
             return 'Age is required'
+        }
+        if (guestData.phone_number && !guestData.phone_country_code) {
+            return 'Phone country code is required'
         }
         return ''
     }
@@ -128,8 +140,6 @@ const Rsvp = () => {
         setCanSubmit(guests.length > 0 && errors.length === 0)
     }, [guests, errors])
 
-    const isBrowser = typeof window !== 'undefined'
-
     return (
       <>
         <Container>
@@ -143,7 +153,7 @@ const Rsvp = () => {
           {guests.map((guest) => (
             <>
               {guest.saved ? (
-                <SavedGuest onClick={handleSave} guest={guest} />
+                <SavedGuest key={guest.id} onClick={handleSave} guest={guest} />
               ) : (
                 <Container key={guest.id}>
                   <Row>
@@ -193,9 +203,22 @@ const Rsvp = () => {
                     <Col xs={12} md={6}>
                       <InputLabel>Phone number</InputLabel>
                       <Input
-                        className="w-100"
+                        className="w-25"
+                        type="text"
+                        name="phone_country_code"
+                        placeholder="+1"
+                        maxLength={3}
+                        minLength={2}
+                        value={guest.phone_country_code}
+                        onChange={(e) =>
+                          handleChange(guest.id, e.target.name, e.target.value)
+                        }
+                      />
+                      <Input
+                        className="w-75"
                         type="tel"
                         name="phone_number"
+                        required={guest.phone_number.length > 0}
                         placeholder="919-555-5555"
                         value={guest.phone_number}
                         onChange={(e) =>
@@ -276,7 +299,7 @@ const Rsvp = () => {
                 <WhiteButton onClick={handleAddGuest}>+ Add guest</WhiteButton>
               </Col>
               <Col className="d-flex flex-column">
-                  <Button type="submit">Submit</Button>
+                <Button type="submit">Submit</Button>
               </Col>
             </Row>
           </Container>
