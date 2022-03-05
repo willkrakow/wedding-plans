@@ -3,7 +3,7 @@ import { P, H2, H4 } from '../components/typography'
 import { navigate, PageProps } from 'gatsby'
 const isBrowser = typeof window !== 'undefined'
 const ThankYou = (props: PageProps<any, any, {data: any}>) => {
-    const [counter, setCounter] = useState(5)
+    const [counter, setCounter] = useState(10)
 
     useEffect(() => {
         if(counter > 0) {
