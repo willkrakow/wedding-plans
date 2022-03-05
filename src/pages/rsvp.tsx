@@ -11,7 +11,6 @@ type Guest = {
     last_name: string;
     age: number;
     attending: boolean;
-    phone_country_code: string;
     phone_number: string;
     email: string;
     id: string;
@@ -49,7 +48,6 @@ const Rsvp = () => {
           last_name: "",
           age: 0,
           attending: true,
-          phone_country_code: "",
           phone_number: "",
           email: "",
           id: v4(),
@@ -116,9 +114,6 @@ const Rsvp = () => {
         }
         if (!guestData.age) {
             return 'Age is required'
-        }
-        if (guestData.phone_number && !guestData.phone_country_code) {
-            return 'Phone country code is required'
         }
         return ''
     }
@@ -203,20 +198,9 @@ const Rsvp = () => {
                     <Col xs={12} md={6}>
                       <InputLabel>Phone number</InputLabel>
                       <Input
-                        className="w-25"
-                        type="text"
-                        name="phone_country_code"
-                        placeholder="+1"
-                        maxLength={3}
-                        minLength={2}
-                        value={guest.phone_country_code}
-                        onChange={(e) =>
-                          handleChange(guest.id, e.target.name, e.target.value)
-                        }
-                      />
-                      <Input
-                        className="w-75"
+                        className="w-100"
                         type="tel"
+                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                         name="phone_number"
                         required={guest.phone_number.length > 0}
                         placeholder="919-555-5555"

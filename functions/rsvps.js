@@ -43,9 +43,9 @@ exports.handler = async (event, context) => {
         }
         for (const guest of guests) {
             try{
-                const cleaned_phone_number = guest?.phone_number ? guest.phone_number?.replace(/\D/g, '') : ""
-                const cleaned_country_code = guest?.phone_country_code?.[0] === "+" ? guest.phone_country_code : `+${guest.phone_country_code}`
-                const cleaned_phone_number_with_country_code = `${cleaned_country_code}${cleaned_phone_number}`
+                // const cleaned_phone_number = guest?.phone_number ? guest.phone_number?.replace(/\D/g, '') : ""
+                // const cleaned_country_code = guest?.phone_country_code?.[0] === "+" ? guest.phone_country_code : `+${guest.phone_country_code}`
+                // const cleaned_phone_number_with_country_code = `${cleaned_country_code}${cleaned_phone_number}`
                 const result = await base('rsvps').create({
                     _id: guest.id,
                     first_name: guest.first_name,
@@ -53,14 +53,14 @@ exports.handler = async (event, context) => {
                     age: parseInt(guest.age),
                     email: guest.email,
                     attending: guest.attending,
-                    phone_number: `${guest?.phone_country_code || ''}${cleaned_phone_number}`,
+                    phone_number: guest.phone_number,
                     notes: guest.notes,
                     created_at: new Date().toISOString(),
                     dietary_restrictions: guest.dietary_restrictions,
                 });
-                if (guest.phone_number && guest.attending) {
-                    await sendResponseMessage(twilioClient, cleaned_phone_number_with_country_code, guest.first_name, true)
-                }
+                // if (guest.phone_number && guest.attending) {
+                //     await sendResponseMessage(twilioClient, cleaned_phone_number_with_country_code, guest.first_name, true)
+                // }
                 await sendResponseMessage(twilioClient, "+19199239882", guest.first_name, false);
                 await sendResponseMessage(twilioClient, "+9197251099", guest.first_name, false);
                 
