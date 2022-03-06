@@ -67,7 +67,7 @@ export const query = graphql`
               id
               localFiles {
                 childImageSharp {
-                  gatsbyImageData
+                  gatsbyImageData(quality: 30)
                   resize {
                     aspectRatio
                   }

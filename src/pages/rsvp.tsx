@@ -86,6 +86,7 @@ const Rsvp = () => {
       }
       if (guests.some((guest) => guest.saved === false)) {
         setErrors([...errors, "Dont forget to save your guests!"]);
+        setLoading(false);
         return;
       }
       const res = await fetch("/.netlify/functions/rsvps", {
