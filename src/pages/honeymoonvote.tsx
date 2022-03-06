@@ -5,7 +5,8 @@ import { Input } from "../components/forms";
 import { H2, H3, H4, H5, P } from "../components/typography";
 import { TextArea } from "./rsvp";
 import { graphql, navigate } from "gatsby";
-import { GatsbyImage, IGatsbyImageData } from "gatsby-plugin-image";
+import { HoneymoonPageProps } from "./honeymoon";
+import { GatsbyImage } from "gatsby-plugin-image";
 
 const HoneymoonVote = ({ data }: HoneymoonPageProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -53,7 +54,7 @@ const HoneymoonVote = ({ data }: HoneymoonPageProps) => {
     if (res.ok) {
       setIsOpen(false);
       setLoading(false);
-      navigate("/honeymoonthankyou");
+      navigate('/honeymoonthankyou');
       return;
     }
     setLoading(false);
@@ -90,25 +91,28 @@ const HoneymoonVote = ({ data }: HoneymoonPageProps) => {
           </Col>
         </Row>
         <Row>
-          {data.allAirtable.edges.map((e) => (
-            <Col key={e.node.id} sm={12} md={6} className="mb-5 px-5">
-              <GatsbyImage
-                image={
-                  e.node.data.image.localFiles[0].childImageSharp
-                    .gatsbyImageData
-                }
-                alt={e.node.data.name}
-              />
-              <H5 className="mt-3 mb-0">{e.node.data.location}</H5>
-              <H4 centered={false} alwaysdark inline>
-                {e.node.data.name}
-              </H4>
-              <P centered={false}>{e.node.data.description}</P>
-              <Button onClick={() => handleSelectDestination(e.node.data.name)}>
-                Vote for {e.node.data.name}
-              </Button>
-            </Col>
-          ))}
+          {
+            data.allAirtable.edges.map((e) => (
+              <Col key={e.node.id} sm={12} md={6} className="mb-5 px-5">
+                <GatsbyImage
+                  image={
+                    e.node.data.image.localFiles[0].childImageSharp
+                      .gatsbyImageData
+                  }
+                  alt={e.node.data.name}
+                />
+                <H5 className="mt-3 mb-0">{e.node.data.location}</H5>
+                <H4 centered={false} alwaysdark inline>
+                  {e.node.data.name}
+                </H4>
+                <P centered={false}>{e.node.data.description}</P>
+                <Button
+                  onClick={() => handleSelectDestination(e.node.data.name)}
+                >
+                  Vote for {e.node.data.name}
+                </Button>
+              </Col>
+            ))}
         </Row>
         <FormModal
           isOpen={isOpen}
@@ -131,10 +135,10 @@ const FormModal = ({
   handleChange,
   errors,
 }) => {
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    handleSubmit();
-  };
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        handleSubmit();
+    }
 
   return (
     <Modal isOpen={isOpen} toggle={handleClose}>
@@ -142,9 +146,7 @@ const FormModal = ({
         <Container>
           <Row className="p-3">
             <Col xs={12}>
-              <H3 centered className="mb-3">
-                {formData.destination}
-              </H3>
+              <H3 centered className="mb-3">{formData.destination}</H3>
             </Col>
             <Col xs={12} md={6}>
               <Input
@@ -161,10 +163,10 @@ const FormModal = ({
                 onChange={handleChange}
                 placeholder="Last name"
               />
-            </Col>
+              </Col>
             <Col xs={12} className="w-100">
               <TextArea
-                className="w-100 mb-3 p-2"
+              className="w-100 mb-3 p-2"
                 name="notes"
                 value={formData.notes}
                 onChange={handleChange}
@@ -172,7 +174,7 @@ const FormModal = ({
               />
             </Col>
             <Col xs={12}>
-              <WhiteButton onClick={(e) => {e.preventDefault(); handleClose()}}>Cancel</WhiteButton>
+              <WhiteButton onClick={handleClose}>Cancel</WhiteButton>
               <Button type="submit">Submit</Button>
             </Col>
           </Row>
@@ -195,7 +197,7 @@ export const query = graphql`
             image {
               localFiles {
                 childImageSharp {
-                  gatsbyImageData(aspectRatio: 1.7, quality: 50)
+                  gatsbyImageData(aspectRatio: 1.7)
                 }
               }
             }
@@ -209,30 +211,3 @@ export const query = graphql`
 `;
 
 export default HoneymoonVote;
-
-export type HoneymoonOptionProps = {
-  id: string;
-  data: {
-    name: string;
-    location: string;
-    description: string;
-    activities: string[];
-    image: {
-      localFiles: {
-        childImageSharp: {
-          gatsbyImageData: IGatsbyImageData;
-        };
-      }[];
-    };
-  };
-};
-
-export type HoneymoonPageProps = {
-  data: {
-    allAirtable: {
-      edges: {
-        node: HoneymoonOptionProps;
-      }[];
-    };
-  };
-};

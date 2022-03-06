@@ -24,7 +24,7 @@ const InputLabel = styled(Label)`
   font-size: ${(props) => props.theme.fontSizes[1]};
 `;
 
-const TextArea = styled.textarea`
+export const TextArea = styled.textarea`
   font-family: ${(props) => props.theme.fonts.body};
   font-size: ${(props) => props.theme.fontSizes[1]};
   border-radius: 0;
