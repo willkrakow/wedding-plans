@@ -43,7 +43,6 @@ const Rsvp = () => {
   const [guests, setGuests] = React.useState<Guest[]>([]);
   const [errors, setErrors] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [canSubmit, setCanSubmit] = React.useState<boolean>(false);
   const handleAddGuest = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const newGuest = {
@@ -65,6 +64,25 @@ const Rsvp = () => {
     setGuests(guests.filter((guest) => guest.id !== id));
   };
 
+  React.useEffect(() => {
+    if (guests.length === 0){
+      setGuests([
+        {
+          first_name: "",
+          last_name: "",
+          age: 0,
+          attending: true,
+          phone_number: "",
+          email: "",
+          id: v4(),
+          notes: "",
+          dietary_restrictions: "",
+          saved: false,
+        },
+      ]);
+    }
+  }, [guests.length])
+
   const handleChange = (id: string, key: string, value: string | number) => {
     setGuests(
       guests.map((guest) => {
@@ -82,6 +100,7 @@ const Rsvp = () => {
     try {
       if (guests.length === 0) {
         setErrors([...errors, "You must add at least one guest."]);
+        setLoading(false);
         return;
       }
       if (guests.some((guest) => guest.saved === false)) {
@@ -93,7 +112,7 @@ const Rsvp = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
+          "Accept": "application/json",
           "Access-Control-Allow-Origin": "*",
         },
         body: JSON.stringify({
@@ -104,6 +123,7 @@ const Rsvp = () => {
       if (res.ok) {
         const data = await res.json();
         setLoading(false);
+        setErrors([]);
         navigate("/thank-you", {
           state: {
             data,
@@ -147,10 +167,6 @@ const Rsvp = () => {
       })
     );
   };
-
-  React.useEffect(() => {
-    setCanSubmit(guests.length > 0 && errors.length === 0);
-  }, [guests, errors]);
 
   return (
     <>
@@ -301,7 +317,9 @@ const Rsvp = () => {
             </Col>
             <Col className="d-flex flex-column">
               <Button type="submit">
-                {(isBrowser && loading) && <Spinner />}
+                {isBrowser && loading && (
+                  <Spinner title={"loading"} children={null} />
+                )}
                 Submit
               </Button>
             </Col>

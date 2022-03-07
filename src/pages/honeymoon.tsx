@@ -7,7 +7,7 @@ import { TextArea } from "./rsvp";
 import { graphql, navigate } from "gatsby";
 import { GatsbyImage, IGatsbyImageData } from "gatsby-plugin-image";
 
-const HoneymoonVote = ({ data }: HoneymoonPageProps) => {
+const Honeymoon = ({ data }: HoneymoonPageProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [formData, setFormData] = React.useState({});
   const [errors, setErrors] = React.useState<string[]>([]);
@@ -78,7 +78,7 @@ const HoneymoonVote = ({ data }: HoneymoonPageProps) => {
 
   return (
     <section>
-      {loading && <Spinner />}
+      {loading && <Spinner title={"loading"} children={null} />}
       <Container>
         <Row className="mb-5">
           <Col>
@@ -195,7 +195,7 @@ export const query = graphql`
             image {
               localFiles {
                 childImageSharp {
-                  gatsbyImageData(aspectRatio: 1.7, quality: 50)
+                  gatsbyImageData(aspectRatio: 1.7, quality: 40)
                 }
               }
             }
@@ -208,7 +208,7 @@ export const query = graphql`
   }
 `;
 
-export default HoneymoonVote;
+export default Honeymoon;
 
 export type HoneymoonOptionProps = {
   id: string;
