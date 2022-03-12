@@ -257,6 +257,10 @@ const HoneymoonDonation = () => {
       const data = await res.json();
       window.location.href = data.redirect_url;
     }
+    else {
+      setIsSubmitting(false);
+      setError(await res.text());
+    }
   }
 
   const handlePresetButton = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -300,6 +304,7 @@ const HoneymoonDonation = () => {
           <P>
             Have an opinion on where we should go? <ElementLink href="/honeymoon">Let us know</ElementLink>.
           </P>
+          {error && <P className="text-danger">{error}</P>}
           {isSubmitting ? (
             <Spinner children={null} title="loading" />
           ) : (
