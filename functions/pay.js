@@ -32,6 +32,12 @@ exports.handler = async function (event, context) {
                     currency: 'usd',
                     product_data: {
                         name: "William and Laura's Honeymoon Fund",
+                        images: [
+                            "https://res.cloudinary.com/djmk8xgrk/image/upload/v1646961579/carolinabeach_pdbbgq.jpg",
+                            "https://res.cloudinary.com/djmk8xgrk/image/upload/v1616892285/E9AFBD2F-9C59-4623-9C90-0C1EE710E2D7_1_201_a_nx9xyj.jpg",
+                            "https://res.cloudinary.com/djmk8xgrk/image/upload/v1647049555/772583BD-9489-4E20-9E4C-82ABC9094D57_1_201_a_uejxkp.jpg",
+                            "https://res.cloudinary.com/djmk8xgrk/image/upload/v1647049604/smilesatbeach_zv6imm.jpg"
+                        ]
                     },
                     unit_amount: amount * 100,
                 },
@@ -42,16 +48,24 @@ exports.handler = async function (event, context) {
         success_url: success_url,
         cancel_url: event.headers.referer,
     });
-
-    await base('honeymoon_fund').create({
-        amount: amount.toString(),
-        note,
-    })
-
-    return {
-        statusCode: 200,
-        body: JSON.stringify({
-            redirect_url: session.url
-        }),
+    if (session?.id) {
+        await base('honeymoon_fund').create({
+            amount: amount.toString(),
+            note,
+        })
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                redirect_url: session.url
+            }),
+        }
     }
+    return {
+        statusCode: 500,
+        body: JSON.stringify({
+            message: 'Sorry, something went wrong. Please try again.',
+        }),
+    };
+
+    
 }
