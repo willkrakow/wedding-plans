@@ -136,8 +136,16 @@ const Registry = ({ data }: RegistryPageProps) => {
       </H4>
       <Container fluid>
         <Row>
+          <HoneymoonDonation />
           {products.map((product) => (
-            <Col className="my-3 p-4" xs={12} md={6} lg={6} xl={4} key={product.id}>
+            <Col
+              className="my-3 p-4"
+              xs={12}
+              md={6}
+              lg={6}
+              xl={4}
+              key={product.id}
+            >
               <article className="d-flex flex-column h-100 position-relative">
                 <GatsbyImage
                   image={product.localImage.childImageSharp.gatsbyImageData}
@@ -145,14 +153,15 @@ const Registry = ({ data }: RegistryPageProps) => {
                   className="mb-2"
                 />
                 <CategoryTitle centered={false} alwaysdark inline>
-                  {product.category === "Other" ? "Other" : removeAllChars(capitalize(trimFirstN(product.category, 3)), [
-                    "_",
-                  ])}
+                  {product.category === "Other"
+                    ? "Other"
+                    : removeAllChars(
+                        capitalize(trimFirstN(product.category, 3)),
+                        ["_"]
+                      )}
                 </CategoryTitle>
                 <DetailsBox>
-                  <Name>
-                    {product.title.slice(0,50)}...
-                  </Name>
+                  <Name>{product.title.slice(0, 50)}...</Name>
                 </DetailsBox>
                 <FlexPrice>
                   <FlexNeed>
@@ -176,7 +185,6 @@ const Registry = ({ data }: RegistryPageProps) => {
               </article>
             </Col>
           ))}
-          <HoneymoonDonation />
         </Row>
       </Container>
     </Container>

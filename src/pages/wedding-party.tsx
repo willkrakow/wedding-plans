@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "reactstrap";
-import { H2, H3, H4, H5, P } from "../components/typography";
+import { H2, H3, H5, P } from "../components/typography";
 import styled from "styled-components";
 import { PageProps, graphql } from "gatsby";
 import { IGatsbyImageData } from "gatsby-plugin-image";
