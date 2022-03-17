@@ -174,6 +174,11 @@ const Rsvp = () => {
         <Row>
           <Col>
             <H2 centered>RSVP</H2>
+            <H4 centered inline alwaysdark>
+              If you plan to attend, please RSVP by April 1, 2022. Also, feel
+              free to bring a plus one (we forgot to specify this in the
+              invitations).
+            </H4>
           </Col>
         </Row>
       </Container>

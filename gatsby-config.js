@@ -126,6 +126,13 @@ module.exports = {
               'image': "fileNode",
             },
           },
+          {
+            baseId: process.env.AIRTABLE_BASE_ID,
+            tableName: `wedding_party`,
+            mapping: {
+              'image': "fileNode",
+            },
+          },
         ],
       },
     },

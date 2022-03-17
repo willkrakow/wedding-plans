@@ -93,12 +93,6 @@ const AmountInput = styled(Input)`
   width: 100%;
 `
 
-const AmountInputWrapper = styled.div`
-  display: flex;
-  position: relative;
-  align-items: center;
-`
-
 const MoneySymbol = styled.span`
   font-size: ${(props) => props.theme.fontSizes[2]};
   padding-right: ${(props) => props.theme.spacing[1]};
