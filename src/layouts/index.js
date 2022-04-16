@@ -59,6 +59,24 @@ export default function Layout({ children, location }) {
     checkCookie()
     setTimeout(() => setIsPrevious(true), 6000)
   }, [isPrevious])
+
+  React.useEffect(() => {
+    const getInfo = async () => {
+      const request = await fetch("https://ipinfo.io/json?token=c98ebd5a56a825")
+      const json = await request.json()
+      await fetch('/.netlify/functions/track', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(json),
+      });
+      }
+    if (typeof window !== 'undefined') {
+      getInfo()
+    }
+  }, [])
+
   const data = useStaticQuery(graphql`
     {
       site {

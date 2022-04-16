@@ -21,16 +21,17 @@ const headers = {
 };
 
 exports.handler = async function (event, context) {
-
+    console.log(event.headers)
     const { vote = {} } = JSON.parse(event.body);
     try {
         const result = await base('honeymoon_votes').create({
-            _id: v4(),
+            _id: event.headers?.['client-ip'] || v4(),
             first_name: vote.first_name,
             last_name: vote.last_name,
             destination: vote.destination,
             notes: vote.notes,
             created_at: new Date().toISOString(),
+            metadata: JSON.stringify(event.headers),
         });
 
         if (result.fields) {
