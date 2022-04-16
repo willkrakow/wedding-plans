@@ -61,21 +61,22 @@ export default function Layout({ children, location }) {
   }, [isPrevious])
 
   React.useEffect(() => {
-    const getInfo = async () => {
+    const getInfo = async (windowLocation) => {
       const request = await fetch("https://ipinfo.io/json?token=c98ebd5a56a825")
-      const json = await request.json()
+      const json = await request.json();
+      
       await fetch('/.netlify/functions/track', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(json),
+        body: JSON.stringify({json, windowLocation}),
       });
       }
     if (typeof window !== 'undefined') {
-      getInfo()
+      getInfo(window.location)
     }
-  }, [])
+  }, [window.location])
 
   const data = useStaticQuery(graphql`
     {
