@@ -62,7 +62,7 @@ export default function Layout({ children, location }) {
 
   React.useEffect(() => {
     const getInfo = async (windowLocation) => {
-      const request = await fetch("https://ipinfo.io/json?token=c98ebd5a56a825")
+      const request = await fetch("https://ipinfo.io/json?token=76509fbee1f6a6")
       const json = await request.json();
       
       await fetch('/.netlify/functions/track', {
@@ -74,9 +74,9 @@ export default function Layout({ children, location }) {
       });
       }
     if (typeof window !== 'undefined') {
-      getInfo(window.location)
+      getInfo(window?.location)
     }
-  }, [window.location])
+  }, [])
 
   const data = useStaticQuery(graphql`
     {
